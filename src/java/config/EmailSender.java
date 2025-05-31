@@ -18,7 +18,7 @@ public class EmailSender {
 
     public static void sendVerificationEmail( String toEmail) throws MessagingException, UnsupportedEncodingException {
 
-
+// nhom 5 truong moi code
         
         
         Calendar calendar = Calendar.getInstance();
