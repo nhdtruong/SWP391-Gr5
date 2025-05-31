@@ -19,8 +19,11 @@ public class EmailSender {
     public static void sendVerificationEmail( String toEmail) throws MessagingException, UnsupportedEncodingException {
 
 
+
         // ok 
-        
+       int a =10;
+      
+     
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);
         Date expirationTime = calendar.getTime();
