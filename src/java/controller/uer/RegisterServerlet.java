@@ -30,7 +30,7 @@ import model.OTPutil;
  */
 @WebServlet(name="RegisterServerlet", urlPatterns={"/register"})
 public class RegisterServerlet extends HttpServlet {
-   
+   //nhom nam
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
