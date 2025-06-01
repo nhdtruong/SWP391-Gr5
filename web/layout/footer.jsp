@@ -34,17 +34,17 @@
                             <ul class="list-unstyled footer-list mt-4">
                                 <li class="d-flex align-items-center">
                                     <i data-feather="mail" class="fea icon-sm text-foot align-middle"></i>
-                                    <a href="mailto:support@doctriscare.ml" class="text-foot ms-2">support@doctriscare.ml</a>
+                                    <a href="mailto:doctris123@gmail.com" class="text-foot ms-2">doctris123@gmail.com</a>
                                 </li>
 
                                 <li class="d-flex align-items-center">
                                     <i data-feather="phone" class="fea icon-sm text-foot align-middle"></i>
-                                    <a href="tel:+152534-468-854" class="text-foot ms-2">+84 888195313</a>
+                                    <a href="tel:+152534-468-854" class="text-foot ms-2">0335704857</a>
                                 </li>
 
                                 <li class="d-flex align-items-center">
                                     <i data-feather="map-pin" class="fea icon-sm text-foot align-middle"></i>
-                                    <a target="_blank" href="https://goo.gl/maps/G8Dyw5XUAiFcHrss5" class="video-play-icon text-foot ms-2">Tìm địa chỉ chúng tôi tại đây</a>
+                                    <a target="_blank" href="https://maps.app.goo.gl/VQuECUumYo9fRtnG8" class="video-play-icon text-foot ms-2">Tìm địa chỉ chúng tôi tại đây</a>
                                 </li>
                             </ul>
                         </div>
