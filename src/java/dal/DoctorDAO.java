@@ -124,29 +124,47 @@ public class DoctorDAO extends DBContext{
     } 
     
         
+           public String getEmailDotorByUsernae(String username){
+         String sql = "select u.email from users u where u.username = ?;";
+        try {
+            
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, sql);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString(1);
+            }
+            
+            
+        } catch (SQLException e) {
+        }
+        
+        return null;
+       
+    }
         
         
-    public List<Doctor> getAllDoctorByAdmin(){
+      public List<Doctor> getAllDoctorByAdmin(){
         List<Doctor> list = new ArrayList<>();
-        String sql = "select d.doctor_id,d.doctor_name,d.gender,d.deparment_id,d.dob,d.phone,d.email,d.description,d.status,d.img,d.AcademicDegree_id,d.AcademicTitle_id,d.position_id,d.address from doctors d" ;
+        String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status from doctors d" ;
         try {
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()){
                Doctor d = new Doctor(rs.getInt(1),
-                       rs.getString(2),
-                       rs.getString(3),
-                       getDepartmentByDoctor_department_id(rs.getInt(4)), 
-                       rs.getDate(5), 
-                       rs.getString(6),
-                       rs.getString(7),
+                       rs.getString(3), 
+                       rs.getString(4), 
+                        rs.getDate(5), 
+                       rs.getString(6), 
+                       getDepartmentByDoctor_department_id(rs.getInt(7)), 
                        rs.getString(8), 
-                       rs.getInt(9), 
+                       rs.getString(9),
                        rs.getString(10), 
-                       getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt(11)),
-                       getAcademictitleByDoctor_Academictile_id(rs.getInt(12)),
-                       getPositionByDoctor_position_id(rs.getInt(13)), 
-                       rs.getString(14));
+                       getPositionByDoctor_position_id(rs.getInt(11)),
+                       getAcademictitleByDoctor_Academictile_id(rs.getInt(12))
+                       , getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt(13)), 
+                       rs.getInt(14), 
+                       getEmailDotorByUsernae(rs.getString(2)));
                list.add(d);
             }
             return list;
@@ -157,7 +175,20 @@ public class DoctorDAO extends DBContext{
         
         return null;
     } 
-    
+      public void RecoverStatusForDoctor(String username)  {
+        String sql = "UPDATE doctors\n" +
+"SET status = 1\n" +
+"WHERE username = ?;";
+         
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     public static void main(String[] args) {
         DoctorDAO d = new DoctorDAO();
         List<Doctor> l = d.getAllDoctorByAdmin();

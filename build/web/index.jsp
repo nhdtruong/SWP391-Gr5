@@ -41,7 +41,7 @@
                                 <h5 class="mt-1">Đặt lịch trực tuyến</h5>
                                 <p class="text-muted mt-2">Đội ngũ bác sĩ luôn sẵn sàng tư vấn và thăm khám dành riêng cho bạn.</p>
                                 <br>
-                                <a href="#" class="text-primary">Tìm hiểu ngay <i class="ri-arrow-right-line align-middle"></i></a>
+                                <a href="#" class="text-primary">Tìm hiểu ngay đi<i class="ri-arrow-right-line align-middle"></i></a>
                             </div>
 
                             <div class="card border-0 bg-light p-4">

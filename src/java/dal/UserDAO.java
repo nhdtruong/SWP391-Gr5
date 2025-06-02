@@ -141,7 +141,39 @@ public class UserDAO  extends DBContext{
         } 
         return null;
     }
-      
+         public AccountUser CheckAccChangePass(String username ,String email) {
+         String sql = "select u.username ,u.email,u.role_id from users u where u.username = ? and u.email =?";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, email);
+            
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new AccountUser(rs.getString(1), rs.getString(2), rs.getInt(3));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+       public void Recover(String username, String password)  {
+        String sql = "UPDATE users\n" +
+"SET password = ?, \n" +
+"    status = 1\n" +
+"WHERE username = ?;";
+         
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(2, username);
+            ps.setString(1, password);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     
     public static void main(String[] args) throws SQLException {
          UserDAO dao =  new UserDAO();

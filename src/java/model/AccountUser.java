@@ -53,6 +53,12 @@ public class AccountUser {
     }
 
  
+    public AccountUser(String username, String email, int role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+    }
+
     
 
     public AccountUser(String username,Role Role, String password , String email, String img, int status) {
