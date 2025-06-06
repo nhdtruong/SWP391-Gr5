@@ -2,16 +2,12 @@ package config;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.text.NumberFormat;
-import java.time.Instant;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Properties;
-import model.OTPutil;
+
 
 
 public class EmailSender {
@@ -21,8 +17,8 @@ public class EmailSender {
 
 
         // ok 
-       int a =10;
-      
+       
+      //ok
      
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);

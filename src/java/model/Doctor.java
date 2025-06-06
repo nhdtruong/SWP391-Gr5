@@ -41,23 +41,8 @@ public class Doctor {
         this.position = position;
     }
 
-    public Doctor(int doctor_id, String doctor_name, String gender, Deparment department, Date DOB, String phone,String email, String description, int status, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String adress) {
-        this.doctor_id = doctor_id;
-        this.doctor_name = doctor_name;
-        this.gender = gender;
-        this.department = department;
-        this.DOB = DOB;
-        this.phone = phone;
-        this.email = email;
-        this.description = description;
-        this.status = status;
-        this.img = img;
-        this.academicDegree = academicDegree;
-        this.academicTitle = academicTitle;
-        this.position = position;
-        this.adress = adress;
-    }
 
+ 
        public Doctor(int doctor_id, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status,String email) {
         this.doctor_id = doctor_id;
         this.doctor_name = doctor_name;

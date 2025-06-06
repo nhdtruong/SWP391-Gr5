@@ -10,7 +10,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+  
     <jsp:include page="layout/head.jsp"/>
     <body>
         <jsp:include page="layout/menu_white.jsp"/>
