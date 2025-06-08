@@ -75,7 +75,7 @@ public class DoctorManager extends HttpServlet {
             }
             
             if (listDoctor != null) {
-                int page, numberPerPage = 8;
+                int page, numberPerPage = 9;
                 int size = listDoctor.size();
                 int numberPage = (size % numberPerPage == 0) ? (size / numberPerPage) : ((size / numberPerPage) + 1);
                 String xPage = request.getParameter("page");
@@ -86,7 +86,7 @@ public class DoctorManager extends HttpServlet {
                 }
                 int start = (page - 1) * numberPerPage;
                 int end = Math.min(page * numberPerPage, size);
-                
+                int numPageDisplay = 7;
                 List<Doctor> listDoctorDisplay = getListDoctorDisplay(listDoctor, start, end);
                 request.setAttribute("position", listPosition);
                  request.setAttribute("department", listDeparment);
@@ -94,6 +94,7 @@ public class DoctorManager extends HttpServlet {
                 request.setAttribute("url", url);
                 request.setAttribute("page", page);
                 request.setAttribute("num", numberPage);
+                request.setAttribute("numPageDisplay", numPageDisplay);
                 request.getRequestDispatcher("admin/doctor.jsp").forward(request, response);
             }
             

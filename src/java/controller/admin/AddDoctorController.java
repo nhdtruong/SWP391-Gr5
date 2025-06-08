@@ -146,7 +146,7 @@ public class AddDoctorController extends HttpServlet {
             int positionId = Integer.parseInt(positionId_);
             int academicTitleId = Integer.parseInt(academicTitleId_);
             int academicDegreeId = Integer.parseInt(academicDegreeId_);
-
+            
             u.RegisterNewUser(username,
                     role_id,
                     password,
@@ -159,7 +159,7 @@ public class AddDoctorController extends HttpServlet {
                     gender,
                     departmentId, positionId,
                     academicTitleId, academicDegreeId,
-                    status);
+                    status,img);
         
             request.setAttribute("success", "success");
             request.getRequestDispatcher("admin/adddoctor.jsp").forward(request, response);

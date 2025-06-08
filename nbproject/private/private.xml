@@ -2,6 +2,17 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Doctris/NhomNam/web/META-INF/context.xml</file>
+            <file>file:/D:/Doctris/NhomNam/web/admin/doctor.jsp</file>
+            <file>file:/D:/Doctris/NhomNam/web/admin/updatedoctor.jsp</file>
+            <file>file:/D:/Doctris/NhomNam/src/java/dal/DoctorDAO.java</file>
+            <file>file:/D:/Doctris/NhomNam/src/java/controller/admin/AddDoctorController.java</file>
+            <file>file:/D:/Doctris/NhomNam/web/admin/dashboard.jsp</file>
+            <file>file:/D:/Doctris/NhomNam/src/java/controller/admin/DoctorManager.java</file>
+            <file>file:/D:/Doctris/NhomNam/src/java/controller/admin/UpdateDeleteDoctor.java</file>
+            <file>file:/D:/Doctris/NhomNam/src/java/model/Doctor.java</file>
+            <file>file:/D:/Doctris/NhomNam/src/java/controller/admin/AccountManager.java</file>
+        </group>
     </open-files>
 </project-private>

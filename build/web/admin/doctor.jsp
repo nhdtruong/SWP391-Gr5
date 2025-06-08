@@ -127,7 +127,7 @@
                                                     </c:if>   
                                                     <td class="p-3">
                                                         <a href="#" class="btn btn-info"
-                                                           onclick="openDetailModal( '${fn:escapeXml(d.getDescription())}', '${d.getImg()}', '${d.getDoctor_name()}', '${d.getGender()}', '${d.getPosition().getName()}', '${d.getDepartment().getDepartment_name()}', '${d.getStatus() == 1 ? "Active" : d.getStatus() == 0 ? "Disable" : "Wait"}')">
+                                                           onclick="openDetailModal('${fn:escapeXml(d.getDescription())}', '${d.getImg()}', '${d.getDoctor_name()}', '${d.getGender()}', '${d.getPosition().getName()}', '${d.getDepartment().getDepartment_name()}', '${d.getStatus() == 1 ? "Active" : d.getStatus() == 0 ? "Disable" : "Wait"}')">
                                                             Detail
                                                         </a>
                                                     </td>
@@ -156,9 +156,42 @@
                             <div class="col-12 mt-4">
                                 <div class="d-md-flex align-items-center text-center" style="justify-content: center">
                                     <ul class="pagination justify-content-center mb-0 mt-3 mt-sm-0">
-                                        <c:forEach begin="${1}" end="${num}" var="i">
-                                            <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
-                                            </c:forEach>
+                                        <c:choose>
+                                            <c:when test="${page < numPageDisplay  && num < numPageDisplay  }">
+                                                <c:forEach begin="${1}" end="${num}" var="i">
+                                                    <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                    </c:forEach>
+
+                                            </c:when>
+
+                                            <c:when test="${page < numPageDisplay  && num > numPageDisplay  }">
+                                                <c:forEach begin="${1}" end="${numPageDisplay}" var="i">
+                                                    <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                    </c:forEach>
+
+                                            </c:when>
+
+
+                                            <c:when test="${(num - page + 1 ) <= numPageDisplay && num >= numPageDisplay}">
+                                                <li class="page-item"><a class="page-link" href="${url}&page=${page-1}">Prev</a></li>
+                                                    <c:forEach begin="${num - (numPageDisplay-1)}" end="${num}" var="i">
+                                                    <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                    </c:forEach>
+
+                                            </c:when>   
+
+
+                                            <c:otherwise >
+                                                <li class="page-item"><a class="page-link" href="${url}&page=${page-1}">Prev</a></li>
+                                                    <c:forEach begin="${page-(numPageDisplay/2)+1}" end="${page+(numPageDisplay/2)}" var="i">
+                                                    <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                    </c:forEach>
+                                                <li class="page-item"><a class="page-link" href="${url}&page=${page+1}">Next</a></li>  
+                                                </c:otherwise>      
+
+                                        </c:choose>
+
+
                                     </ul>
                                 </div>
                             </div>
@@ -197,10 +230,10 @@
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-md-12 fw-bold">Mô tả:</div>
-                                            
+
                                         </div>
                                         <div class="row mb-2">
-                                            
+
                                             <div style="margin-left: 30px" class="col-md-12" id="description"></div>
                                         </div>
                                         <div class="row mb-2">
@@ -279,8 +312,18 @@
 
                     }
                     function openDetailModal(description, img, name, gender, position, department, status) {
+                        if (img === 'default') {
+                            if (gender === 'Nam') {
+                                document.getElementById('doctorImage').src = 'assets/images/doctors/doctormale.jpg';
+                            } else if (gender === 'Nữ') {
+                                document.getElementById('doctorImage').src = 'assets/images/doctors/doctorfemale.jpg';
+                            } else {
+                                document.getElementById('doctorImage').src = 'assets/images/doctors/doctormale.jpg';
+                            }
+                        } else {
+                            document.getElementById('doctorImage').src = img;
+                        }
                         document.getElementById('description').innerHTML = description;
-                        document.getElementById('doctorImage').src = img;
                         document.getElementById('detailName').innerText = name;
                         document.getElementById('detailGender').innerText = gender;
                         document.getElementById('detailPosition').innerText = position;

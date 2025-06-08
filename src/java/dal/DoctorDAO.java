@@ -327,12 +327,30 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         }
         return null;
     }
+      public void updateDoctorStatusRole( String username, int status) {
+    String sql = "UPDATE doctors SET  status = ?  WHERE username = ?";
+    
+    try (  PreparedStatement ps = connection.prepareStatement(sql)) {
+
+         
+        ps.setString(2, username);
+        ps.setInt(1, status);
+
+        int rows = ps.executeUpdate();
+        
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    
+}
     public void updateDoctor(int doctorId, String doctorName, String gender, String phone, String dob,
                             String description, int departmentId, int status) {
     String sql = "UPDATE doctors SET doctor_name = ?, gender = ?, phone = ?, dob = ?, " +
-                 "description = ?, deparment_id = ?, status = ? WHERE doctor_id = ?";
+                 "description = ?, deparment_id = ?, status = ?  WHERE doctor_id = ?";
     
-    try ( // Đổi thành cách bạn kết nối DB
+    try ( 
          PreparedStatement ps = connection.prepareStatement(sql)) {
         
         ps.setString(1, doctorName);
@@ -343,6 +361,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         ps.setInt(6, departmentId);
         ps.setInt(7, status);
         ps.setInt(8, doctorId);
+        
 
         int rows = ps.executeUpdate();
         
@@ -354,7 +373,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
     
 }
 
-    public void InsertDoctorByAdmin(String username, String doctor_name, String gender, int department_id, int position_id, int AcademicT_id, int AcademicDgre_id, int status) {
+    public void InsertDoctorByAdmin(String username, String doctor_name, String gender, int department_id, int position_id, int AcademicT_id, int AcademicDgre_id, int status,String img) {
         String sql = "INSERT INTO doctors (\n"
                 + "    username,\n"
                 + "    doctor_name,\n"
@@ -363,8 +382,9 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
                 + "    position_id,\n"
                 + "    AcademicTitle_id,\n"
                 + "    AcademicDegree_id,\n"
-                + "    status\n"
-                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                + "    status,\n"
+                + "    img\n"
+                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try {
             ps = connection.prepareStatement(sql);
 
@@ -376,6 +396,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
             ps.setInt(6, AcademicT_id);
             ps.setInt(7, AcademicDgre_id);
             ps.setInt(8, status);
+            ps.setString(9, img);
             ps.executeUpdate();
 
         } catch (SQLException e) {

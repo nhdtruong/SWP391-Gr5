@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * @author DELL
@@ -88,8 +87,13 @@ public class UpdateDeleteAccount extends HttpServlet {
             int status = Integer.parseInt(status_);
             UserDAO u = new UserDAO();
             u.updateAccountByAdmin(username, role_id, status);
-            
-            
+            if (role_id == 4) {
+                DoctorDAO d = new DoctorDAO();
+                d.updateDoctorStatusRole(username, status);
+            }
+
+            response.sendRedirect("accountmanager?action=all");
+
         }
 
         if (action.equals("delete")) {
