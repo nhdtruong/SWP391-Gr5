@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller.admin;
 
+import dal.DepartmentDAO;
 import dal.DoctorDAO;
+import dal.PositionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,42 +16,103 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import model.Deparment;
 import model.Doctor;
+import model.Position;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name="DoctorManager", urlPatterns={"/doctormanager"})
+@WebServlet(name = "DoctorManager", urlPatterns = {"/doctormanager"})
 public class DoctorManager extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        String url = null;
+        DoctorDAO dDao = new DoctorDAO();
+        DepartmentDAO deDao = new DepartmentDAO();
+        PositionDAO pDao =new PositionDAO();
+        List<Doctor> listDoctor = null;
+        List<Deparment> listDeparment = deDao.getAllDeparment();
+        List<Position> listPosition = pDao.getAllPosition();
+        
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DoctorManager</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DoctorManager at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            if (action.equals("all")) {
+                listDoctor = dDao.getAllDoctorByAdmin();
+                url = "doctormanager?action=all";
+            }
+            if (action.equals("search")) {
+                String text = request.getParameter("text");
+                listDoctor = dDao.getAllDoctorBySearchName(text);
+            }
+            if (action.equals("filter")) {
+                
+                String gender = request.getParameter("gender");
+                String position = request.getParameter("position_id");
+                String department = request.getParameter("department_id");
+
+                request.setAttribute("gender", gender);
+                request.setAttribute("position_id", position);
+                request.setAttribute("department_id", department);
+                
+                listDoctor = dDao.getAllDoctorByFilter(gender, position, department);
+                url = "doctormanager?action=filter&gender="+gender+"&position="+position+"&department="+department;
+                 
+            }
+            
+            if (listDoctor != null) {
+                int page, numberPerPage = 9;
+                int size = listDoctor.size();
+                int numberPage = (size % numberPerPage == 0) ? (size / numberPerPage) : ((size / numberPerPage) + 1);
+                String xPage = request.getParameter("page");
+                if (xPage == null) {
+                    page = 1;
+                } else {
+                    page = Integer.parseInt(xPage);
+                }
+                int start = (page - 1) * numberPerPage;
+                int end = Math.min(page * numberPerPage, size);
+                int numPageDisplay = 7;
+                List<Doctor> listDoctorDisplay = getListDoctorDisplay(listDoctor, start, end);
+                request.setAttribute("position", listPosition);
+                 request.setAttribute("department", listDeparment);
+                request.setAttribute("doctor", listDoctorDisplay);
+                request.setAttribute("url", url);
+                request.setAttribute("page", page);
+                request.setAttribute("num", numberPage);
+                request.setAttribute("numPageDisplay", numPageDisplay);
+                request.getRequestDispatcher("admin/doctor.jsp").forward(request, response);
+            }
+            
         }
-    } 
+    }
+    
+    private List<Doctor> getListDoctorDisplay(List<Doctor> listDoctor, int start, int end) {
+        List<Doctor> listDoctorDisplay = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            listDoctorDisplay.add(listDoctor.get(i));
+        }
+        return listDoctorDisplay;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -58,16 +120,13 @@ public class DoctorManager extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        DoctorDAO dDao = new DoctorDAO();
-        List<Doctor> listDoc = dDao.getAllDoctorByAdmin();
-        request.setAttribute("doctor", listDoc);
-        request.getRequestDispatcher("admin/doctor.jsp").forward(request, response);
-    } 
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -75,12 +134,13 @@ public class DoctorManager extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

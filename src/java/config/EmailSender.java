@@ -2,25 +2,24 @@ package config;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.text.NumberFormat;
-import java.time.Instant;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Properties;
-import model.OTPutil;
+
 
 
 public class EmailSender {
 
     public static void sendVerificationEmail( String toEmail) throws MessagingException, UnsupportedEncodingException {
 
-// nhom 5 truong moi code
-        
-        
+
+
+        // ok 
+       
+      //ok
+     
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);
         Date expirationTime = calendar.getTime();

@@ -86,7 +86,6 @@ public class RegisterServerlet extends HttpServlet {
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 String repassword = request.getParameter("repassword");
-
                 String email = request.getParameter("email");
                 int role_id = 5;
                 String img = "default";
