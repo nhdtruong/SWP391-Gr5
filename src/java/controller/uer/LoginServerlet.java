@@ -41,49 +41,59 @@ public class LoginServerlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
-        UserDAO dao = new UserDAO();
+        UserDAO dao =  new UserDAO();
         String action = "";
         action = request.getParameter("action");
-        if (action == null) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+        if(action == null ){
+           request.getRequestDispatcher("login.jsp").forward(request, response);  
+            return; 
+        }
+        if(action.equals("login")){
+            request.getRequestDispatcher("login.jsp").forward(request, response);  
             return;
         }
-        if (action.equals("login")) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        }
-        if (action.equals("checkLogin")) {
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            String remember = request.getParameter("remember");
-            AccountUser account = dao.Login(username, password);
-            if (account == null) {
-                request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-                return;
-            } else {
-                session.setAttribute("user", account);
-                Cookie cuname = new Cookie("username", username);
-                Cookie cpass = new Cookie("password", password);
-                Cookie rem = new Cookie("remember", remember);
-                if (remember != null) {
-                    cuname.setMaxAge(60 * 60 * 24 * 30);
-                    cpass.setMaxAge(60 * 60 * 24 * 30);
-                    rem.setMaxAge(60 * 60 * 24 * 30);
-                } else {
-                    cuname.setMaxAge(0);
-                    cpass.setMaxAge(0);
-                    rem.setMaxAge(0);
-                }
-                if (account.getRole() == 1) {
-                    response.sendRedirect("dashboard");
-                } else {
-                    response.sendRedirect("home");
-                }
-
-            }
-
-        }
+       if(action.equals("checkLogin")){
+           String username = request.getParameter("username");
+           String password = request.getParameter("password");
+           String remember = request.getParameter("remember");
+           request.setAttribute("username", username);
+           AccountUser account = dao.Login(username, password);
+           if(account  == null ){
+               request.setAttribute("error","Tài khoản hoặc mật khẩu không chính xác");
+               request.getRequestDispatcher("login.jsp").forward(request, response);
+                  return;
+           }else if (account.getStatus() == 0) {
+                    request.setAttribute("error", "Tài khoản đã bị khóa !");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+            }else if (account.getStatus() == 2) {
+                    request.setAttribute("acc",account);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+            }else{
+                    
+                    session.setAttribute("user",account);
+                    Cookie cuname = new Cookie("username",username);
+                    Cookie cpass = new Cookie("password", password);
+                    Cookie rem = new Cookie("remember", remember);
+                    if (remember != null) {
+                        cuname.setMaxAge(60 * 60 * 24 * 30);
+                        cpass.setMaxAge(60 * 60 * 24 * 30);
+                        rem.setMaxAge(60 * 60 * 24 * 30);
+                    } else {
+                        cuname.setMaxAge(0);
+                        cpass.setMaxAge(0);
+                        rem.setMaxAge(0);
+                    }
+              if(account.getRole() == 1){
+                  response.sendRedirect("dashboard");
+              }else{
+                  response.sendRedirect("home");
+              }
+             
+           }
+           
+       }
 
     }
 

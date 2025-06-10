@@ -82,7 +82,6 @@
                             </div>
                             <div class="col-md-1">
                                 <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
-
                             </div>                         
                         </div>
 
@@ -127,7 +126,7 @@
                                                     </c:if>   
                                                     <td class="p-3">
                                                         <a href="#" class="btn btn-info"
-                                                           onclick="openDetailModal('${fn:escapeXml(d.getDescription())}', '${d.getImg()}', '${d.getDoctor_name()}', '${d.getGender()}', '${d.getPosition().getName()}', '${d.getDepartment().getDepartment_name()}', '${d.getStatus() == 1 ? "Active" : d.getStatus() == 0 ? "Disable" : "Wait"}')">
+                                                           onclick="openDetailModal('${d.getSpecialized()}', '${fn:escapeXml(d.getEducationHistory())}', '${d.getAcademicDegree().getName()}', '${d.getAcademicTitle().getName()}', '${fn:escapeXml(d.getDescription())}', '${d.getImg()}', '${d.getDoctor_name()}', '${d.getGender()}', '${d.getPosition().getName()}', '${d.getDepartment().getDepartment_name()}', '${d.getStatus() == 1 ? "Active" : d.getStatus() == 0 ? "Disable" : "Wait"}')">
                                                             Detail
                                                         </a>
                                                     </td>
@@ -198,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Detail Modal -->
+
                 <!-- Modal Chi tiết bác sĩ -->
                 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -230,7 +229,6 @@
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-md-12 fw-bold">Mô tả:</div>
-
                                         </div>
                                         <div class="row mb-2">
 
@@ -239,6 +237,26 @@
                                         <div class="row mb-2">
                                             <div class="col-md-2 fw-bold">Chuyên khoa:</div>
                                             <div class="col-md-10" id="detailDepartment"></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-2 fw-bold">Chuyên trị:</div>
+                                            <div class="col-md-10" id="detailSpecialized"></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-2 fw-bold">Tiểu sử:</div>
+                                          
+                                        </div>
+                                        <div class="row mb-2">
+
+                                            <div style="margin-left: 30px" class="col-md-12" id="detailEducation"></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-2 fw-bold">Học vị:</div>
+                                            <div class="col-md-10" id="detailDegree"></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-2 fw-bold">Học hàm:</div>
+                                            <div class="col-md-10" id="detailTitle"></div>
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-md-2 fw-bold">Trạng thái:</div>
@@ -311,8 +329,10 @@
                         new bootstrap.Modal(document.getElementById('deleteModal')).show();
 
                     }
-                    function openDetailModal(description, img, name, gender, position, department, status) {
-                        if (img === 'default') {
+
+                    function openDetailModal(specialized, educationHistory, academicDegree, academicTitle, description, img, name, gender, position, department, status) {
+                       
+                        if (img === 'default' || img.trim() === '') {
                             if (gender === 'Nam') {
                                 document.getElementById('doctorImage').src = 'assets/images/doctors/doctormale.jpg';
                             } else if (gender === 'Nữ') {
@@ -323,14 +343,23 @@
                         } else {
                             document.getElementById('doctorImage').src = img;
                         }
-                        document.getElementById('description').innerHTML = description;
+
+                  
+                       
                         document.getElementById('detailName').innerText = name;
                         document.getElementById('detailGender').innerText = gender;
                         document.getElementById('detailPosition').innerText = position;
                         document.getElementById('detailDepartment').innerText = department;
                         document.getElementById('detailStatus').innerText = status;
+                        document.getElementById('detailSpecialized').innerText = specialized?.trim() || 'Đang cập nhật';
+                        document.getElementById('detailEducation').innerHTML = educationHistory?.trim() || 'Đang cập nhật';
+                        document.getElementById('detailDegree').innerText = academicDegree === "" ? 'Không':academicDegree;
+                        document.getElementById('detailTitle').innerText = academicTitle === "" ? 'Không':academicTitle;
+                        document.getElementById('description').innerHTML = description?.trim() || 'Đang cập nhật';
                         new bootstrap.Modal(document.getElementById('detailModal')).show();
                     }
+                 
+
                 </script>
 
 

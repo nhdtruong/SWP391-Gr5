@@ -236,7 +236,7 @@
                 align-items: center;
                 justify-content: center;
                 text-align: center;">
-        ✅<br>Thêm bác sĩ<br>thành công!
+         <br>Thêm bác sĩ<br>thành công!
     </div>
 
     <script>
@@ -249,8 +249,7 @@
             </main>
 
         </div> 
-                <jsp:include page="../admin/layout/footer.jsp"/>
-            </main>
+              
 
         </div>
 

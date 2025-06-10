@@ -27,10 +27,6 @@ import model.Deparment;
 import model.Doctor;
 import model.Position;
 
-
-
-
-
 /**
  *
  * @author DELL
@@ -84,43 +80,26 @@ public class UpdateDeleteDoctor extends HttpServlet {
             String DOB = request.getParameter("DOB");
             String description = request.getParameter("description");
             String department_id = request.getParameter("department_id");
+            String EducationHistory = request.getParameter("EducationHistory");
+            String specialized = request.getParameter("specialized");
+            String positionId = request.getParameter("positionId");
+            String academicDegreeId = request.getParameter("academicDegreeId");
+            String academicTitleId = request.getParameter("academicTitleId");
             String status = request.getParameter("status");
-          //  String oldImage = request.getParameter("oldImage");
 
-         //   Part filePart = request.getPart("image"); // file input name="image"
-         //   String imageUrl = oldImage; // mặc định giữ ảnh cũ
-
-//            Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-//                    "cloud_name", "da9qbv1j3",
-//                    "api_key", "472792579998957",
-//                    "api_secret", "9kianrPjNSiGZfFGOR1cYd6VpoI"
-//            ));
-//            
-//            if (filePart != null && filePart.getSize() > 0) {
-//    try (InputStream inputStream = filePart.getInputStream()) {
-//        Map options = ObjectUtils.asMap(
-//            "folder", "Home/Doctor"  // Tên folder trong Cloudinary
-//        );
-//        Map uploadResult = cloudinary.uploader().upload(inputStream, options);
-//         imageUrl = (String) uploadResult.get("secure_url");  // URL ảnh
-//        // Lưu imageUrl vào database nếu cần
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//    }
-//}        
             DoctorDAO d = new DoctorDAO();
             UserDAO udao = new UserDAO();
             String username = d.getUsernameByDoctorId(doctor_id);
             udao.updateAccountByAdmin(username, 4, Integer.parseInt(status));
-            
-            
+
             d.updateDoctor(Integer.parseInt(doctor_id), doctor_name,
-                    gender, phone, DOB, description, Integer.parseInt(department_id), Integer.parseInt(status));
+                    gender, phone, DOB, description, Integer.parseInt(department_id), Integer.parseInt(status), specialized, EducationHistory,
+                    Integer.parseInt(positionId), Integer.parseInt(academicDegreeId), Integer.parseInt(academicTitleId));
 
             response.sendRedirect("doctormanager?action=all");
 
         }
-    
+
         if (action.equals("delete")) {
             String doctor_id = request.getParameter("doctor_id");
             DoctorDAO d = new DoctorDAO();

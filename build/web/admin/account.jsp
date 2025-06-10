@@ -68,7 +68,7 @@
                                     </form>
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
+                                    <a href="addaccount" type="button"class="btn btn-info">Add+</a>         
 
                                 </div>                             
                             </div>
@@ -110,12 +110,14 @@
                                                     <c:if test="${a.getStatus() == 2}">
                                                         <td class="p-3" style="color: yellow">Wait</td>
                                                     </c:if>
+                                                    <c:if test="${a.getORole().getId() != 1}">   
                                                     <td class="p-3">
                                                         <a href="#" class="btn btn-primary"
                                                            data-bs-toggle="modal"
                                                            data-bs-target="#editModal"
                                                            onclick="openEditModal('${a.getUsername()}', '${a.getORole().getId()}', '${a.getStatus()}')">Update</a>
                                                     </td>
+                                                    </c:if>
                                                     <c:if test="${a.getORole().getId() != 1}">
                                                         <td class="p-3">
                                                             <a href="#" class="btn btn-danger"

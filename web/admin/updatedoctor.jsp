@@ -33,10 +33,10 @@
                                             <c:if test="${doctor.getImg() == 'default' && doctor.getGender() == 'Nữ'}"> 
                                                 <img id="thumbimage" class="rounded-circle shadow" src="assets/images/doctors/doctorfemale.jpg" alt="Ảnh đại diện" style="width: 120px;" />
                                             </c:if>  
-                                              <c:if test="${doctor.getImg() == 'default' && doctor.getGender() == 'Khác'}"> 
+                                            <c:if test="${doctor.getImg() == 'default' && doctor.getGender() == 'Khác'}"> 
                                                 <img id="thumbimage" class="rounded-circle shadow" src="assets/images/doctors/doctormale.jpg" alt="Ảnh đại diện" style="width: 120px;" />
                                             </c:if>
-                                                   
+
                                             <c:if test="${doctor.img != 'default'}">
                                                 <img id="thumbimage" class="rounded-circle shadow" src="${doctor.getImg()}" alt="Ảnh đại diện" style="width: 120px;" />
                                             </c:if>
@@ -90,7 +90,7 @@
 
 
                                     <div class="col-md-12 mb-3">
-                                        <label class="form-label">Mô tả</label>
+                                        <label class="form-label">Giới thiệu</label>
                                         <textarea name="description" id="editors">${doctor.getDescription()}</textarea>
                                     </div>
 
@@ -106,102 +106,113 @@
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="position">Chức vụ <span class="text-danger">*</span></label>
-                                        <select class="form-control" id="position" name="positionId" required>
 
-                                            <c:forEach var="p" items="${requestScope.Position}">
-                                                <option value="${p.getId()}" ${requestScope.positionId == p.getId() ? 'selected' : ''}>
-                                                    ${p.getName()}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
+
+                               
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Chuyên trị</label>
+                                    <input name="specialized" value="${doctor.getSpecialized()}" class="form-control">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Quá trình đào tạo</label>
+                                    <textarea name="EducationHistory" id="editorss">${doctor.getEducationHistory()}</textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="position">Chức vụ <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="position" name="positionId" required>
+
+                                        <c:forEach var="p" items="${requestScope.Position}">
+                                            <option value="${p.getId()}" ${doctor.getPosition().getId() == p.getId() ? 'selected' : ''}>
+                                                ${p.getName()}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="academicDegree">Học vị </label>
+                                    <select class="form-control" id="academicDegree" name="academicDegreeId" required>
+
+                                        <c:forEach var="ad" items="${requestScope.AcademicDegree}">
+                                            <option value="${ad.getId()}" ${doctor.getAcademicDegree().getId() == ad.getId() ? 'selected' : ''}>
+                                                ${ad.getName()}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="academicTitle">Học hàm</label>
+                                    <select class="form-control" id="academicTitle" name="academicTitleId" required>
+
+                                        <c:forEach var="at" items="${requestScope.AcademicTitle}">
+                                            <option value="${at.getId()}" ${doctor.getAcademicTitle().getId() == at.getId() ? 'selected' : ''}>
+                                                ${at.getName()}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <!-- Trạng thái -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Trạng thái</label><br/>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status" value="1" ${doctor.getStatus()=="1"?"checked":""}>
+                                        <label class="form-check-label">Hoạt động</label>
                                     </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="academicDegree">Học vị </label>
-                                        <select class="form-control" id="academicDegree" name="academicDegreeId" required>
-
-                                            <c:forEach var="ad" items="${requestScope.AcademicDegree}">
-                                                <option value="${ad.getId()}" ${requestScope.academicDegreeId == ad.getId() ? 'selected' : ''}>
-                                                    ${ad.getName()}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status" value="0" ${doctor.getStatus()=="0"?"checked":""}>
+                                        <label class="form-check-label">Khóa</label>
                                     </div>
-
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="academicTitle">Học hàm</label>
-                                        <select class="form-control" id="academicTitle" name="academicTitleId" required>
-
-                                            <c:forEach var="at" items="${requestScope.AcademicTitle}">
-                                                <option value="${at.getId()}" ${requestScope.academicTitleId == at.getId() ? 'selected' : ''}>
-                                                    ${at.getName()}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status" value="2" ${doctor.getStatus()=="2"?"checked":""}>
+                                        <label class="form-check-label">Đợi</label>
                                     </div>
                                 </div>
-                        
 
+                                <!-- Nút cập nhật -->
+                                <div class="col-12 mt-3 text-center">
+                                    <button type="submit" class="btn btn-success px-4">Cập nhật tất cả</button>
+                                </div>
+                                </div>
+                            </form>
 
-                        <!-- Trạng thái -->
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Trạng thái</label><br/>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="status" value="1" ${doctor.getStatus()=="1"?"checked":""}>
-                                <label class="form-check-label">Hoạt động</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="status" value="0" ${doctor.getStatus()=="0"?"checked":""}>
-                                <label class="form-check-label">Khóa</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="status" value="2" ${doctor.getStatus()=="2"?"checked":""}>
-                                <label class="form-check-label">Đợi</label>
-                            </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Nút cập nhật -->
-                        <div class="col-12 mt-3 text-center">
-                            <button type="submit" class="btn btn-success px-4">Cập nhật tất cả</button>
-                        </div>
-                           
-                </form>
-                              
+                <jsp:include page="../admin/layout/footer.jsp"/>
+            </main>
         </div>
-    </div>
-</div>
-
-<jsp:include page="../admin/layout/footer.jsp"/>
-</main>
-</div>
 
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/ui/trumbowyg.min.css">
-<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/ui/trumbowyg.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
 
-<script>
-                                                $(document).ready(function () {
-                                                    $('#editors').trumbowyg();
-                                                });
-                                                function readURL(input) {
-                                                    if (input.files && input.files[0]) {
-                                                        var reader = new FileReader();
+        <script>
+                                                        $(document).ready(function () {
+                                                            $('#editors').trumbowyg();
+                                                        });
+                                                        $(document).ready(function () {
+                                                            $('#editorss').trumbowyg();
+                                                        });
+                                                        function readURL(input) {
+                                                            if (input.files && input.files[0]) {
+                                                                var reader = new FileReader();
 
-                                                        reader.onload = function (e) {
-                                                            const preview = document.getElementById('previewImage');
-                                                            preview.src = e.target.result;
-                                                            preview.style.display = 'block';
-                                                        };
-                                                        reader.readAsDataURL(input.files[0]);
-                                                    }
-                                                }
-</script>
-</body>
+                                                                reader.onload = function (e) {
+                                                                    const preview = document.getElementById('previewImage');
+                                                                    preview.src = e.target.result;
+                                                                    preview.style.display = 'block';
+                                                                };
+                                                                reader.readAsDataURL(input.files[0]);
+                                                            }
+                                                        }
+        </script>
+    </body>
 
 </html>

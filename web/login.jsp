@@ -7,6 +7,30 @@
     <jsp:include page="layout/head.jsp"/>
 
     <body>
+        <style>
+    .custom-warning-box {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 15px;
+        border-left: 5px solid #ffeeba;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+    .change-pass-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #ffc107;
+        color: #212529;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+    .change-pass-btn:hover {
+        background-color: #e0a800;
+        color: white;
+    }
+</style>
         <div class="back-to-home rounded d-none d-sm-block">
             <a href="home" class="btn btn-icon btn-primary"><i data-feather="home" class="icons"></i></a>
         </div>
@@ -32,14 +56,14 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Tài khoản <span class="text-danger">*</span></label>
-                                                <input type="text" value="${cookie.username.value}" class="form-control" placeholder="User name" name="username" required="">
+                                                <input type="text" value="${username}" class="form-control" placeholder="User name" name="username" required="">
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                                                <input type="password"  value="${cookie.password.value}" class="form-control" name="password" placeholder="Password" required="">
+                                                <input type="password"  value="" class="form-control" name="password" placeholder="Password" required="">
                                             </div>
                                         </div>
 
@@ -51,7 +75,7 @@
                                                         <label class="form-check-label" for="remember-check">Lưu tài khoản</label>
                                                     </div>
                                                 </div>
-                                                <a href="user?action=recover" class="text-dark h6 mb-0">Quên mật khẩu ?</a>
+                                                <a href="changepassword?action=forgotpass" class="text-dark h6 mb-0">Quên mật khẩu ?</a>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-0">
@@ -59,21 +83,15 @@
                                                 <button class="btn btn-primary" id="submit">Đăng nhập</button>
                                             </div>
                                             <div class="text-center" style="margin-top: 10px">
-<!--                                     <span class="divider-text">hoặc</span>-->
-                                                 </div>
+                                             </div>
                                         </div>
-                                                        
-<!--                                            <div class="d-grid">
-                                             <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid 
-&redirect_uri=http://localhost:8080/doctris2/login 
-&response_type=code 
-&client_id=317169805740-15i71k4oteapam282tio5bfe936db95n.apps.googleusercontent.com
-&approval_prompt=force" 
-                                        class="btn btn-outline-danger google-login-btn">
-                                       <img src="https://img.icons8.com/color/16/000000/google-logo.png" class="me-2">
-                                            Đăng nhập bằng Google
-                                           </a>
-                                              </div>            -->
+                                         <c:if test="${acc.getStatus() == 2}">
+                                             <div class="col-lg-12 custom-warning-box">
+                                              <p class="warning-text">Tài khoản '${acc.getUsername()}' cần đổi mật khẩu!</p>
+                                              <a href="changepassword?action=hdn&username=${acc.getUsername()}" class="change-pass-btn">Hành động ngay</a>
+                                               </div>              
+                                         </c:if>
+
                                                         
                                         <div class="col-12 text-center">
                                             <p class="mb-0 mt-3"><small class="text-dark me-2">Chưa có tài khoản ?</small> <a href="register?action=register" class="text-dark fw-bold">Đăng ký</a></p>
@@ -86,7 +104,7 @@
                 </div>
                 <div class="col-lg-12 my-3">
     
-</div>                                        
+                 </div>                                        
             </div> 
            </div>
            <div   class="col-md-6 "style="background-image: url('assets/images/imgLogin/login.jpg')"> 
