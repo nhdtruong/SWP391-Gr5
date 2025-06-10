@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/build/
-/dist/
-=======
 # Ignore NetBeans specific files
 nbproject/private/
 build/
@@ -24,4 +20,4 @@ Thumbs.db
 # IDEs
 *.iml
 .idea/
->>>>>>> main
+
