@@ -1,2 +1,27 @@
+<<<<<<< HEAD
 /build/
 /dist/
+=======
+# Ignore NetBeans specific files
+nbproject/private/
+build/
+dist/
+*.bak
+*.log
+
+# Ignore compiled class files
+*.class
+
+# Ignore generated files
+*.war
+*.ear
+*.jar
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+*.iml
+.idea/
+>>>>>>> main
