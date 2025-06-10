@@ -63,7 +63,7 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                                                <input type="password"  value="" class="form-control" name="password" placeholder="Password" required="">
+                                                <input type="password"  value="${password}" class="form-control" name="password" placeholder="Password" required="">
                                             </div>
                                         </div>
 

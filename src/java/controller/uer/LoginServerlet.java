@@ -57,6 +57,7 @@ public class LoginServerlet extends HttpServlet {
            String password = request.getParameter("password");
            String remember = request.getParameter("remember");
            request.setAttribute("username", username);
+           request.setAttribute("password", password);
            AccountUser account = dao.Login(username, password);
            if(account  == null ){
                request.setAttribute("error","Tài khoản hoặc mật khẩu không chính xác");
