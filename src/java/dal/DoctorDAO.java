@@ -147,7 +147,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
     List<Doctor> list = new ArrayList<>();
     String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
             "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
-            "d.AcademicDegree_id, d.status FROM doctors d WHERE d.doctor_name LIKE ?";
+            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE d.doctor_name LIKE ?";
 
     try (PreparedStatement ps = connection.prepareStatement(sql)) {
         ps.setString(1, "%" + name + "%");
@@ -167,8 +167,8 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
                     getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
                     getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
                     rs.getInt("status"),
-                    rs.getString(15),
-                    rs.getString(16),
+                    rs.getString("specialized"),
+                    rs.getString("EducationHistory"),
                     getEmailDotorByUsernae(rs.getString("username"))
             );
             list.add(d);

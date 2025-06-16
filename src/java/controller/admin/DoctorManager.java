@@ -57,7 +57,10 @@ public class DoctorManager extends HttpServlet {
             }
             if (action.equals("search")) {
                 String text = request.getParameter("text");
+                request.setAttribute("text", text);
                 listDoctor = dDao.getAllDoctorBySearchName(text);
+                
+                url = "doctormanager?action=search&text="+text;
             }
             if (action.equals("filter")) {
                 

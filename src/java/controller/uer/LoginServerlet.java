@@ -4,9 +4,9 @@
  */
 package controller.uer;
 
+import config.EncodeData;
 import dal.UserDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -58,6 +58,9 @@ public class LoginServerlet extends HttpServlet {
            String remember = request.getParameter("remember");
            request.setAttribute("username", username);
            request.setAttribute("password", password);
+           String enPassWord = EncodeData.enCode(password);
+                   
+          // AccountUser account = dao.Login(username, enPassWord);
            AccountUser account = dao.Login(username, password);
            if(account  == null ){
                request.setAttribute("error","Tài khoản hoặc mật khẩu không chính xác");

@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import model.CategoryServices;
-import model.Doctor;
+
 
 /**
  *
@@ -22,7 +22,7 @@ public class CategoryServiceDAO  extends DBContext{
      
      public List<CategoryServices> getAllCategoryServiceses(){
         List<CategoryServices> list = new ArrayList<>();
-        String sql = "select c.id,c.name ,c.img from category_service c" ;
+        String sql = "select c.category_service_id,c.name ,c.img from category_service c" ;
         try {
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -33,8 +33,14 @@ public class CategoryServiceDAO  extends DBContext{
             return list;
             
         } catch (Exception e) {
+            System.out.println(e);
         }
         
         return null;
     } 
+     
+     public static void main(String[] args) {
+        CategoryServiceDAO c = new CategoryServiceDAO();
+         System.out.println(c.getAllCategoryServiceses());
+    }
 }

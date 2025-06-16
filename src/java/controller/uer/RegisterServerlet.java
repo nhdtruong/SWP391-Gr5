@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import config.EmailSender;
+import config.EncodeData;
 import model.OTPdata;
 import model.OTPutil;
 /**
@@ -95,10 +96,11 @@ public class RegisterServerlet extends HttpServlet {
                 request.setAttribute("password", password);
                 request.setAttribute("repassword", repassword);
                 request.setAttribute("username", username);
+                String enPassWord = EncodeData.enCode(password);
                
                 AccountUser account1 = u.CheckAccByUsername(username );
                 AccountUser account2 = u.CheckAccByEmail(email);
-                AccountUser accountUser = new AccountUser(username, role_id, password, email, img, status);
+                AccountUser accountUser = new AccountUser(username, role_id, enPassWord, email, img, status);
                 
                 if(account1 != null && account2 != null ){
                     request.setAttribute("errorEM", "Email đã tồn tại!");
@@ -115,7 +117,7 @@ public class RegisterServerlet extends HttpServlet {
                     return;
                 }else{
                     HttpSession session = request.getSession();
-                    session.setAttribute("prepareAccount", accountUser);
+                    session.setAttribute("prepareAccountRegister", accountUser);
                     long expiryTime = System.currentTimeMillis() + 5 * 60 * 1000;
                     String otp =OTPutil.generateOTP() ;
                     OTPdata otpData = new OTPdata(otp, expiryTime);

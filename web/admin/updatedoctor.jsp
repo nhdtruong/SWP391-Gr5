@@ -9,7 +9,7 @@
 <html>
     <jsp:include page="../admin/layout/adminhead.jsp"/>
     <body>
-        <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+        
         <div class="page-wrapper doctris-theme toggled">
             <jsp:include page="../admin/layout/menu.jsp"/>
             <main class="page-content bg-light">
@@ -188,11 +188,10 @@
 
 
 
-
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/ui/trumbowyg.min.css">
         <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
-
+        
         <script>
                                                         $(document).ready(function () {
                                                             $('#editors').trumbowyg();

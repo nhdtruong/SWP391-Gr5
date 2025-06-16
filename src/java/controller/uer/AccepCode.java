@@ -20,8 +20,8 @@ import model.AccountUser;
  *
  * @author DELL
  */
-@WebServlet(name = "AccepCodeRegister", urlPatterns = {"/accepcode"})
-public class AccepCodeRegister extends HttpServlet {
+@WebServlet(name = "AccepCode", urlPatterns = {"/accepcode"})
+public class AccepCode extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,7 +51,9 @@ public class AccepCodeRegister extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        request.getRequestDispatcher("accepcode.jsp").forward(request, response);
     }
 
     /**
@@ -93,13 +95,31 @@ public class AccepCodeRegister extends HttpServlet {
             // ddungs 
             UserDAO u = new UserDAO();
 
-            AccountUser accountUser = (AccountUser) session.getAttribute("prepareAccount");
-
-            u.RegisterNewUser(accountUser.getUsername(), accountUser.getRole(), accountUser.getPassword(),
-                    accountUser.getEmail(), accountUser.getImg(), accountUser.getStatus());
-
-            session.invalidate();
-            request.getRequestDispatcher("registersuccess.jsp").forward(request, response);
+            AccountUser accountUser1 = (AccountUser) session.getAttribute("prepareAccountRegister");
+            AccountUser accountUser2 = (AccountUser) session.getAttribute("accountChangPass");
+            AccountUser accountUser3 = (AccountUser) session.getAttribute("accountPrepareUpdate");
+            
+            if (accountUser1 != null) {
+                u.registerNewUser(accountUser1.getUsername(), accountUser1.getRole(), 
+                        accountUser1.getPassword(), accountUser1.getEmail(), accountUser1.getImg(), accountUser1.getStatus());
+                session.invalidate();
+                
+                request.getRequestDispatcher("registersuccess.jsp").forward(request, response);
+                
+     
+            } else if (accountUser2 != null) {
+                request.setAttribute("type", "2");
+                request.getRequestDispatcher("recover.jsp").forward(request, response);
+            }else if(accountUser3 != null){
+                AccountUser accountCurrent = (AccountUser) session.getAttribute("user");
+                
+                u.updateAccountByUser(accountCurrent.getUsername(), accountUser3.getUsername(),accountUser3.getEmail());
+                accountCurrent.setUsername(accountUser3.getUsername());
+                accountCurrent.setEmail(accountUser3.getEmail());
+                session.setAttribute("user",accountCurrent);
+                response.sendRedirect("profile");
+                
+            }
 
         } else {
 

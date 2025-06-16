@@ -4,8 +4,6 @@
  */
 package controller.admin;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import dal.DepartmentDAO;
 import dal.DoctorDAO;
 import dal.QualificationDAO;
@@ -17,10 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import model.AcademicDegree;
 import model.AcademicTitle;
 import model.Deparment;

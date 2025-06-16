@@ -16,9 +16,6 @@ public class EmailSender {
 
 
 
-        // ok 
-       
-      //ok
      
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);
@@ -68,7 +65,7 @@ public class EmailSender {
          
         
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 3);
+        calendar.add(Calendar.MINUTE, 5);
         Date expirationTime = calendar.getTime();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
@@ -92,7 +89,7 @@ public class EmailSender {
         String htmlContent = "<html>"
     + "<body style='font-family: Arial, sans-serif;'>"
     + "<h2 style='color: #333;'>Xác minh tài khoản người dùng</h2>"
-    + "<p>Mã OTP của bạn có hiệu lực trong 3 phút:</p>"
+    + "<p>Mã OTP của bạn có hiệu lực trong 5 phút:</p>"
     + "<p style='background-color: #4CAF50; color: white; padding: 10px 20px; "
     + "text-align: center; text-decoration: none; display: inline-block; "
     + "font-size: 24px; margin: 10px 0; border-radius: 5px;'>"
