@@ -23,14 +23,14 @@ public class UserDAO extends DBContext {
     ResultSet rs = null;
 
     public AccountUser Login(String username, String password) throws SQLException {
-        String sql = "select u.username ,u.role_id ,u.password,u.email,u.img ,u.status from users u where u.username =? and u.password = ?";
+        String sql = "select u.username ,u.role_id ,u.email,u.img ,u.status from users u where u.username =? and u.password = ?";
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
             rs = ps.executeQuery();
             while (rs.next()) {
-                return new AccountUser(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6));
+                return new AccountUser(rs.getString(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5));
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -69,6 +69,22 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    
+     public AccountUser CheckAccByUsernameOREmail(String username,String email) {
+        String sql = "select u.username  from users u where u.username = ? or u.email = ? ";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2,email);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new AccountUser(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
     public AccountUser CheckAccByEmail(String email) {
         String sql = "select u.email  from users u where  u.email = ?";
@@ -84,23 +100,22 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-
-    public void RegisterNewUser(String username, int role, String password, String email, String img, int status) {
-        String sql = "insert into users values (?,?,?,?,?,?);";
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, username);
-            ps.setInt(2, role);
-            ps.setString(3, password);
-            ps.setString(4, email);
-            ps.setString(5, img);
-            ps.setInt(6, status);
-            ps.executeUpdate();
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+    
+    
+public void registerNewUser(String username, int role, String password, String email, String img, int status) {
+    String sql = "INSERT INTO users (username, role_id, password, email, img, status) VALUES (?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ps.setInt(2, role);
+        ps.setString(3, password);
+        ps.setString(4, email);
+        ps.setString(5, img);
+        ps.setInt(6, status);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi thêm người dùng mới: " + e.getMessage());
     }
+}
 
     public Role getRoleByUserRole_id(int role_id) {
         String sql = "select r.id ,r.name from roles r where r.id = ?";
@@ -168,6 +183,33 @@ public class UserDAO extends DBContext {
         System.out.println(e);
     }
 }
+       public void updateAccountByUser(String currentUsername,String username, String email) {
+    String sql = "UPDATE users SET username = ?, email = ? WHERE username = ?";
+
+    try {
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, username);
+        ps.setString(2, email);
+        ps.setString(3, currentUsername);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+}
+       
+      public void changePassByUser(String username, String newPassword) {
+    String sql = "UPDATE users SET password = ? WHERE username = ?";
+
+    try {
+        ps = connection.prepareStatement(sql);
+        ps.setString(1, newPassword);
+        ps.setString(2, username);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+}
+    
     public void deleteAccountByAdmin(String username) {
     String sql = "DELETE FROM users WHERE username = ?";
 
@@ -250,6 +292,44 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+      
+       public AccountUser getAccByUsername( String username){
+       String sql = "select  u.username ,u.role_id,u.email,u.img ,u.status from users u where u.username = ?";
+        try {
+            
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+              return new AccountUser(rs.getString(1),
+                        getRoleByUserRole_id(rs.getInt(2)),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5));
+            }
+           
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+       public boolean checkPasswordByUsername( String username,String password){
+       String sql = "select  u.username from users u where u.username = ? and u.password = ?";
+        try {
+            
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            
+           return rs.next();
+           
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+       return false;
+    }
     
     
       public List<AccountUser> SearchAll(String text) {
@@ -289,7 +369,8 @@ public class UserDAO extends DBContext {
         System.out.println(list2.size());
         // System.out.println(dao.CheckAcc("admin"));
        // dao.deleteAccountByAdmin("doctor19");
-
+        System.out.println(dao.checkPasswordByUsername("user10","SHV5MTNAMDAw" ));
+        dao.registerNewUser("user11", 5, "Huy13@000", "huy@gmail.com", "default", 1);
     }
 
 }

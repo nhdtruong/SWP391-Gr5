@@ -57,10 +57,10 @@
             <div class="pt-4 footer-bar">
                 <div class="align-items-center">
                     <div class="text-sm-start text-center">
-                        <p class="mb-0">
+                        <p class="mb-0" style="text-align: center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> © Doctris.
+                            </script> © Doctris.Bản quyền thuộc về Dư Văn Huy
                     </div>
                 </div>
             </div>

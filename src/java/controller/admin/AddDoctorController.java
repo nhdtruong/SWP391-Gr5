@@ -147,7 +147,7 @@ public class AddDoctorController extends HttpServlet {
             int academicTitleId = Integer.parseInt(academicTitleId_);
             int academicDegreeId = Integer.parseInt(academicDegreeId_);
             
-            u.RegisterNewUser(username,
+            u.registerNewUser(username,
                     role_id,
                     password,
                     email,

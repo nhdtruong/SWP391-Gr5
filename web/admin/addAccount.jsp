@@ -13,7 +13,7 @@
             <jsp:include page="../admin/layout/menu.jsp"/>   
             <main class="page-content bg-light">
                 <jsp:include page="../admin/layout/headmenu.jsp"/>
-                 <div class="container py-5">
+                <div class="container py-5" style="margin-top: 100px">
                 <div class="row justify-content-center">
                     <div class="col-lg-6 col-md-8">
                         <div class="card shadow rounded border-0">
@@ -68,11 +68,32 @@
                 </div>
             </div>
 
-                <jsp:include page="../admin/layout/footer.jsp"/>
+                
             </main>
+             <jsp:include page="../admin/layout/footer.jsp"/>
         </div>
 
-        
+         <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* đảm bảo chiều cao toàn trang */
+    }
+
+    main.page-content {
+        flex: 1; /* đẩy footer xuống cuối cùng */
+    }
+
+    footer {
+        margin-top: auto;
+    }
+</style>
+
 
     </body>
 </html>

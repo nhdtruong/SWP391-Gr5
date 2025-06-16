@@ -40,14 +40,14 @@
                     </div>
                 </div>
                  <div class="row align-items-center">
-                    <c:forEach items="${service}" var="s">
+                    <c:forEach items="${category_service}" var="s">
                         <div class="col-xl-4 col-lg-4 col-md-6 mt-4 pt-2" style="" >
                             <div class="card team border-0 rounded shadow overflow-hidden">
                                 <div class="team-img position-relative" style="display: flex ;margin: auto">
                                     <img style="height:80px;width: 80px"src="${s.getImg()}" class="" alt="">
                                 </div>
                                 <div class="card-body content text-center">
-                                    <a href="detailservice?id=${s.getId()}" class="title text- h5 d-block mb-0">${s.getName()}</a>
+                                    <a href="detailservice?id=${s.getId()}" class="title text-h5 d-block mb-0">${s.getName()}</a>
                                     <small class="text-muted speciality">${s.getName()}</small>
                                 </div>
                             </div>

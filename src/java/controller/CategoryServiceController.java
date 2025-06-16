@@ -37,8 +37,8 @@ public class CategoryServiceController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         CategoryServiceDAO dao = new CategoryServiceDAO();
         List<CategoryServices> list =  dao.getAllCategoryServiceses();
-        request.setAttribute("service", list);
-        request.getRequestDispatcher("service.jsp").forward(request, response);
+        request.setAttribute("category_service", list);
+        request.getRequestDispatcher("category_service.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

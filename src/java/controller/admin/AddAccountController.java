@@ -105,10 +105,10 @@ public class AddAccountController extends HttpServlet {
             return;
         } else {
             if (Integer.parseInt(role_id) == 5) {
-                u.RegisterNewUser(username, Integer.parseInt(role_id), password, email, img, 2);
+                u.registerNewUser(username, Integer.parseInt(role_id), password, email, img, 2);
 
             } else {
-                u.RegisterNewUser(username, Integer.parseInt(role_id), password, email, img, status);
+                u.registerNewUser(username, Integer.parseInt(role_id), password, email, img, status);
 
             }
 
