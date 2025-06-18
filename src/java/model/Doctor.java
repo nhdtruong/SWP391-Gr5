@@ -15,6 +15,7 @@ public class Doctor {
     
     private int doctor_id;
     private int role_id;
+    private String username;
     private String doctor_name;
     private String  gender;
     private Deparment department;
@@ -30,7 +31,8 @@ public class Doctor {
     private Position position;
     private String specialized;
     private String EducationHistory;
-
+    
+    
     public String getSpecialized() {
         return specialized;
     }
@@ -59,6 +61,25 @@ public class Doctor {
         this.position = position;
     }
 
+   public Doctor(int doctor_id, String username ,String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status,String specialized ,String EducationHistory,String email) {
+        this.doctor_id = doctor_id;
+        this.username = username;
+        this.doctor_name = doctor_name;
+        this.gender = gender;
+        this.department = department;
+        this.DOB = DOB;
+        this.phone = phone;
+        this.email = email;
+        this.description = description;
+        this.status = status;
+        this.img = img;
+        this.academicDegree = academicDegree;
+        this.academicTitle = academicTitle;
+        this.position = position;
+        this.specialized = specialized;
+        this.EducationHistory= EducationHistory;
+        this.adress = adress;
+    }
 
  
        public Doctor(int doctor_id, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status,String specialized ,String EducationHistory,String email) {
@@ -234,6 +255,14 @@ public class Doctor {
     @Override
     public String toString() {
         return "Doctor{" + "doctor_id=" + doctor_id + ", role_id=" + role_id + ", doctor_name=" + doctor_name + ", gender=" + gender + ", department=" + department + ", DOB=" + DOB + ", phone=" + phone + ", email=" + email + ", description=" + description + ", status=" + status + ", img=" + img + ", rateStar=" + rateStar + ", academicDegree=" + academicDegree + ", academicTitle=" + academicTitle + ", position=" + position + ", specialized=" + specialized + ", EducationHistory=" + EducationHistory + ", adress=" + adress + '}';
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
   
     

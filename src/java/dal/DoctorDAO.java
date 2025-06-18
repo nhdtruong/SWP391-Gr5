@@ -143,6 +143,46 @@ public class DoctorDAO extends DBContext {
 
     }
     
+    public List<Doctor> getAllDoctorBySearchNameOrUsername(String name) {
+    List<Doctor> list = new ArrayList<>();
+    String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
+            "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
+            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE d.doctor_name LIKE ? or d.username LiKE ? ";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, "%" + name + "%");
+         ps.setString(2,  name );
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Doctor d = new Doctor(
+                    rs.getInt("doctor_id"),
+                    rs.getString("username"),
+                    rs.getString("doctor_name"),
+                    rs.getString("gender"),
+                    rs.getDate("dob"),
+                    rs.getString("phone"),
+                    getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
+                    rs.getString("address"),
+                    rs.getString("img"),
+                    rs.getString("description"),
+                    getPositionByDoctor_position_id(rs.getInt("position_id")),
+                    getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
+                    getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
+                    rs.getInt("status"),
+                    rs.getString("specialized"),
+                    rs.getString("EducationHistory"),
+                    getEmailDotorByUsernae(rs.getString("username"))
+            );
+            list.add(d);
+        }
+
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+
+    return list;
+}
+    
 public List<Doctor> getAllDoctorBySearchName(String name) {
     List<Doctor> list = new ArrayList<>();
     String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
@@ -181,7 +221,54 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
     return list;
 }
 
+   public List<Doctor> getAllDoctorByFilterDepartment(String department) {
+    List<Doctor> list = new ArrayList<>();
+    StringBuilder sql = new StringBuilder("SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
+            "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
+            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE 1 = 1");
 
+    List<Object> params = new ArrayList<>();
+
+  
+    if (!department.equalsIgnoreCase("all")) {
+        sql.append(" and d.deparment_id = ?");
+        params.add(department);
+    }
+
+    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+        for (int i = 0; i < params.size(); i++) {
+            ps.setObject(i + 1, params.get(i));
+        }
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Doctor d = new Doctor(
+                    rs.getInt("doctor_id"),
+                    rs.getString("doctor_name"),
+                    rs.getString("gender"),
+                    rs.getDate("dob"),
+                    rs.getString("phone"),
+                    getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
+                    rs.getString("address"),
+                    rs.getString("img"),
+                    rs.getString("description"),
+                    getPositionByDoctor_position_id(rs.getInt("position_id")),
+                    getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
+                    getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
+                    rs.getInt("status"),
+                    rs.getString("specialized"),
+                    rs.getString("EducationHistory"),
+                    getEmailDotorByUsernae(rs.getString("username"))
+            );
+            list.add(d);
+        }
+
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+
+    return list;
+}
 
     public List<Doctor> getAllDoctorByFilter(String gender, String position, String department) {
     List<Doctor> list = new ArrayList<>();
@@ -247,6 +334,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Doctor d = new Doctor(rs.getInt(1),
+                        rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
                         rs.getDate(5),
@@ -304,6 +392,37 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
 
         return null;
 
+    }
+        public Doctor getDoctorByDoctorUsername(String username){
+        String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status,d.specialized,d.EducationHistory from doctors d where d.username = ?";
+        try {
+             PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1,username);
+            ResultSet rs = ps.executeQuery();
+          if (rs.next()) {
+                Doctor d = new Doctor(rs.getInt(1),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getDate(5),
+                        rs.getString(6),
+                        getDepartmentByDoctor_department_id(rs.getInt(7)),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10),
+                        getPositionByDoctor_position_id(rs.getInt(11)),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt(12)),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt(13)),
+                        rs.getInt(14),
+                        rs.getString(15),
+                        rs.getString(16),
+                        getEmailDotorByUsernae(rs.getString(2)));
+               return d;
+            }
+           
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
     }
     public Doctor getDoctorByDoctorId(String id){
         String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status,d.specialized,d.EducationHistory from doctors d where d.doctor_id = ?";
@@ -436,6 +555,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         List<Doctor> l = d.getAllDoctorByAdmin();
         System.out.println(l);
         System.out.println(d.getDoctorByDoctorId("1").toString());
+        System.out.println(d.getDoctorByDoctorUsername("doctor1"));
 
     }
 }
