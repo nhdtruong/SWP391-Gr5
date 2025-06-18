@@ -28,6 +28,24 @@ public class Doctor {
     private AcademicDegree academicDegree;
     private AcademicTitle academicTitle;
     private Position position;
+    private String specialized;
+    private String EducationHistory;
+
+    public String getSpecialized() {
+        return specialized;
+    }
+
+    public void setSpecialized(String specialized) {
+        this.specialized = specialized;
+    }
+
+    public String getEducationHistory() {
+        return EducationHistory;
+    }
+
+    public void setEducationHistory(String EducationHistory) {
+        this.EducationHistory = EducationHistory;
+    }
     private String adress;
 
   
@@ -41,7 +59,9 @@ public class Doctor {
         this.position = position;
     }
 
-    public Doctor(int doctor_id, String doctor_name, String gender, Deparment department, Date DOB, String phone,String email, String description, int status, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String adress) {
+
+ 
+       public Doctor(int doctor_id, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status,String specialized ,String EducationHistory,String email) {
         this.doctor_id = doctor_id;
         this.doctor_name = doctor_name;
         this.gender = gender;
@@ -55,10 +75,11 @@ public class Doctor {
         this.academicDegree = academicDegree;
         this.academicTitle = academicTitle;
         this.position = position;
+        this.specialized = specialized;
+        this.EducationHistory= EducationHistory;
         this.adress = adress;
     }
 
-   
 
     public Doctor(int doctor_id, int role_id, String doctor_name, String gender, Deparment department, Date DOB, String phone, String description, int status, String img, RateStar rateStar, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String adress) {
         this.doctor_id = doctor_id;
@@ -208,6 +229,11 @@ public class Doctor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Doctor{" + "doctor_id=" + doctor_id + ", role_id=" + role_id + ", doctor_name=" + doctor_name + ", gender=" + gender + ", department=" + department + ", DOB=" + DOB + ", phone=" + phone + ", email=" + email + ", description=" + description + ", status=" + status + ", img=" + img + ", rateStar=" + rateStar + ", academicDegree=" + academicDegree + ", academicTitle=" + academicTitle + ", position=" + position + ", specialized=" + specialized + ", EducationHistory=" + EducationHistory + ", adress=" + adress + '}';
     }
   
     

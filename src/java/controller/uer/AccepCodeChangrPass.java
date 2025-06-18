@@ -5,6 +5,7 @@
 
 package controller.uer;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,16 +14,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.OTPdata;
-import dal.UserDAO;
 import model.AccountUser;
+import model.OTPdata;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name="AccepCodeRegister", urlPatterns={"/accepcode"})
-public class AccepCodeRegister extends HttpServlet {
+@WebServlet(name="AccepCodeChangrPass", urlPatterns={"/accepcodeChangePass"})
+public class AccepCodeChangrPass extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,8 +34,18 @@ public class AccepCodeRegister extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        request.getRequestDispatcher("accepcode.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AccepCodeChangrPass</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AccepCodeChangrPass at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -49,7 +59,10 @@ public class AccepCodeRegister extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        request.setAttribute("type","1");
+        request.getRequestDispatcher("accepcode.jsp").forward(request, response);
     } 
 
     /** 
@@ -62,51 +75,45 @@ public class AccepCodeRegister extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-           HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 
         String rawOtp = request.getParameter("otp");
         String cleanOtp = rawOtp.trim();
         OTPdata otpdata = (OTPdata) session.getAttribute("currentOTP");
-        
-        if (otpdata == null) {
-    request.setAttribute("error", "Không tìm thấy mã OTP. Vui lòng yêu cầu mã mới.");
-    request.getRequestDispatcher("accepcode.jsp").forward(request, response);
-    return;
-}
-        
-        
-        if (cleanOtp.equals(otpdata.getOtp()) && otpdata.isExpired()) {
-    // Mã đúng và hết hạn
-    request.setAttribute("error", "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
-       request.getRequestDispatcher("registersuccess.jsp").forward(request, response);
-       return;
-     } 
-        if (otpdata.isExpired()) {
-           request.setAttribute("error", "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
-            request.getRequestDispatcher("accepcode.jsp").forward(request, response);
-              return;
-           }
-       
 
-     if (cleanOtp.equals(otpdata.getOtp())) {
-     // ddungs 
-        UserDAO u = new UserDAO();
-        
-        AccountUser accountUser= (AccountUser) session.getAttribute("prepareAccount");
-        
-        u.RegisterNewUser(accountUser.getUsername(),accountUser.getRole(),accountUser.getPassword(),
-                accountUser.getEmail(),accountUser.getImg(),accountUser.getStatus());
-        
-        session.invalidate();
-        request.getRequestDispatcher("registersuccess.jsp").forward(request, response);
-       
-     } else {
-  
-    request.setAttribute("error", "Mã OTP không khớp.");
-    request.getRequestDispatcher("accepcode.jsp").forward(request, response);
+        if (otpdata == null) {
+            request.setAttribute("error", "Không tìm thấy mã OTP. Vui lòng yêu cầu mã mới.");
+            request.getRequestDispatcher("accepcode.jsp").forward(request, response);
+            return;
         }
-        
-   
+
+        if (cleanOtp.equals(otpdata.getOtp()) && otpdata.isExpired()) {
+            // Mã đúng và hết hạn
+            request.setAttribute("error", "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
+            request.getRequestDispatcher("registersuccess.jsp").forward(request, response);
+            return;
+        }
+        if (otpdata.isExpired()) {
+            request.setAttribute("error", "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
+            request.getRequestDispatcher("accepcode.jsp").forward(request, response);
+            return;
+        }
+
+        if (cleanOtp.equals(otpdata.getOtp())) {
+            // ddungs 
+            UserDAO uDao = new UserDAO();
+            String username = (String) session.getAttribute("usernameChangePass");
+            String enNewPassword = (String) session.getAttribute("enNewPassword");
+            uDao.changePassByUser(username, enNewPassword);
+            session.removeAttribute(username);
+            session.removeAttribute(enNewPassword);
+            response.sendRedirect("profile");
+
+        } else {
+
+            request.setAttribute("error", "Mã OTP không khớp.");
+            request.getRequestDispatcher("accepcode.jsp").forward(request, response);
+        }
     }
 
     /** 

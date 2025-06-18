@@ -9,16 +9,16 @@
          
           <section class="section">
             <div class="container">
-                <div class="row justify-content-center">
+                <div class="row mt-5 justify-content-center">
                     <div class="col-12">
-                        <div class="section-title text-center mb-4 pb-2">
-                            <span class="badge badge-pill badge-soft-primary mb-3">Dịch vụ chăm sóc sức khỏe</span>
-                            <h4 class="title mb-4">Những dịch vụ nổi bật của chúng tôi</h4>
-                            <p class="text-muted mx-auto para-desc mb-0">Đội ngũ Doctris luôn đem đến cho bạn những dịch vụ chăm sóc sức khỏe hiện đại và tốt nhất trên thị trường với những bác sĩ chuyên sâu trong các lĩnh vực .</p>
-                        </div>
-                    </div> 
+                        <nav aria-label="breadcrumb" class="d-inline-block mt-3">
+                                <ul class="breadcrumb bg-transparent mb-0">
+                                    <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
+                                </ul>
+                            </nav>
+                    </div>
                 </div>
-
                 <div class="row align-items-center">
                     <c:forEach items="${listDe}" var="d">
                         <div class="col-xl-4 col-lg-4 col-md-6 mt-4 pt-2" style="" >
@@ -27,15 +27,13 @@
                                     <img style="height:80px;width: 80px"src="${d.getImg()}" class="" alt="">
                                 </div>
                                 <div class="card-body content text-center">
-                                    <a href="#" class="title text- h5 d-block mb-0">${d.getDepartment_name()}</a>
+                                    <a href="booking?department_id=${d.getId()}&departmentName=${d.getDepartment_name()}" class="title text- h5 d-block mb-0">${d.getDepartment_name()}</a>
                                    
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
-                    <div class="col-12 mt-4 pt-2 text-center">
-                        <a href="#" class="btn btn-primary">Tìm kiếm nhiều hơn</a>
-                    </div>
+                    
                 </div>
             </div>
         </section>

@@ -74,30 +74,51 @@
     </style>
      <jsp:include page="layout/head.jsp"/>
     <body>
+      <div class="page-wrapper d-flex flex-column min-vh-100">
+        
         <jsp:include page="layout/menu_white.jsp"/>
-        
-        
-        <div class="otp-container">
-            <h2>Xác minh OTP</h2>
-            <p>Vui lòng nhập mã gồm 6 số đã gửi về email của bạn</p>
 
-            <form action="accepcode" method="post">
-                <input type="text" name="otp" maxlength="6" required 
-                       class="otp-input" pattern="\d{6}" placeholder="______"  />
+        <main class="flex-grow-1">
+            <c:if test="${requestScope.type == null}">
+                <div class="otp-container">
+                    <h2>Xác minh OTP</h2>
+                    <p>Vui lòng nhập mã gồm 6 số đã gửi về email của bạn null</p>
 
-                <button type="submit" class="otp-button">Xác nhận</button>
-            </form>
-             
-            <c:if test="${requestScope.error != null}">
-                <p class="error1" style="color: red">${requestScope.error}</p>
+                    <form action="accepcode" method="post">
+                        <input type="text" name="otp" maxlength="6" required 
+                               class="otp-input" pattern="\d{6}" placeholder="______"  />
+                        <button type="submit" class="otp-button">Xác nhận</button>
+                    </form>
+
+                    <c:if test="${requestScope.error != null}">
+                        <p class="error1" style="color: red">${requestScope.error}</p>
+                    </c:if>
+                </div>
             </c:if>
-            
-        </div>
 
-         
+            <c:if test="${requestScope.type == '1'}">
+                <div class="otp-container">
+                    <h2>Xác minh OTP</h2>
+                    <p>Vui lòng nhập mã gồm 6 số đã gửi về email của bạn 1</p>
+
+                    <form action="accepcodeChangePass" method="post">
+                        <input type="text" name="otp" maxlength="6" required 
+                               class="otp-input" pattern="\d{6}" placeholder="______"  />
+                        <button type="submit" class="otp-button">Xác nhận</button>
+                    </form>
+
+                    <c:if test="${requestScope.error != null}">
+                        <p class="error1" style="color: red">${requestScope.error}</p>
+                    </c:if>
+                </div>
+            </c:if>
+        </main>
+
         <jsp:include page="layout/footer.jsp"/>
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/feather.min.js"></script>
-        <script src="assets/js/app.js"></script>
+    </div>
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/app.js"></script>
     </body>
 </html>

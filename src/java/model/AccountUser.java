@@ -43,6 +43,16 @@ public class AccountUser {
         this.email = email;
     }
 
+      public AccountUser(String username, int role ,String email, String img, int status) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.img = img;
+        this.status = status;
+        this.role = role;
+    }
+
+    
     public AccountUser(String username, int role, String password, String email, String img, int status) {
         this.username = username;
         this.password = password;
@@ -53,6 +63,12 @@ public class AccountUser {
     }
 
  
+    public AccountUser(String username, String email, int role) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+    }
+
     
 
     public AccountUser(String username,Role Role, String password , String email, String img, int status) {
