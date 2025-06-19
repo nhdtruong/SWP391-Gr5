@@ -355,22 +355,22 @@ public void registerNewUser(String username, int role, String password, String e
     }
      
     
-    public static void main(String[] args) throws SQLException {
-        UserDAO dao = new UserDAO();
-        AccountUser account = new AccountUser();
-           List<AccountUser> list1 = dao.getAccByFilter("1","2");
-           List<AccountUser> list2 = dao.getAccByFilterStatus("1");
-        // System.out.println(list);
-        //Role r = dao.getRoleByUserRole_id(3); 
-        // System.out.println(r);
-        //  System.out.println(list);
-        // account = dao.CheckAcc("admin", "huydvhe186208@fpt.edu.vn");
-        System.out.println(list1.size());
-        System.out.println(list2.size());
-        // System.out.println(dao.CheckAcc("admin"));
-       // dao.deleteAccountByAdmin("doctor19");
-        System.out.println(dao.checkPasswordByUsername("user10","SHV5MTNAMDAw" ));
-        dao.registerNewUser("user11", 5, "Huy13@000", "huy@gmail.com", "default", 1);
-    }
+//    public static void main(String[] args) throws SQLException {
+//        UserDAO dao = new UserDAO();
+//        AccountUser account = new AccountUser();
+//           List<AccountUser> list1 = dao.getAccByFilter("1","2");
+//           List<AccountUser> list2 = dao.getAccByFilterStatus("1");
+//        // System.out.println(list);
+//        //Role r = dao.getRoleByUserRole_id(3); 
+//        // System.out.println(r);
+//        //  System.out.println(list);
+//        // account = dao.CheckAcc("admin", "huydvhe186208@fpt.edu.vn");
+//        System.out.println(list1.size());
+//        System.out.println(list2.size());
+//        // System.out.println(dao.CheckAcc("admin"));
+//       // dao.deleteAccountByAdmin("doctor19");
+//        System.out.println(dao.checkPasswordByUsername("user10","SHV5MTNAMDAw" ));
+//        dao.registerNewUser("user11", 5, "Huy13@000", "huy@gmail.com", "default", 1);
+//    }
 
 }

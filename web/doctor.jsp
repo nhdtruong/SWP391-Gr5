@@ -33,35 +33,36 @@
                         <c:forEach items="${doctor}" var="d">
                             <div class="col-xl-4 col-lg-4 col-md-6 mt-2 pt-2">
                                 <div class="card team border-0 rounded shadow overflow-hidden">
+                                    <div style="display: none" >${d.doctor_id}</div>
                                     <div class="team-person position-relative overflow-hidden">
                                         <img src="data:image/png;base64,${d.img}" style="display: block;margin-left: auto;margin-right: auto;" class="img-fluid" alt="">
                                     </div>
                                     <div class="card-body">
                                         <a href="#" class="title text-dark h5 d-block mb-0">${d.doctor_name}</a>
-                                        <small class="text-muted speciality">${d.setting.name}</small>
+<!--                                        <small class="text-muted speciality">${d.setting.name}</small>-->
                                         <br>
-                                        <small class="text-muted speciality">Chức vụ : ${d.position}</small>
-                                        <div class="d-flex justify-content-between align-items-center mt-2">
-                                            <ul class="list-unstyled mb-0">
-                                                <c:if test="${d.rateStar.star != 0}">
-                                                    <c:forEach var = "i" begin = "1" end = "${d.rateStar.star}">
-                                                        <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                                        </c:forEach>
-                                                        <c:forEach var = "i" begin = "1" end = "${5-d.rateStar.star}">
-                                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
-                                                        </c:forEach>
-                                                    </c:if>
-                                                    <c:if test="${d.rateStar.star == 0}">
-                                                    <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                                    <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                                    <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                                    <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                                    <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                                    </c:if>
-                                            </ul>
-                                            <p class="text-muted mb-0">${d.rateStar.countfeedback} feedbacks</p>
-                                        </div>
-                                        <small class="text-muted speciality">Phí đặt lịch : <fmt:formatNumber pattern="#,###,###,###" value="${d.fee}"/> đ</small>
+                                        <small class="text-muted speciality">Chức vụ : ${d.position.getName()}</small>
+                                        <!--                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                                                                    <ul class="list-unstyled mb-0">
+                                        <c:if test="${d.rateStar.star != 0}">
+                                            <c:forEach var = "i" begin = "1" end = "${d.rateStar.star}">
+                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            </c:forEach>
+                                            <c:forEach var = "i" begin = "1" end = "${5-d.rateStar.star}">
+                                            <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
+                                            </c:forEach>
+                                        </c:if>
+                                        <c:if test="${d.rateStar.star == 0}">
+                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
+                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
+                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
+                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
+                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
+                                        </c:if>
+                                </ul>
+                                <p class="text-muted mb-0">${d.rateStar.countfeedback} feedbacks</p>
+                            </div>-->
+<!--                                        <small class="text-muted speciality">Phí đặt lịch : <fmt:formatNumber pattern="#,###,###,###" value="${d.fee}"/> đ</small>-->
                                         <div class="pt-2">
                                             <c:if test="${user.getRole().getRole_id() == 2}">
                                                 <button class="btn btn-soft-primary" onclick="window.location.href = 'book?type=appointment&id=${d.doctor_id}'">Đặt lịch</button>
@@ -99,8 +100,8 @@
                                                 <div class="col-md-12">
                                                     <select name="speciality" class="form-select">
                                                         <option <c:if test="${speciality == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                    <c:forEach items="${speciality}" var="s">
-                                                        <option <c:if test="${speciality1 == s.id}"> selected </c:if> value="${s.id}">${s.name}</option>
+                                                    <c:forEach items="${listDepartment}" var="s">
+                                                        <option <c:if test="${speciality == s.id}"> selected </c:if> value="${s.id}">${s.department_name}</option>
                                                     </c:forEach>
                                                 </select>  
                                             </div>
@@ -113,13 +114,11 @@
                                     <h5 class="widget-title">Sắp xếp</h5>
                                     <div class="row align-items-center">
                                         <div class="col-md-12">
-                                            <select name="gender" onchange="Sort(this.value)" class="form-select">
+                                            <select name="SortType" onchange="Sort(this.value)" class="form-select">
                                                 <option <c:if test="${sort == 'all'}"> selected </c:if> value="all">Tất cả</option>
                                                 <option <c:if test="${sort == 'star'}"> selected </c:if> value="star">Star</option>
                                                 <option <c:if test="${sort == 'latest'}"> selected </c:if> value="latest">Mới nhất</option>
                                                 <option <c:if test="${sort == 'popular'}"> selected </c:if> value="popular">Phổ biến</option>
-                                                <option <c:if test="${sort == 'fee-'}"> selected </c:if> value="fee-">Phí giảm dần</option>
-                                                <option <c:if test="${sort == 'fee'}"> selected </c:if> value="fee">Phí tăng dần</option>
                                                 </select>  
                                             </div>
                                         </div>
