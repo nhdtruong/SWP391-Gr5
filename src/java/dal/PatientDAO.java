@@ -161,20 +161,21 @@ public class PatientDAO extends DBContext{
 
     public static void main(String[] args) {
         PatientDAO pdao = new PatientDAO();
-        System.out.println(pdao.getPatientByUsername("admin"));
-        pdao.deletePatientById(6);
-        Patient p = new Patient();
-        p.setPatientId(1); // ID của bệnh nhân cần cập nhật (phải tồn tại trong DB)
-        p.setPatientName("Nguyễn Văn A");
-        p.setGender("Nam");
-        p.setDob(Date.valueOf(LocalDate.of(1995, 5, 15)));
-        p.setJob("Kỹ sư phần mềm");
-        p.setPhone("0901234567");
-        p.setEmail("nguyenvana@example.com");
-        p.setBhyt("BHYT123456");
-        p.setNation("Việt Nam");
-        p.setCccd("012345678901");
-        p.setAddress("123 Đường ABC, Quận 1, TP.HCM");
-        pdao.updatePatient(p);
+        System.out.println(pdao.getPatientByUsername("user10"));
+//        System.out.println(pdao.getPatientByUsername("admin"));
+//        pdao.deletePatientById(6);
+//        Patient p = new Patient();
+//        p.setPatientId(1); // ID của bệnh nhân cần cập nhật (phải tồn tại trong DB)
+//        p.setPatientName("Nguyễn Văn A");
+//        p.setGender("Nam");
+//        p.setDob(Date.valueOf(LocalDate.of(1995, 5, 15)));
+//        p.setJob("Kỹ sư phần mềm");
+//        p.setPhone("0901234567");
+//        p.setEmail("nguyenvana@example.com");
+//        p.setBhyt("BHYT123456");
+//        p.setNation("Việt Nam");
+//        p.setCccd("012345678901");
+//        p.setAddress("123 Đường ABC, Quận 1, TP.HCM");
+//        pdao.updatePatient(p);
     }
 }

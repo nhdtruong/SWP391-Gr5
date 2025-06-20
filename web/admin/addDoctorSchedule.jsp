@@ -35,7 +35,7 @@
                                 <div class="col-md-8">
                                     <div class="search-bar p-0 d-lg-block ms-2">                                                        
                                         <div id="search" class="menu-search mb-0">
-                                            <form action="adddoctorschedule?action=serachdoctor" method="POST" id="searchform" class="searchform">
+                                            <form action="adddoctorschedule?actionform=serachdoctor" method="POST" id="searchform" class="searchform">
                                                 <div>
                                                     <input type="text" class="form-control border rounded-pill" name="doctorUsername" id="s" placeholder="Nhập mã bác sĩ để tìm kiếm">
                                                     <input type="submit" id="searchsubmit" value="Search">
@@ -68,7 +68,7 @@
 
 
                         </div>
-                        <form action="adddoctorschedule?action=addschedule" method="post">
+                        <form id="scheduleForm" action="adddoctorschedule?actionform=addschedule" method="post">
                             <div class="row">
                                 <c:if test="${not empty doctor }">
                                     <input type="hidden" name="doctorID" value="${doctor.doctor_id}">
@@ -131,8 +131,33 @@
                                 </c:forEach>
                             </div>
 
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary px-4 py-2">Lưu lịch</button>
+                            <div class="row mt-4 justify-content-center text-center">
+                                <!-- Nút Lưu mẫu -->
+                                <div class="col-12 mb-3">
+                                    <button type="submit" name="action" value="saveTemplate" class="btn btn-secondary px-4 py-2">Lưu mẫu</button>
+                                </div>
+
+                                <!-- Chữ HOẶC -->
+                                <div class="col-12 mb-3 fw-bold">
+                                    <span>HOẶC</span>
+                                </div>
+
+                                <!-- Nút Lưu và áp dụng + chọn ngày -->
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <button type="submit" name="action" value="saveAndApply" class="btn btn-primary px-4 py-2">Lưu và áp dụng ngay</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="startDate" class="form-label fw-bold">Từ ngày</label>
+                                            <input type="date" class="form-control" name="startDate" id="startDate">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="endDate" class="form-label fw-bold">Đến ngày</label>
+                                            <input type="date" class="form-control" name="endDate" id="endDate">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </form>
@@ -145,8 +170,9 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <script>
-                                                        // Khi click vào checkbox "Chọn tất cả"
+                                                        
                                                         function toggleAllSlots(day) {
                                                             const checkAll = document.getElementById('checkAll_' + day);
                                                             const slots = document.querySelectorAll('.slot-' + day);
@@ -155,12 +181,11 @@
                                                             });
                                                         }
 
-                                                        //   Khi click vào từng checkbox slot
+                                                   
                                                         document.addEventListener("DOMContentLoaded", () => {
                                                             for (let day = 2; day <= 8; day++) {
                                                                 const checkAll = document.getElementById('checkAll_' + day);
                                                                 const slots = document.querySelectorAll('.slot-' + day);
-
                                                                 slots.forEach(slot => {
                                                                     slot.addEventListener("change", () => {
                                                                         const allChecked = Array.from(slots).every(s => s.checked);
@@ -169,7 +194,33 @@
                                                                 });
                                                             }
                                                         });
+
+                                                        document.getElementById('scheduleForm').addEventListener('submit', function (e) {
+                                                            const action = e.submitter?.value;
+                                                            const startDateInput = document.getElementById('startDate');
+                                                            const endDateInput = document.getElementById('endDate');
+
+                                                            const startDate = startDateInput.value;
+                                                            const endDate = endDateInput.value;
+
+                                                            if (action === 'saveAndApply') {
+                                                                if (!startDate || !endDate) {
+                                                                    e.preventDefault();
+                                                                    alert("Vui lòng chọn cả 'Từ ngày' và 'Đến ngày'.");
+                                                                    return;
+                                                                }
+
+                                                                const start = new Date(startDate);
+                                                                const end = new Date(endDate);
+
+                                                                if (end < start) {
+                                                                    e.preventDefault();
+                                                                    alert("'Đến ngày' phải lớn hơn hoặc bằng 'Từ ngày'.");
+                                                                }
+                                                            }
+                                                        });
         </script>
+
 
 
         <style>

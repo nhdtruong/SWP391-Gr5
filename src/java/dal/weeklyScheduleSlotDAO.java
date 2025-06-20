@@ -18,8 +18,8 @@ import model.DoctorScheduleSlots;
  *
  * @author DELL
  */
-public class DoctorScheduleSlotsDAO extends DBContext{
-    
+public class WeeklyScheduleSlotDAO extends DBContext {
+
     PreparedStatement ps = null;
     ResultSet rs = null;
 
@@ -52,10 +52,10 @@ public class DoctorScheduleSlotsDAO extends DBContext{
         return result;
     }
     
-        public void insertScheduleSlot(int schedule_id, int shift, Time start, Time end) {
-        String sql = "INSERT INTO doctor_schedule_slot (schedule_id, shift, slot_start, slot_end) VALUES (?, ?, ?, ?)";
+        public void insertSlot(int templateId, int shift, Time start, Time end) {
+        String sql = "INSERT INTO weekly_schedule_slot (template_id, shift, slot_start, slot_end) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, schedule_id);
+            ps.setInt(1, templateId);
             ps.setInt(2, shift);
             ps.setTime(3, start);
             ps.setTime(4, end);
@@ -64,4 +64,9 @@ public class DoctorScheduleSlotsDAO extends DBContext{
             System.out.println(e);
         }
     }
+    public static void main(String[] args) {
+        WeeklyScheduleSlotDAO d = new WeeklyScheduleSlotDAO();
+        System.out.println(d.getTemplateScheduleByDoctorId(1));
+    }
+
 }
