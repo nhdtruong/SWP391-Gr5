@@ -31,49 +31,61 @@
                 <div class="row">
                     <div class="col-lg-9 col-lg-9 row align-items-center">
                         <c:forEach items="${doctor}" var="d">
-                            <div class="col-xl-4 col-lg-4 col-md-6 mt-2 pt-2">
-                                <div class="card team border-0 rounded shadow overflow-hidden">
-                                    <div style="display: none" >${d.doctor_id}</div>
-                                    <div class="team-person position-relative overflow-hidden">
-                                        <img src="data:image/png;base64,${d.img}" style="display: block;margin-left: auto;margin-right: auto;" class="img-fluid" alt="">
+                            <div class="col-xl-4 col-lg-4 col-md-6 mt-2 pt-2 d-flex">
+                                <div class="card team border-0 rounded shadow overflow-hidden d-flex flex-column w-100 h-100">
+                                    <div style="display: none">${d.doctor_id}</div>
+
+                                    <!-- Avatar -->
+                                    <div class="team-person text-center mt-3">
+                                        <img src="${d.img}" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
                                     </div>
-                                    <div class="card-body">
+
+                                    <!-- Nội dung chính -->
+                                    <div class="card-body text-center flex-grow-1 d-flex flex-column justify-content-center">
                                         <a href="#" class="title text-dark h5 d-block mb-0">${d.doctor_name}</a>
-<!--                                        <small class="text-muted speciality">${d.setting.name}</small>-->
-                                        <br>
-                                        <small class="text-muted speciality">Chức vụ : ${d.position.getName()}</small>
-                                        <!--                                        <div class="d-flex justify-content-between align-items-center mt-2">
-                                                                                    <ul class="list-unstyled mb-0">
-                                        <c:if test="${d.rateStar.star != 0}">
-                                            <c:forEach var = "i" begin = "1" end = "${d.rateStar.star}">
-                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                            </c:forEach>
-                                            <c:forEach var = "i" begin = "1" end = "${5-d.rateStar.star}">
-                                            <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
-                                            </c:forEach>
-                                        </c:if>
-                                        <c:if test="${d.rateStar.star == 0}">
-                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                        <li class="list-inline-item"><i class="mdi mdi-star"></i></li> 
-                                        </c:if>
-                                </ul>
-                                <p class="text-muted mb-0">${d.rateStar.countfeedback} feedbacks</p>
-                            </div>-->
-<!--                                        <small class="text-muted speciality">Phí đặt lịch : <fmt:formatNumber pattern="#,###,###,###" value="${d.fee}"/> đ</small>-->
-                                        <div class="pt-2">
-                                            <c:if test="${user.getRole().getRole_id() == 2}">
-                                                <button class="btn btn-soft-primary" onclick="window.location.href = 'book?type=appointment&id=${d.doctor_id}'">Đặt lịch</button>
-                                            </c:if>
-                                            <button class="btn btn-soft-primary" onclick="window.location.href = 'doctor?action=detail&id=${d.doctor_id}'">Chi tiết</button>  
-                                        </div>
+                                        <small class="text-muted speciality" style="min-height: 36px; display: block;">Chức vụ: ${d.position.getName()}</small>
+                                        <p class="text-muted mb-0">${d.number_rate_star} feedbacks</p>
+                                    </div>
+
+                                    <!-- Button footer -->
+                                    <div class="pt-2 pb-3 text-center">
+                                        <button class="btn btn-soft-primary me-1" onclick="window.location.href = 'book?type=appointment&id=${d.doctor_id}'">Đặt lịch</button>
+                                        <button class="btn btn-soft-primary" onclick="window.location.href = 'doctor?action=detail&id=${d.doctor_id}'">Chi tiết</button>  
                                     </div>
                                 </div>
                             </div>
+
                         </c:forEach>
+                        <div style="
+                             text-align: center;
+                             margin-top: 20px;
+                             font-size: 18px;
+                             font-weight: 500;
+                             color: #333;
+                             font-family: 'Segoe UI', sans-serif;
+                             ">
+                            <span style="
+                                  cursor: pointer;
+                                  padding: 5px 10px;
+                                  border-radius: 5px;
+                                  background-color: #f0f0f0;
+                                  margin-right: 8px;
+                                  transition: background-color 0.2s ease;
+                                  ">&lt;</span>
+
+                            <span style="font-weight: bold; color: #007bff;">1</span>/<span style="color: #555;">2</span>
+
+                            <span style="
+                                  cursor: pointer;
+                                  padding: 5px 10px;
+                                  border-radius: 5px;
+                                  background-color: #f0f0f0;
+                                  margin-left: 8px;
+                                  transition: background-color 0.2s ease;
+                                  ">&gt;</span>
+                        </div>
                     </div>
+
                     <div class="col-lg-3 col-md-3 mt-3 pt-2">
                         <div class="card border-0 sidebar sticky-bar rounded shadow">
                             <div class="card-body">
@@ -107,55 +119,56 @@
                                             </div>
                                         </div>
                                         <br>
-                                        <button type="submit" class="btn btn-primary">Lọc</button>
-                                    </div>
-                                </form>
-                                <div class="widget mb-4 pb-2">
-                                    <h5 class="widget-title">Sắp xếp</h5>
-                                    <div class="row align-items-center">
-                                        <div class="col-md-12">
-                                            <select name="SortType" onchange="Sort(this.value)" class="form-select">
-                                                <option <c:if test="${sort == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                <option <c:if test="${sort == 'star'}"> selected </c:if> value="star">Star</option>
-                                                <option <c:if test="${sort == 'latest'}"> selected </c:if> value="latest">Mới nhất</option>
-                                                <option <c:if test="${sort == 'popular'}"> selected </c:if> value="popular">Phổ biến</option>
-                                                </select>  
+                                        <div class="widget mb-4 pb-2">
+                                            <h5 class="widget-title">Sắp xếp</h5>
+                                            <div class="row align-items-center">
+                                                <div class="col-md-12">
+                                                    <select name="SortType" onchange="Sort(this.value)" class="form-select">
+                                                        <option <c:if test="${sort == 'all'}"> selected </c:if> value="all">Tất cả</option>
+                                                        <option <c:if test="${sort == 'star'}"> selected </c:if> value="star">Star</option>
+                                                        <option <c:if test="${sort == 'latest'}"> selected </c:if> value="latest">Mới nhất</option>
+                                                        <option <c:if test="${sort == 'popular'}"> selected </c:if> value="popular">Phổ biến</option>
+                                                        </select>  
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <button type="submit" class="btn btn-primary">Lọc</button>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <c:set var="page" value="${page}"/>
-                <div class="row text-center">
-                    <div class="col-12 mt-4">
-                        <div class="d-md-flex align-items-center text-center justify-content-between">
-                            <ul class="pagination justify-content-center mb-0 mt-3 mt-sm-0">
-                                <c:forEach begin="${1}" end="${num}" var="i">
-                                    <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
-                                    </c:forEach>
-                            </ul>
-                        </div>
+                </div>
+            <c:set var="page" value="${page}"/>
+            <div class="row text-center">
+                <div class="col-12 mt-4">
+                    <div class="d-md-flex align-items-center text-center justify-content-between">
+                        <ul class="pagination justify-content-center mb-0 mt-3 mt-sm-0">
+                            <c:forEach begin="${1}" end="${num}" var="i">
+                                <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                </c:forEach>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
-        <jsp:include page="layout/footer.jsp"/>
+        </div>
+    </section>
+    <jsp:include page="layout/footer.jsp"/>
 
-        <a href="#" onclick="topFunction()" id="back-to-top" class="btn btn-icon btn-pills btn-primary back-to-top"><i data-feather="arrow-up" class="icons"></i></a>
+    <a href="#" onclick="topFunction()" id="back-to-top" class="btn btn-icon btn-pills btn-primary back-to-top"><i data-feather="arrow-up" class="icons"></i></a>
 
-        <jsp:include page="layout/search.jsp"/>
-        <jsp:include page="layout/facebookchat.jsp"/>
+    <jsp:include page="layout/search.jsp"/>
+    <jsp:include page="layout/facebookchat.jsp"/>
 
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/feather.min.js"></script>
-        <script src="assets/js/app.js"></script>
-        <script>
-            function Sort(type) {
-                window.location.href = "doctor?action=sort&type=" + type;
-            }
-        </script>
-    </body>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        function Sort(type) {
+            window.location.href = "doctor?action=sort&type=" + type;
+        }
+    </script>
+</body>
 
 </html>
