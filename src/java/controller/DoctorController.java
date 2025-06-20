@@ -45,7 +45,7 @@ public class DoctorController extends HttpServlet {
         String gender = request.getParameter("gender") == null ? "all" : request.getParameter("gender");
 
         String gender_str = "";
-        if (gender == "all") {
+        if (gender.equals("all")) {
             gender_str = "";
         } else if (gender.equals("true")) {
             gender_str = "Nam";
@@ -56,32 +56,52 @@ public class DoctorController extends HttpServlet {
         String speciality = request.getParameter("speciality");
         String SortType = request.getParameter("SortType") == null ? "" : request.getParameter("SortType");
         int speciality_id = 0;
-        int[] departmentIds = new int[0];
+        int[] departmentIds = new int[1];
         try {
             speciality_id = Integer.parseInt(speciality);
             departmentIds[0] = speciality_id;
         } catch (Exception e) {
+            departmentIds = new int[0];
         }
 
         DoctorDAO doctorDAO = new DoctorDAO();
-
+        int number = doctorDAO.GetListDoctorNumber(gender_str, departmentIds, SortType, 6);
+        int numberPage = 0;
+        if (number % 6 == 0) {
+            numberPage = number / 6;
+        } else {
+            numberPage = number / 6;
+            numberPage = numberPage + 1;
+        }
         String pageIndex_str = request.getParameter("pagIndex") == null ? "1" : request.getParameter("pagIndex");
         int pageIndex = 0;
         try {
             pageIndex = Integer.parseInt(pageIndex_str);
         } catch (Exception e) {
         }
+        
+        if(pageIndex<=0){
+            pageIndex = 1;
+        }
+        if(pageIndex>numberPage){
+            pageIndex = numberPage;
+        }
 
         List<Doctor> doctors = doctorDAO.GetListDoctor(gender_str, departmentIds, SortType, pageIndex, 6);
+
 //        PrintWriter out = response.getWriter();
 //        out.print("gender: "+gender_str);
-//        out.print("departmentIds: "+departmentIds.length);
+//        //out.print("departmentIds: "+departmentIds[0]);
 //        out.print("SortType: "+SortType);
 //        out.print("pageIndex: "+pageIndex);
 //        out.print("size: "+doctors.size());
 //        out.print("\n"+doctorDAO.sang);
         request.setAttribute("doctor", doctors);
-
+        request.setAttribute("speciality", speciality_id + "");
+        request.setAttribute("sort", SortType);
+        request.setAttribute("gender", gender);
+        request.setAttribute("pagIndex", pageIndex+"");
+        request.setAttribute("numberPage", numberPage);
         request.getRequestDispatcher("doctor.jsp").forward(request, response);
     }
 
@@ -99,7 +119,7 @@ public class DoctorController extends HttpServlet {
         String id = request.getParameter("id");
         DoctorDAO doctorDAO = new DoctorDAO();
         Doctor doctor = doctorDAO.getDoctorByDoctorId(id);
-        request.setAttribute("doctor", doctor);
+        request.setAttribute("detail", doctor);
         request.getRequestDispatcher("doctordetail.jsp").forward(request, response);
     }
 
@@ -107,6 +127,7 @@ public class DoctorController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        action = action == null ? "" : action;
         if (action.equals("detail")) {
             processRequest2(request, response);
         } else {

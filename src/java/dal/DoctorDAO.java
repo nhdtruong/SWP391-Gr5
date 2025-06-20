@@ -647,6 +647,93 @@ public class DoctorDAO extends DBContext {
 
         return doctors;
     }
+    public int GetListDoctorNumber(String gender, int[] departmentIds, String sortType, int pageSize) {
+        //List<Doctor> doctors = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM (");
+        sql.append("SELECT d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, COUNT(rs.ratestar_id) AS total_reviews,");
+        sql.append("dp.department_name, ");
+        sql.append("AVG(CAST(rs.star AS FLOAT)) AS average_rating, ");
+        sql.append("ROW_NUMBER() OVER (ORDER BY ");
+        
+        switch (sortType) {
+            case "rating":
+                sql.append("AVG(CAST(rs.star AS FLOAT)) DESC ");
+                break;
+            case "popular":
+                sql.append("COUNT(rs.ratestar_id) DESC ");
+                break;
+            case "latest":
+                sql.append("d.doctor_id DESC ");
+                break;
+            default:
+                sql.append("d.doctor_id ASC ");
+                break;
+        }
+
+        sql.append(") AS RowNum ");
+        sql.append("FROM doctors d ");
+        sql.append("LEFT JOIN department dp ON d.deparment_id = dp.department_id ");
+        sql.append("LEFT JOIN ratestar rs ON d.doctor_id = rs.doctor_id ");
+        sql.append("WHERE 1=1 ");
+
+        // Gender filter
+        if (gender != null && !gender.isEmpty()) {
+            sql.append("AND d.gender = ? ");
+        }
+
+        // Department filter (multiple values)
+        if (departmentIds != null && departmentIds.length > 0) {
+            sql.append("AND d.deparment_id IN (");
+            for (int i = 0; i < departmentIds.length; i++) {
+                sql.append("?");
+                if (i < departmentIds.length - 1) {
+                    sql.append(", ");
+                }
+            }
+            sql.append(") ");
+        }
+
+        sql.append("GROUP BY d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, dp.department_name ");
+        sql.append(") AS paged_result ");
+        //sql.append("WHERE RowNum BETWEEN ? AND ?");
+
+        System.out.println("sql: " + sql.toString());
+        sang = sql.toString();
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+
+            if (gender != null && !gender.isEmpty()) {
+                ps.setString(paramIndex++, gender);
+            }
+
+            if (departmentIds != null && departmentIds.length > 0) {
+                for (int deptId : departmentIds) {
+                    ps.setInt(paramIndex++, deptId);
+                }
+            }
+
+//            int startRow = (pageIndex - 1) * pageSize + 1;
+//            int endRow = pageIndex * pageSize;
+
+//            ps.setInt(paramIndex++, startRow);
+//            ps.setInt(paramIndex++, endRow);
+
+            ResultSet rs = ps.executeQuery();
+            PositionDAO positionDAO = new PositionDAO();
+            int count = 0;
+            while (rs.next()) {
+                count=count+1;
+            }
+            return count;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 
     public static void main(String[] args) {
         DoctorDAO d = new DoctorDAO();
