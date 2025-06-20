@@ -14,6 +14,7 @@
                 <li><a href="dashboard?action=default"><i class="uil uil-dashboard me-2 d-inline-block"></i>Bảng điều khiển</a></li>
                 <li><a href="accountmanager?action=all"><i class="uil uil-user me-2 d-inline-block"></i>Quản lý Tài khoản</a></li>
                 <li><a href="doctormanager?action=all"><i class="uil uil-user me-2 d-inline-block"></i>Quản lý Bác sĩ</a></li>
+                <li><a href="doctorschedule?action=all"><i class="uil uil-flip-h me-2 d-inline-block"></i>Quản lý Lịch làm việc Bác sĩ</a></li>
                 <li><a href="patientmanage?action=all"><i class="uil uil-user me-2 d-inline-block"></i>Quản lý Bệnh nhân</a></li>
                 <li><a href="servicemanager?action=all"><i class="uil uil-apps me-2 d-inline-block"></i>Quản lý Dịch vụ</a></li>
                 <li><a href="appointmentmanage?action=all"><i class="uil uil-stethoscope me-2 d-inline-block"></i>Quản lý lịch hẹn</a></li>
