@@ -1,23 +1,41 @@
-# Ignore NetBeans specific files
+# ==========================
+# NetBeans-specific folders
+# ==========================
 nbproject/private/
+nbproject/build-impl.xml*
+nbproject/genfiles.properties
 build/
 dist/
-*.bak
-*.log
+nbbuild/
 
-# Ignore compiled class files
+# ==========================
+# Java compiled files
+# ==========================
 *.class
 
-# Ignore generated files
+# ==========================
+# Generated packages (WAR, JAR, EAR)
+# ==========================
 *.war
-*.ear
 *.jar
+*.ear
 
-# OS generated files
+# ==========================
+# Logs & temporary
+# ==========================
+*.log
+*.bak
+*.tmp
+*.swp
+
+# ==========================
+# OS-specific files
+# ==========================
 .DS_Store
 Thumbs.db
 
-# IDEs
-*.iml
-.idea/
-
+# ==========================
+# Git merge conflict markers (optional)
+# ==========================
+*.orig
+*.rej
