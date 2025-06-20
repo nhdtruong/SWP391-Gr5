@@ -17,7 +17,7 @@ public class DBContext {
             String password = "sa";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, username, password);
-            System.out.println("ngon");
+
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println(ex);
         }

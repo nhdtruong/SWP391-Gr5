@@ -623,6 +623,7 @@ public class DoctorDAO extends DBContext {
             ps.setInt(paramIndex++, endRow);
 
             ResultSet rs = ps.executeQuery();
+            PositionDAO positionDAO = new PositionDAO();
             while (rs.next()) {
                 Doctor doctor = new Doctor();
                 doctor.setDoctor_id(rs.getInt("doctor_id"));
@@ -637,6 +638,7 @@ public class DoctorDAO extends DBContext {
                 doctor.setDepartment_name(rs.getString("department_name"));
                 doctor.setAverageRateStar(rs.getFloat("average_rating"));
                 doctor.setNumber_rate_star(rs.getInt("total_reviews"));
+                doctor.setPosition(positionDAO.GetPositionName(doctor.getDoctor_id()));
                 doctors.add(doctor);
             }
         } catch (Exception e) {
