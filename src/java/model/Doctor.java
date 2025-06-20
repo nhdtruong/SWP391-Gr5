@@ -11,16 +11,15 @@ import java.sql.Date;
  * @author DELL
  */
 public class Doctor {
-    
-    
+
     private int doctor_id;
     private int role_id;
     private String username;
     private String doctor_name;
-    private String  gender;
+    private String gender;
     private Deparment department;
     private Date DOB;
-    private String  phone;
+    private String phone;
     private String email;
     private String description;
     private int status;
@@ -31,8 +30,35 @@ public class Doctor {
     private Position position;
     private String specialized;
     private String EducationHistory;
-    
-    
+//===========================
+    private float averageRateStar;
+    private int number_rate_star;
+    private String department_name;
+
+    public String getDepartment_name() {
+        return department_name;
+    }
+
+    public void setDepartment_name(String department_name) {
+        this.department_name = department_name;
+    }
+
+    public float getAverageRateStar() {
+        return averageRateStar;
+    }
+
+    public void setAverageRateStar(float averageRateStar) {
+        this.averageRateStar = averageRateStar;
+    }
+
+    public int getNumber_rate_star() {
+        return number_rate_star;
+    }
+
+    public void setNumber_rate_star(int number_rate_star) {
+        this.number_rate_star = number_rate_star;
+    }
+
     public String getSpecialized() {
         return specialized;
     }
@@ -50,7 +76,8 @@ public class Doctor {
     }
     private String adress;
 
-  
+    public Doctor() {
+    }
 
     public Doctor(String doctor_name, Deparment department, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position) {
         this.doctor_name = doctor_name;
@@ -61,7 +88,7 @@ public class Doctor {
         this.position = position;
     }
 
-   public Doctor(int doctor_id, String username ,String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status,String specialized ,String EducationHistory,String email) {
+    public Doctor(int doctor_id, String username, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status, String specialized, String EducationHistory, String email) {
         this.doctor_id = doctor_id;
         this.username = username;
         this.doctor_name = doctor_name;
@@ -77,12 +104,11 @@ public class Doctor {
         this.academicTitle = academicTitle;
         this.position = position;
         this.specialized = specialized;
-        this.EducationHistory= EducationHistory;
+        this.EducationHistory = EducationHistory;
         this.adress = adress;
     }
 
- 
-       public Doctor(int doctor_id, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status,String specialized ,String EducationHistory,String email) {
+    public Doctor(int doctor_id, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status, String specialized, String EducationHistory, String email) {
         this.doctor_id = doctor_id;
         this.doctor_name = doctor_name;
         this.gender = gender;
@@ -97,10 +123,9 @@ public class Doctor {
         this.academicTitle = academicTitle;
         this.position = position;
         this.specialized = specialized;
-        this.EducationHistory= EducationHistory;
+        this.EducationHistory = EducationHistory;
         this.adress = adress;
     }
-
 
     public Doctor(int doctor_id, int role_id, String doctor_name, String gender, Deparment department, Date DOB, String phone, String description, int status, String img, RateStar rateStar, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String adress) {
         this.doctor_id = doctor_id;
@@ -119,8 +144,6 @@ public class Doctor {
         this.position = position;
         this.adress = adress;
     }
-
-    
 
     public int getDoctor_id() {
         return doctor_id;
@@ -234,7 +257,6 @@ public class Doctor {
         this.position = position;
     }
 
-  
     public String getAdress() {
         return adress;
     }
@@ -243,8 +265,7 @@ public class Doctor {
         this.adress = adress;
     }
 
-     
-     public String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -264,7 +285,5 @@ public class Doctor {
     public void setUsername(String username) {
         this.username = username;
     }
-  
-    
-    
+
 }

@@ -142,189 +142,188 @@ public class DoctorDAO extends DBContext {
         return null;
 
     }
-    
+
     public List<Doctor> getAllDoctorBySearchNameOrUsername(String name) {
-    List<Doctor> list = new ArrayList<>();
-    String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
-            "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
-            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE d.doctor_name LIKE ? or d.username LiKE ? ";
+        List<Doctor> list = new ArrayList<>();
+        String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
+                + "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, "
+                + "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE d.doctor_name LIKE ? or d.username LiKE ? ";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, "%" + name + "%");
-         ps.setString(2,  name );
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Doctor d = new Doctor(
-                    rs.getInt("doctor_id"),
-                    rs.getString("username"),
-                    rs.getString("doctor_name"),
-                    rs.getString("gender"),
-                    rs.getDate("dob"),
-                    rs.getString("phone"),
-                    getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
-                    rs.getString("address"),
-                    rs.getString("img"),
-                    rs.getString("description"),
-                    getPositionByDoctor_position_id(rs.getInt("position_id")),
-                    getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
-                    getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
-                    rs.getInt("status"),
-                    rs.getString("specialized"),
-                    rs.getString("EducationHistory"),
-                    getEmailDotorByUsernae(rs.getString("username"))
-            );
-            list.add(d);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ps.setString(2, name);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(
+                        rs.getInt("doctor_id"),
+                        rs.getString("username"),
+                        rs.getString("doctor_name"),
+                        rs.getString("gender"),
+                        rs.getDate("dob"),
+                        rs.getString("phone"),
+                        getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
+                        rs.getString("address"),
+                        rs.getString("img"),
+                        rs.getString("description"),
+                        getPositionByDoctor_position_id(rs.getInt("position_id")),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
+                        rs.getInt("status"),
+                        rs.getString("specialized"),
+                        rs.getString("EducationHistory"),
+                        getEmailDotorByUsernae(rs.getString("username"))
+                );
+                list.add(d);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
 
-    } catch (SQLException e) {
-        System.out.println(e);
+        return list;
     }
 
-    return list;
-}
-    
-public List<Doctor> getAllDoctorBySearchName(String name) {
-    List<Doctor> list = new ArrayList<>();
-    String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
-            "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
-            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE d.doctor_name LIKE ?";
+    public List<Doctor> getAllDoctorBySearchName(String name) {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
+                + "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, "
+                + "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE d.doctor_name LIKE ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, "%" + name + "%");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Doctor d = new Doctor(
-                    rs.getInt("doctor_id"),
-                    rs.getString("doctor_name"),
-                    rs.getString("gender"),
-                    rs.getDate("dob"),
-                    rs.getString("phone"),
-                    getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
-                    rs.getString("address"),
-                    rs.getString("img"),
-                    rs.getString("description"),
-                    getPositionByDoctor_position_id(rs.getInt("position_id")),
-                    getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
-                    getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
-                    rs.getInt("status"),
-                    rs.getString("specialized"),
-                    rs.getString("EducationHistory"),
-                    getEmailDotorByUsernae(rs.getString("username"))
-            );
-            list.add(d);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(
+                        rs.getInt("doctor_id"),
+                        rs.getString("doctor_name"),
+                        rs.getString("gender"),
+                        rs.getDate("dob"),
+                        rs.getString("phone"),
+                        getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
+                        rs.getString("address"),
+                        rs.getString("img"),
+                        rs.getString("description"),
+                        getPositionByDoctor_position_id(rs.getInt("position_id")),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
+                        rs.getInt("status"),
+                        rs.getString("specialized"),
+                        rs.getString("EducationHistory"),
+                        getEmailDotorByUsernae(rs.getString("username"))
+                );
+                list.add(d);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
 
-    } catch (SQLException e) {
-        System.out.println(e);
+        return list;
     }
 
-    return list;
-}
+    public List<Doctor> getAllDoctorByFilterDepartment(String department) {
+        List<Doctor> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
+                + "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, "
+                + "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE 1 = 1");
 
-   public List<Doctor> getAllDoctorByFilterDepartment(String department) {
-    List<Doctor> list = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
-            "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
-            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE 1 = 1");
+        List<Object> params = new ArrayList<>();
 
-    List<Object> params = new ArrayList<>();
-
-  
-    if (!department.equalsIgnoreCase("all")) {
-        sql.append(" and d.deparment_id = ?");
-        params.add(department);
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-        for (int i = 0; i < params.size(); i++) {
-            ps.setObject(i + 1, params.get(i));
+        if (!department.equalsIgnoreCase("all")) {
+            sql.append(" and d.deparment_id = ?");
+            params.add(department);
         }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Doctor d = new Doctor(
-                    rs.getInt("doctor_id"),
-                    rs.getString("doctor_name"),
-                    rs.getString("gender"),
-                    rs.getDate("dob"),
-                    rs.getString("phone"),
-                    getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
-                    rs.getString("address"),
-                    rs.getString("img"),
-                    rs.getString("description"),
-                    getPositionByDoctor_position_id(rs.getInt("position_id")),
-                    getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
-                    getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
-                    rs.getInt("status"),
-                    rs.getString("specialized"),
-                    rs.getString("EducationHistory"),
-                    getEmailDotorByUsernae(rs.getString("username"))
-            );
-            list.add(d);
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(
+                        rs.getInt("doctor_id"),
+                        rs.getString("doctor_name"),
+                        rs.getString("gender"),
+                        rs.getDate("dob"),
+                        rs.getString("phone"),
+                        getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
+                        rs.getString("address"),
+                        rs.getString("img"),
+                        rs.getString("description"),
+                        getPositionByDoctor_position_id(rs.getInt("position_id")),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
+                        rs.getInt("status"),
+                        rs.getString("specialized"),
+                        rs.getString("EducationHistory"),
+                        getEmailDotorByUsernae(rs.getString("username"))
+                );
+                list.add(d);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
 
-    } catch (SQLException e) {
-        System.out.println(e);
+        return list;
     }
-
-    return list;
-}
 
     public List<Doctor> getAllDoctorByFilter(String gender, String position, String department) {
-    List<Doctor> list = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, " +
-            "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, " +
-            "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE 1 = 1");
+        List<Doctor> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
+                + "d.deparment_id, d.address, d.img, d.description, d.position_id, d.AcademicTitle_id, "
+                + "d.AcademicDegree_id, d.status,d.specialized,d.EducationHistory FROM doctors d WHERE 1 = 1");
 
-    List<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
 
-    if (!gender.equalsIgnoreCase("all")) {
-        sql.append(" and d.gender = ?");
-        params.add(gender);
-    }
-    if (!position.equalsIgnoreCase("all")) {
-        sql.append(" and d.position_id = ?");
-        params.add(position);
-    }
-    if (!department.equalsIgnoreCase("all")) {
-        sql.append(" and d.deparment_id = ?");
-        params.add(department);
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-        for (int i = 0; i < params.size(); i++) {
-            ps.setObject(i + 1, params.get(i));
+        if (!gender.equalsIgnoreCase("all")) {
+            sql.append(" and d.gender = ?");
+            params.add(gender);
+        }
+        if (!position.equalsIgnoreCase("all")) {
+            sql.append(" and d.position_id = ?");
+            params.add(position);
+        }
+        if (!department.equalsIgnoreCase("all")) {
+            sql.append(" and d.deparment_id = ?");
+            params.add(department);
         }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Doctor d = new Doctor(
-                    rs.getInt("doctor_id"),
-                    rs.getString("doctor_name"),
-                    rs.getString("gender"),
-                    rs.getDate("dob"),
-                    rs.getString("phone"),
-                    getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
-                    rs.getString("address"),
-                    rs.getString("img"),
-                    rs.getString("description"),
-                    getPositionByDoctor_position_id(rs.getInt("position_id")),
-                    getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
-                    getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
-                    rs.getInt("status"),
-                    rs.getString("specialized"),
-                    rs.getString("EducationHistory"),
-                    getEmailDotorByUsernae(rs.getString("username"))
-            );
-            list.add(d);
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(
+                        rs.getInt("doctor_id"),
+                        rs.getString("doctor_name"),
+                        rs.getString("gender"),
+                        rs.getDate("dob"),
+                        rs.getString("phone"),
+                        getDepartmentByDoctor_department_id(rs.getInt("deparment_id")),
+                        rs.getString("address"),
+                        rs.getString("img"),
+                        rs.getString("description"),
+                        getPositionByDoctor_position_id(rs.getInt("position_id")),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")),
+                        rs.getInt("status"),
+                        rs.getString("specialized"),
+                        rs.getString("EducationHistory"),
+                        getEmailDotorByUsernae(rs.getString("username"))
+                );
+                list.add(d);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
 
-    } catch (SQLException e) {
-        System.out.println(e);
+        return list;
     }
-
-    return list;
-}
 
     public List<Doctor> getAllDoctorByAdmin() {
         List<Doctor> list = new ArrayList<>();
@@ -349,7 +348,6 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
                         rs.getInt(14),
                         rs.getString(15),
                         rs.getString(16),
-                        
                         getEmailDotorByUsernae(rs.getString(2)));
                 list.add(d);
             }
@@ -362,8 +360,7 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         return null;
     }
 
-  
-                 public void deleteDoctorByAdmin(String username) {
+    public void deleteDoctorByAdmin(String username) {
         String sql = "DELETE FROM doctors WHERE username = ?";
 
         try {
@@ -375,8 +372,8 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         }
 
     }
-                 
-      public String getUsernameByDoctorId(String id) {
+
+    public String getUsernameByDoctorId(String id) {
         String sql = "select d.username from doctors d where d.doctor_id = ?;";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -393,13 +390,14 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         return null;
 
     }
-        public Doctor getDoctorByDoctorUsername(String username){
+
+    public Doctor getDoctorByDoctorUsername(String username) {
         String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status,d.specialized,d.EducationHistory from doctors d where d.username = ?";
         try {
-             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1,username);
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-          if (rs.next()) {
+            if (rs.next()) {
                 Doctor d = new Doctor(rs.getInt(1),
                         rs.getString(3),
                         rs.getString(4),
@@ -416,21 +414,22 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
                         rs.getString(15),
                         rs.getString(16),
                         getEmailDotorByUsernae(rs.getString(2)));
-               return d;
+                return d;
             }
-           
+
         } catch (Exception e) {
             System.out.println(e);
         }
         return null;
     }
-    public Doctor getDoctorByDoctorId(String id){
+
+    public Doctor getDoctorByDoctorId(String id) {
         String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status,d.specialized,d.EducationHistory from doctors d where d.doctor_id = ?";
         try {
-             PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
-          if (rs.next()) {
+            if (rs.next()) {
                 Doctor d = new Doctor(rs.getInt(1),
                         rs.getString(3),
                         rs.getString(4),
@@ -447,64 +446,61 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
                         rs.getString(15),
                         rs.getString(16),
                         getEmailDotorByUsernae(rs.getString(2)));
-               return d;
+                return d;
             }
-           
+
         } catch (Exception e) {
             System.out.println(e);
         }
         return null;
     }
-      public void updateDoctorStatusRole( String username, int status) {
-    String sql = "UPDATE doctors SET  status = ?  WHERE username = ?";
-    
-    try (  PreparedStatement ps = connection.prepareStatement(sql)) {
 
-         
-        ps.setString(2, username);
-        ps.setInt(1, status);
+    public void updateDoctorStatusRole(String username, int status) {
+        String sql = "UPDATE doctors SET  status = ?  WHERE username = ?";
 
-        int rows = ps.executeUpdate();
-        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-    } catch (Exception e) {
-        e.printStackTrace();
+            ps.setString(2, username);
+            ps.setInt(1, status);
+
+            int rows = ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    
-}
     public void updateDoctor(int doctorId, String doctorName, String gender, String phone, String dob,
-                            String description, int departmentId, int status,String specialized,String EducationHistory ,int positionId,int academicDegreeId , int academicTitleId) {
-    String sql = "UPDATE doctors SET doctor_name = ?, gender = ?, phone = ?, dob = ?, " +
-                 "description = ?, deparment_id = ?,  status = ? ,specialized =?, EducationHistory =? ,position_id= ?,AcademicDegree_id=? ,AcademicTitle_id= ? WHERE doctor_id = ?";
-    
-    try ( 
-         PreparedStatement ps = connection.prepareStatement(sql)) {
-        
-        ps.setString(1, doctorName);
-        ps.setString(2, gender);
-        ps.setString(3, phone);
-        ps.setDate(4, Date.valueOf(dob)); 
-        ps.setString(5, description);
-        ps.setInt(6, departmentId);
-        ps.setInt(7, status);
-        ps.setString(8, specialized);
-        ps.setString(9, EducationHistory);
-        ps.setInt(10,positionId );
-        ps.setInt(11, academicDegreeId);
-        ps.setInt(12, academicTitleId);
-        ps.setInt(13, doctorId);
-        int rows = ps.executeUpdate();
-        
+            String description, int departmentId, int status, String specialized, String EducationHistory, int positionId, int academicDegreeId, int academicTitleId) {
+        String sql = "UPDATE doctors SET doctor_name = ?, gender = ?, phone = ?, dob = ?, "
+                + "description = ?, deparment_id = ?,  status = ? ,specialized =?, EducationHistory =? ,position_id= ?,AcademicDegree_id=? ,AcademicTitle_id= ? WHERE doctor_id = ?";
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, doctorName);
+            ps.setString(2, gender);
+            ps.setString(3, phone);
+            ps.setDate(4, Date.valueOf(dob));
+            ps.setString(5, description);
+            ps.setInt(6, departmentId);
+            ps.setInt(7, status);
+            ps.setString(8, specialized);
+            ps.setString(9, EducationHistory);
+            ps.setInt(10, positionId);
+            ps.setInt(11, academicDegreeId);
+            ps.setInt(12, academicTitleId);
+            ps.setInt(13, doctorId);
+            int rows = ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    
-}
-
-    public void InsertDoctorByAdmin(String username, String doctor_name, String gender, int department_id, int position_id, int AcademicT_id, int AcademicDgre_id, int status,String img) {
+    public void InsertDoctorByAdmin(String username, String doctor_name, String gender, int department_id, int position_id, int AcademicT_id, int AcademicDgre_id, int status, String img) {
         String sql = "INSERT INTO doctors (\n"
                 + "    username,\n"
                 + "    doctor_name,\n"
@@ -550,12 +546,114 @@ public List<Doctor> getAllDoctorBySearchName(String name) {
         }
     }
 
+    public String sang = "";
+    
+    public List<Doctor> GetListDoctor(String gender, int[] departmentIds, String sortType, int pageIndex, int pageSize) {
+        List<Doctor> doctors = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM (");
+        sql.append("SELECT d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, COUNT(rs.ratestar_id) AS total_reviews,");
+        sql.append("dp.department_name, ");
+        sql.append("AVG(CAST(rs.star AS FLOAT)) AS average_rating, ");
+        sql.append("ROW_NUMBER() OVER (ORDER BY ");
+        
+        switch (sortType) {
+            case "rating":
+                sql.append("AVG(CAST(rs.star AS FLOAT)) DESC ");
+                break;
+            case "popular":
+                sql.append("COUNT(rs.ratestar_id) DESC ");
+                break;
+            case "latest":
+                sql.append("d.doctor_id DESC ");
+                break;
+            default:
+                sql.append("d.doctor_id ASC ");
+                break;
+        }
+
+        sql.append(") AS RowNum ");
+        sql.append("FROM doctors d ");
+        sql.append("LEFT JOIN department dp ON d.deparment_id = dp.department_id ");
+        sql.append("LEFT JOIN ratestar rs ON d.doctor_id = rs.doctor_id ");
+        sql.append("WHERE 1=1 ");
+
+        // Gender filter
+        if (gender != null && !gender.isEmpty()) {
+            sql.append("AND d.gender = ? ");
+        }
+
+        // Department filter (multiple values)
+        if (departmentIds != null && departmentIds.length > 0) {
+            sql.append("AND d.deparment_id IN (");
+            for (int i = 0; i < departmentIds.length; i++) {
+                sql.append("?");
+                if (i < departmentIds.length - 1) {
+                    sql.append(", ");
+                }
+            }
+            sql.append(") ");
+        }
+
+        sql.append("GROUP BY d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, dp.department_name ");
+        sql.append(") AS paged_result ");
+        sql.append("WHERE RowNum BETWEEN ? AND ?");
+
+        System.out.println("sql: " + sql.toString());
+        sang = sql.toString();
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+
+            if (gender != null && !gender.isEmpty()) {
+                ps.setString(paramIndex++, gender);
+            }
+
+            if (departmentIds != null && departmentIds.length > 0) {
+                for (int deptId : departmentIds) {
+                    ps.setInt(paramIndex++, deptId);
+                }
+            }
+
+            int startRow = (pageIndex - 1) * pageSize + 1;
+            int endRow = pageIndex * pageSize;
+
+            ps.setInt(paramIndex++, startRow);
+            ps.setInt(paramIndex++, endRow);
+
+            ResultSet rs = ps.executeQuery();
+            PositionDAO positionDAO = new PositionDAO();
+            while (rs.next()) {
+                Doctor doctor = new Doctor();
+                doctor.setDoctor_id(rs.getInt("doctor_id"));
+                //doctor.setUsername(rs.getString(2));
+                doctor.setDoctor_name(rs.getString("doctor_name"));
+                doctor.setGender(rs.getString("gender"));
+                //doctor.setDob(rs.getDate("dob"));
+                doctor.setPhone(rs.getString("phone"));
+                doctor.setImg(rs.getString("img"));
+                doctor.setAdress(rs.getString("address"));
+                //doctor.setDescription(rs.getString("description"));
+                doctor.setDepartment_name(rs.getString("department_name"));
+                doctor.setAverageRateStar(rs.getFloat("average_rating"));
+                doctor.setNumber_rate_star(rs.getInt("total_reviews"));
+                doctor.setPosition(positionDAO.GetPositionName(doctor.getDoctor_id()));
+                doctors.add(doctor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return doctors;
+    }
+
     public static void main(String[] args) {
         DoctorDAO d = new DoctorDAO();
-        List<Doctor> l = d.getAllDoctorByAdmin();
-        System.out.println(l);
-        System.out.println(d.getDoctorByDoctorId("1").toString());
-        System.out.println(d.getDoctorByDoctorUsername("doctor1"));
-
+        int[] department = new int[0];
+        List<Doctor> l = d.GetListDoctor("", department, "rating", 1, 2);
+        for (Doctor doctor : l) {
+            System.out.println(doctor.getDoctor_id());
+        }
     }
 }
