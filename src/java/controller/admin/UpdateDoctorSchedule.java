@@ -4,7 +4,7 @@
  */
 package controller.admin;
 
-import dal.DoctorScheduleSlotsDAO;
+import dal.WeeklyScheduleSlotDAO;
 import dal.WeeklyDoctorScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,11 +43,11 @@ public class UpdateDoctorSchedule extends HttpServlet {
             
             if (action.equals("updateSchedule")) {
                 
-                DoctorScheduleSlotsDAO DSSD = new DoctorScheduleSlotsDAO();
+                WeeklyScheduleSlotDAO WSSD = new WeeklyScheduleSlotDAO();
                 
                 String doctorID = request.getParameter("doctorId");
                 
-                Map<Integer, List<DoctorScheduleSlots>> result = DSSD.getTemplateScheduleByDoctorId(Integer.parseInt(doctorID));
+                Map<Integer, List<DoctorScheduleSlots>> result = WSSD.getTemplateScheduleByDoctorId(Integer.parseInt(doctorID));
                 
                 request.setAttribute("ScheduleTemplate", result);
                 
@@ -69,7 +69,7 @@ public class UpdateDoctorSchedule extends HttpServlet {
                     
                     if (day != null) {
 
-                        int template_Id = WDS.insertTemplate(Integer.parseInt(doctorId), i);
+                        int template_Id = WDS.insertTemplateSchdule(Integer.parseInt(doctorId), i);
                         
                         for (String slots : day) {
                             String parts[] = slots.split("_");

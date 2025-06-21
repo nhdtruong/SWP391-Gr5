@@ -4,6 +4,7 @@
  */
 package controller.admin;
 
+import dal.DoctorScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,18 +12,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import dal.DoctorScheduleDAO;
-import dal.DoctorScheduleSlotsDAO;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import model.WorkingDateSchedule;
+import java.sql.Date;
+import java.sql.Time;
+import dal.DoctorScheduleSlotsDAO;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name = "DoctorScheduleDetail", urlPatterns = {"/doctorScheduleDetail"})
-public class DoctorScheduleDetail extends HttpServlet {
+@WebServlet(name = "UpdateDoctorScheduleDetail", urlPatterns = {"/updateDoctorScheduleDetail"})
+public class UpdateDoctorScheduleDetail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class DoctorScheduleDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DoctorScheduleDetail</title>");
+            out.println("<title>Servlet UpdateDoctorScheduleDetail</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DoctorScheduleDetail at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateDoctorScheduleDetail at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,32 +62,13 @@ public class DoctorScheduleDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String doctorId = (String) session.getAttribute("doctorId");
-        String doctorName = (String) session.getAttribute("doctorName");
-        
-        if (doctorId == null || doctorName == null) {
-
-            String doctorId_r = request.getParameter("doctorId");
-            String doctorName_r = request.getParameter("doctorName");
-            session.setAttribute("doctorId", doctorId_r);
-            session.setAttribute("doctorName", doctorName_r);
-            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-            List<WorkingDateSchedule> workingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId_r));
-            request.setAttribute("WorkingDateSchedule", workingDateSchedule);
-            request.setAttribute("doctorName", doctorName_r);
-            request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response);
-
-        } else if (doctorId != null && doctorName != null) {
-
-            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-            List<WorkingDateSchedule> workingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId));
-            request.setAttribute("WorkingDateSchedule", workingDateSchedule);
-            request.setAttribute("doctorName", doctorName);
-            request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response);
-
-        }
-
+        String doctorId = request.getParameter("doctorId");
+        String workingDate = request.getParameter("workingDate");
+        Date date = Date.valueOf(workingDate);
+        DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+        WorkingDateSchedule WDS = DSD.getWorkingDayScheduleOfDoctor(Integer.parseInt(doctorId), date);
+        request.setAttribute("WDS", WDS);
+        request.getRequestDispatcher("admin/updateDoctorScheduleDetail.jsp").forward(request, response);
     }
 
     /**
@@ -101,7 +82,34 @@ public class DoctorScheduleDetail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+        DoctorScheduleSlotsDAO DSSD = new DoctorScheduleSlotsDAO();
+        String doctorId_ = request.getParameter("doctorId");
+        int doctorId = Integer.parseInt(doctorId_);
+        String[] day = request.getParameterValues("day");
+        String workingDate = request.getParameter("workingDate");
+        Date date = Date.valueOf(workingDate);
+        
+        if (day != null) {
+            DSD.deleteDayScheduleOfDoctor(doctorId, date);
+            int schedule_id = DSD.insertDoctorSchedule(doctorId, date);
+            for (String days : day) {
+                // update ca
+                String[] part = days.split("_");
+                int shift = Integer.parseInt(part[0]);
+                String slotstime[] = part[1].split("-");
+                
+                Time timeStart = Time.valueOf(slotstime[0]);
+                
+                Time timeEnd = Time.valueOf(slotstime[1]);
+                
+                DSSD.insertScheduleSlot(schedule_id, shift, timeStart, timeEnd);
+            }
+            response.sendRedirect("doctorScheduleDetail");
+        } else if (day == null) {
+            DSD.deleteDayScheduleOfDoctor(doctorId, date);
+            response.sendRedirect("doctorScheduleDetail");
+        }
     }
 
     /**
