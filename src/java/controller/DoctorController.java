@@ -6,6 +6,7 @@ package controller;
 
 import dal.DepartmentDAO;
 import dal.DoctorDAO;
+import dal.RateStarDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Deparment;
 import model.Doctor;
+import model.RateStar;
 
 /**
  *
@@ -65,7 +67,7 @@ public class DoctorController extends HttpServlet {
         }
 
         DoctorDAO doctorDAO = new DoctorDAO();
-        int number = doctorDAO.GetListDoctorNumber(gender_str, departmentIds, SortType, 6);
+        int number = doctorDAO.GetListDoctorNumber(gender_str, departmentIds, SortType);
         int numberPage = 0;
         if (number % 6 == 0) {
             numberPage = number / 6;
@@ -97,7 +99,7 @@ public class DoctorController extends HttpServlet {
 //        out.print("size: "+doctors.size());
 //        out.print("\n"+doctorDAO.sang);
         request.setAttribute("doctor", doctors);
-        request.setAttribute("speciality", speciality_id + "");
+        request.setAttribute("speciality", speciality_id==0?"":speciality_id+"");
         request.setAttribute("sort", SortType);
         request.setAttribute("gender", gender);
         request.setAttribute("pagIndex", pageIndex+"");
@@ -120,6 +122,9 @@ public class DoctorController extends HttpServlet {
         DoctorDAO doctorDAO = new DoctorDAO();
         Doctor doctor = doctorDAO.getDoctorByDoctorId(id);
         request.setAttribute("detail", doctor);
+        RateStarDAO rateStarDAO = new RateStarDAO();
+        List<RateStar> rateStars = rateStarDAO.getAllRateStarByDoctorId(doctor.getDoctor_id());
+        request.setAttribute("rate", rateStars);
         request.getRequestDispatcher("doctordetail.jsp").forward(request, response);
     }
 

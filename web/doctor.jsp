@@ -30,7 +30,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 col-lg-9 row align-items-center">
-                        <c:if test="${empty doctor}">
+                        <c:if test="${numberPage== 0}">
                             <div class="alert alert-warning text-center" style="width: 100%;">
                                 Không có bác sĩ nào phù hợp với bộ lọc của bạn.
                             </div>
@@ -39,12 +39,18 @@
                             <div class="col-xl-4 col-lg-4 col-md-6 mt-2 pt-2 d-flex">
                                 <div class="card team border-0 rounded shadow overflow-hidden d-flex flex-column w-100 h-100">
                                     <div style="display: none">${d.doctor_id}</div>
-
-                                    <!-- Avatar -->
-                                    <div class="team-person text-center mt-3">
-                                        <img src="${d.img}" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
-                                    </div>
-
+                                    <c:if test="${d.img!='default'}" >
+                                        <!-- Avatar -->
+                                        <div class="team-person text-center mt-3">
+                                            <img src="${d.img}" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
+                                        </div>
+                                    </c:if>
+                                        <c:if test="${d.img=='default'}" >
+                                        <!-- Avatar -->
+                                        <div class="team-person text-center mt-3">
+                                            <img src="assets/images/avata.png" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
+                                        </div>
+                                    </c:if>
                                     <!-- Nội dung chính -->
                                     <div class="card-body text-center flex-grow-1 d-flex flex-column justify-content-center">
                                         <a href="#" class="title text-dark h5 d-block mb-0">${d.doctor_name}</a>
@@ -62,7 +68,6 @@
                             </div>
 
                         </c:forEach>
-                        <c:if test="${not empty doctor}">
                             <div style="
                                  text-align: center;
                                  margin-top: 20px;
@@ -78,7 +83,7 @@
                                    background-color: #f0f0f0;
                                    margin-right: 8px;
                                    transition: background-color 0.2s ease;
-                                   " href="doctor?gender=${param.gender}&speciality=${param.speciality}&SortType=${param.SortType}&pagIndex=${pagIndex-1}">&lt;</a>
+                                   " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex-1}">&lt;</a>
 
                                 <span style="font-weight: bold; color: #007bff;">${pagIndex}</span>/<span style="color: #555;">${numberPage}</span>
 
@@ -89,9 +94,8 @@
                                    background-color: #f0f0f0;
                                    margin-left: 8px;
                                    transition: background-color 0.2s ease;
-                                   " href="doctor?gender=${param.gender}&speciality=${param.speciality}&SortType=${param.SortType}&pagIndex=${pagIndex+1}" >&gt;</a>
+                                   " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex+1}" >&gt;</a>
                             </div>
-                        </c:if>
                     </div>
 
                     <div class="col-lg-3 col-md-3 mt-3 pt-2">

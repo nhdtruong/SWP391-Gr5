@@ -647,7 +647,7 @@ public class DoctorDAO extends DBContext {
 
         return doctors;
     }
-    public int GetListDoctorNumber(String gender, int[] departmentIds, String sortType, int pageSize) {
+    public int GetListDoctorNumber(String gender, int[] departmentIds, String sortType) {
         //List<Doctor> doctors = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder();

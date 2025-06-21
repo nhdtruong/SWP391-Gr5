@@ -88,9 +88,16 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-5">
-                        <div class="slider slider-for">
-                            <div><img src="${detail.img}" class="img-fluid rounded" alt=""></div>
-                        </div>
+                        <c:if test="${detail.img!='default'}" >
+                            <div class="slider slider-for">
+                                <div><img src="${detail.img}" class="img-fluid rounded" alt=""></div>
+                            </div>
+                        </c:if>
+                        <c:if test="${detail.img=='default'}" >
+                            <div class="slider slider-for">
+                                <div><img src="assets/images/avata.png" class="img-fluid rounded" alt=""></div>
+                            </div>
+                        </c:if>
                     </div>
 
                     <div class="col-md-7 mt-4 mt-sm-0 pt-2 pt-sm-0">
@@ -154,37 +161,33 @@
                         </form>
                     </c:if>
                     <ul class="media-list list-unstyled mb-0">
-                        <c:forEach items="${rate}" var="r">
-                            <li class="mt-4">
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <a class="pe-3" href="#">
-                                            <c:if test="${r.user.img != 'default'}">
-                                                <img src="data:image/png;base64,${r.user.img}" class="img-fluid avatar avatar-md-sm rounded-circle shadow" alt="img">
-                                            </c:if>
-                                            <c:if test="${r.user.img == 'default'}">
-                                                <img src="assets/images/avata.png" class="img-fluid avatar avatar-md-sm rounded-circle shadow" alt="img">
-                                            </c:if>
-
-                                        </a>
-                                        <div class="commentor-detail">
-                                            <h6 class="mb-0"><a href="javascript:void(0)" class="text-dark media-heading">${r.user.username}</a></h6>
-                                            <small class="text-muted"><fmt:formatDate pattern="dd/MM/yyyy hh:mm" value="${r.date}"/></small>
+                        <c:if test="${empty rate}">
+                            Chưa có phản hồi !!!
+                        </c:if>
+                        <c:if test="${not empty rate}">
+                            <c:forEach items="${rate}" var="r">
+                                <li class="mt-4">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="commentor-detail">
+                                                <h6 class="mb-0"><a href="javascript:void(0)" class="text-dark media-heading">${r.patientName}</a></h6>
+    <!--                                            <small class="text-muted">${r.feedback}</small>-->
+                                            </div>
                                         </div>
+                                        <ul class="list-unstyled text-warning h5 mb-0">
+                                            <c:if test="${r.star != 0}">
+                                                <c:forEach var = "i" begin = "1" end = "${r.star}">
+                                                    <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
+                                                    </c:forEach>
+                                                </c:if>
+                                        </ul>
                                     </div>
-                                    <ul class="list-unstyled text-warning h5 mb-0">
-                                        <c:if test="${r.star != 0}">
-                                            <c:forEach var = "i" begin = "1" end = "${r.star}">
-                                                <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
-                                                </c:forEach>
-                                            </c:if>
-                                    </ul>
-                                </div>
-                                <div class="mt-3">
-                                    <p class="text-muted font-italic p-3 bg-light rounded">${r.feedback}</p>
-                                </div>
-                            </li>
-                        </c:forEach>
+                                    <div class="mt-3">
+                                        <p class="text-muted font-italic p-3 bg-light rounded">${r.feedback}</p>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </c:if>
                     </ul>
                 </div>
             </div>
