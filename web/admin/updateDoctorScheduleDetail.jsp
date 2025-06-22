@@ -20,45 +20,38 @@
                 <div class="container-fluid">
                     <div class="layout-specing">
 
-
-                        <form action="updateDoctorScheduleDetail?action=updateScheduleExcute" method="post">
-                            <div class="row">
-
+                        <c:set var="day" value="${WDS}"></c:set>
+                            <form action="updateDoctorScheduleDetail" method="post">
+                                <div class="row">
+                                    <span>Sửa lịch cho bác sĩ ${doctorName} </span>
                                 <input type="hidden" name="doctorId" value="${doctorId}">
+                                <input type="hidden" name="doctorName" value="${doctorName}">
 
-                                <c:set var="day" value="${WDS}"></c:set>
-                                    <div class="col-md-6">
-                                        <div class="card mb-4 shadow-sm">
-                                            <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                                                <strong>   
-                                                    
-                                                    <input name="workingDate" value="${day.workingDate}" type="hidden">
-                                                    Ngày:${day.workingDate} 
-                                                </strong>
-                                                <div>
-                                                    <input type="checkbox" id="checkAll" onchange="toggleAllSlots()">
-                                                    <label for="checkAll" class="ms-1">Chọn tất cả</label>
-                                                </div>
+                                <div class="col-md-6">
+                                    <div class="card mb-4 shadow-sm">
+                                        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                                            <strong>   
+                                                <input name="workingDate" value="${day.workingDate}" type="hidden">
+                                                Ngày:${day.workingDate} 
+                                            </strong>
+                                            <div>
+                                                <input type="checkbox" id="checkAll" onchange="toggleAllSlots()">
+                                                <label for="checkAll" class="ms-1">Chọn tất cả slot Sáng và Chiều</label>
                                             </div>
-                                            <div class="card-body">
+                                        </div>
+                                        <div class="card-body">
 
-                                                <div><strong>Slot Sáng</strong></div>
-                                                <div class="row mb-2">
+                                            <div><strong>Slot Sáng</strong></div>
+                                            <div class="row mb-2">
                                                 <c:forEach var="h" begin="7" end="10">
                                                     <c:set var="slotStart" value="${h < 10 ? '0' : ''}${h}:00:00"/>
                                                     <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00"/>
                                                     <c:set var="isChecked" value="false"/>
 
 
-
-                                                    <c:forEach var="shift" items="${day.shifts}">
-                                                        <c:if test="${shift.shift == 1}">
-                                                            <c:forEach var="slot" items="${shift.slots}">
-                                                                <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
-                                                                    <c:set var="isChecked" value="true"/>
-                                                                </c:if>
-                                                            </c:forEach>
-
+                                                    <c:forEach var="slot" items="${day.slots}">
+                                                        <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
+                                                            <c:set var="isChecked" value="true"/>
                                                         </c:if>
                                                     </c:forEach>
 
@@ -66,7 +59,7 @@
                                                     <div class="col-md-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input slot" type="checkbox"
-                                                                   name="day" value="1_${slotStart}-${slotEnd}"
+                                                                   name="day" value="${slotStart}-${slotEnd}"
                                                                    id="slot_${i}_m_${h}"
                                                                    <c:if test="${isChecked}">checked</c:if>>
                                                             <label class="form-check-label" for="slot_${2}_m_${h}">
@@ -86,23 +79,43 @@
                                                     <c:set var="isChecked" value="false"/>
 
 
-                                                    <c:forEach var="shift" items="${day.shifts}">
-                                                        <c:if test="${shift.shift == 2}">
-                                                            <c:forEach var="slot" items="${shift.slots}">
+                                                            <c:forEach var="slot" items="${day.slots}">
                                                                 <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
                                                                     <c:set var="isChecked" value="true"/>
                                                                 </c:if>
                                                             </c:forEach>
 
-                                                        </c:if>
-                                                    </c:forEach>
-
-
-
                                                     <div class="col-md-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input slot" type="checkbox"
-                                                                   name="day" value="2_${slotStart}-${slotEnd}"    
+                                                                   name="day" value="${slotStart}-${slotEnd}"    
+                                                                   id="slot_${i}_a_${h}"
+                                                                   <c:if test="${isChecked}">checked</c:if>>
+                                                            <label class="form-check-label" for="slot_${2}_a_${h}">
+                                                                ${h}:00 - ${h+1}:00
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+                                            </div>
+                                            <div><strong>Slot Tối</strong></div>
+                                            <div class="row">
+                                                <c:forEach var="h" begin="18" end="21">
+                                                    <c:set var="slotStart" value="${h < 10 ? '0' : ''}${h}:00:00"/>
+                                                    <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00"/>
+                                                    <c:set var="isChecked" value="false"/>
+
+
+                                                            <c:forEach var="slot" items="${day.slots}">
+                                                                <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
+                                                                    <c:set var="isChecked" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input slot1" type="checkbox"
+                                                                   name="day" value="${slotStart}-${slotEnd}"    
                                                                    id="slot_${i}_a_${h}"
                                                                    <c:if test="${isChecked}">checked</c:if>>
                                                             <label class="form-check-label" for="slot_${2}_a_${h}">
@@ -134,29 +147,29 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <script>
-                                                        // Khi click vào checkbox "Chọn tất cả"
-                                                        function toggleAllSlots() {
-                                                            const checkAll = document.getElementById('checkAll');
-                                                            const slots = document.querySelectorAll('.slot');
-                                                            slots.forEach(slot => {
-                                                                slot.checked = checkAll.checked;
-                                                            });
-                                                        }
-
-                                                        //   Khi click vào từng checkbox slot
-                                                        document.addEventListener("DOMContentLoaded", () => {
-
-                                                            const checkAll = document.getElementById('checkAll');
-                                                            const slots = document.querySelectorAll('.slot');
-
-                                                            slots.forEach(slot => {
-                                                                slot.addEventListener("change", () => {
-                                                                    const allChecked = Array.from(slots).every(s => s.checked);
-                                                                    checkAll.checked = allChecked;
-                                                                });
-                                                            });
-
+                                                    // Khi click vào checkbox "Chọn tất cả"
+                                                    function toggleAllSlots() {
+                                                        const checkAll = document.getElementById('checkAll');
+                                                        const slots = document.querySelectorAll('.slot');
+                                                        slots.forEach(slot => {
+                                                            slot.checked = checkAll.checked;
                                                         });
+                                                    }
+
+                                                    //   Khi click vào từng checkbox slot
+                                                    document.addEventListener("DOMContentLoaded", () => {
+
+                                                        const checkAll = document.getElementById('checkAll');
+                                                        const slots = document.querySelectorAll('.slot');
+
+                                                        slots.forEach(slot => {
+                                                            slot.addEventListener("change", () => {
+                                                                const allChecked = Array.from(slots).every(s => s.checked);
+                                                                checkAll.checked = allChecked;
+                                                            });
+                                                        });
+
+                                                    });
         </script>
 
 

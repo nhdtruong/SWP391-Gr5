@@ -17,6 +17,7 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 import model.DoctorScheduleSlots;
+import dal.DoctorScheduleDAO;
 
 /**
  *
@@ -54,8 +55,9 @@ public class UpdateDoctorSchedule extends HttpServlet {
                 request.setAttribute("doctorId", doctorID);
                 
                 request.getRequestDispatcher("admin/updateDoctorSchedule.jsp").forward(request, response);
+               
             }
-            if (action.equals("updateScheduleExcute")) {
+            else if (action.equals("updateScheduleExcute")) {
                 
                 String doctorId = request.getParameter("doctorId");
                 
@@ -89,7 +91,16 @@ public class UpdateDoctorSchedule extends HttpServlet {
                     
                 }
                 request.getRequestDispatcher("admin/updateDoctorSchedule.jsp").forward(request, response);
+             
             }
+            else if(action.equals("deleteSchedule")){
+                String doctorId = request.getParameter("doctorId");
+                DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+                DSD.deleteDoctorScheduleByDoctorId(Integer.parseInt(doctorId));
+                response.sendRedirect("doctorschedule?action=all");
+                return;
+            } 
+           
             
         }
     }

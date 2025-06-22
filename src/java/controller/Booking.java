@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.DoctorDAO;
 import dal.ServiceDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,7 +15,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.Doctor;
 import model.Service;
+import dal.DoctorScheduleDAO;
+import java.sql.Date;
+import java.sql.Time;
+import model.WorkingDateSchedule;
 
 /**
  *
@@ -61,14 +67,69 @@ public class Booking extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
-        ServiceDAO serviceDao = new ServiceDAO();
-        String departmentId = request.getParameter("department_id");
-        String departmentName = request.getParameter("departmentName");
-        List<Service> listService = serviceDao.getAllServicesByDepartmentId(Integer.parseInt(departmentId));
-        session.setAttribute("departmentName",departmentName);
-        request.setAttribute("serviceOfDepartment", listService);
-        request.getRequestDispatcher("booking.jsp").forward(request, response);
+        String stepName = request.getParameter("stepName");
+        request.setAttribute("stepName", stepName);
+        
+        if (stepName.equals("doctor")) {
+            DoctorDAO doctDAO = new DoctorDAO();
+            String departmentId = request.getParameter("departmentId");
+            String departmentName = request.getParameter("departmentName");
+            List<Doctor> listDoctor = doctDAO.getAllDoctorInDepartmanent(Integer.parseInt(departmentId));
+            session.setAttribute("departmentName", departmentName);
+            session.setAttribute("departmentId", departmentId);
+            session.removeAttribute("doctorId");
+            session.removeAttribute("doctorName");
+            request.setAttribute("listDoctor", listDoctor);
+            
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
+        } 
+        else if (stepName.equals("service")) {
+            
+            ServiceDAO serviceDao = new ServiceDAO();
+            String doctorId = request.getParameter("doctorId");
+            String doctorName = request.getParameter("doctorName");
+            session.setAttribute("doctorId", doctorId);
+            session.setAttribute("doctorName", doctorName);
+            session.removeAttribute("serviceId");
+            session.removeAttribute("serviceName");
+            String departmentId = (String) session.getAttribute("departmentId");
+            List<Service> listService = serviceDao.getAllServicesByDepartmentId(Integer.parseInt(departmentId));
+            request.setAttribute("listService",listService);
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
+        }
+        else if(stepName.equals("dateTime")){
+            
+            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+            String doctorId = (String) session.getAttribute("doctorId");
+            List<WorkingDateSchedule> listWDS =  DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
+            String serviceId = request.getParameter("serviceId");
+            String serviceName = request.getParameter("serviceName");
+            session.setAttribute("serviceId", serviceId);
+            session.setAttribute("serviceName",serviceName);
+            session.removeAttribute("dateBooking");
+            session.removeAttribute("slotStart");
+            session.removeAttribute("slotEnd");
+            request.setAttribute("listWDS", listWDS);
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
+ 
+        }
+        else if(stepName.equals("chooseRecords")){
+            String dateBooking_ = request.getParameter("dateBooking");
+            String slotStart_ = request.getParameter("slotStart");
+            String slotEnd_ = request.getParameter("slotEnd");
+            Date dateBooking = Date.valueOf(dateBooking_);
+            Time slotStart = Time.valueOf(slotStart_);
+            Time slotEnd = Time.valueOf(slotEnd_);
+            session.setAttribute("dateBooking",dateBooking );
+            session.setAttribute("slotStart", slotStart);
+            session.setAttribute("slotEnd", slotEnd);
+            response.sendRedirect("chooseRecords");
+
+            
+        }
+
     }
 
     /**

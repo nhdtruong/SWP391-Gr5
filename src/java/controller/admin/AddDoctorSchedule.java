@@ -99,7 +99,7 @@ public class AddDoctorSchedule extends HttpServlet {
 
             if (action.equals("saveTemplate")) {
                 saveTemplate(request, Integer.parseInt(doctorID));
-                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                response.sendRedirect("doctorschedule?action=all");
 
             } else if (action.equals("saveAndApply")) {
 
@@ -113,7 +113,7 @@ public class AddDoctorSchedule extends HttpServlet {
                 System.out.println("End Date: " + request.getParameter("endDate"));
 
                 applySchedule(request, Integer.parseInt(doctorID), start, end);
-                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                response.sendRedirect("doctorschedule?action=all");
             }
 
         }
@@ -131,17 +131,16 @@ public class AddDoctorSchedule extends HttpServlet {
                 int template_Id = WDSD.insertTemplateSchdule(doctorID, i);
 
                 for (String slots : day) {
-                    String parts[] = slots.split("_");
-
-                    int shift = Integer.parseInt(parts[0]);
-
-                    String slotstime[] = parts[1].split("-");
+                   
+                    String slotstime[] = slots.split("-");
 
                     Time timeStart = Time.valueOf(slotstime[0]);
-
+                    
                     Time timeEnd = Time.valueOf(slotstime[1]);
-
-                    WSSD.insertSlot(template_Id, shift, timeStart, timeEnd);
+                    System.out.println(slots);
+                    System.out.println(timeEnd);
+                    System.out.println(timeStart);
+                    WSSD.insertSlot(template_Id, timeStart, timeEnd);
                 }
 
             }
@@ -163,17 +162,13 @@ public class AddDoctorSchedule extends HttpServlet {
                 System.out.println("ScID"+scheduleId);
                 for (String days : day) {
 
-                    String parts[] = days.split("_");
-
-                    int shift = Integer.parseInt(parts[0]);
-
-                    String slotstime[] = parts[1].split("-");
+                    String slotstime[] = days.split("-");
 
                     Time timeStart = Time.valueOf(slotstime[0]);
 
                     Time timeEnd = Time.valueOf(slotstime[1]);
 
-                    DSSD.insertScheduleSlot(scheduleId, shift, timeStart, timeEnd);
+                    DSSD.insertScheduleSlot(scheduleId, timeStart, timeEnd);
                 }
             }
         }

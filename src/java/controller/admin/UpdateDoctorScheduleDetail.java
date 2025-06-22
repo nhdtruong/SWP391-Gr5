@@ -16,6 +16,7 @@ import model.WorkingDateSchedule;
 import java.sql.Date;
 import java.sql.Time;
 import dal.DoctorScheduleSlotsDAO;
+import java.net.URLEncoder;
 
 /**
  *
@@ -63,10 +64,13 @@ public class UpdateDoctorScheduleDetail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String doctorId = request.getParameter("doctorId");
+        String doctorName = request.getParameter("doctorName");
         String workingDate = request.getParameter("workingDate");
         Date date = Date.valueOf(workingDate);
         DoctorScheduleDAO DSD = new DoctorScheduleDAO();
         WorkingDateSchedule WDS = DSD.getWorkingDayScheduleOfDoctor(Integer.parseInt(doctorId), date);
+        request.setAttribute("doctorId", doctorId);
+        request.setAttribute("doctorName", doctorName);
         request.setAttribute("WDS", WDS);
         request.getRequestDispatcher("admin/updateDoctorScheduleDetail.jsp").forward(request, response);
     }
@@ -82,33 +86,37 @@ public class UpdateDoctorScheduleDetail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         DoctorScheduleDAO DSD = new DoctorScheduleDAO();
         DoctorScheduleSlotsDAO DSSD = new DoctorScheduleSlotsDAO();
         String doctorId_ = request.getParameter("doctorId");
+        String doctorName_ = request.getParameter("doctorName");
         int doctorId = Integer.parseInt(doctorId_);
         String[] day = request.getParameterValues("day");
         String workingDate = request.getParameter("workingDate");
+
         Date date = Date.valueOf(workingDate);
-        
+
         if (day != null) {
             DSD.deleteDayScheduleOfDoctor(doctorId, date);
             int schedule_id = DSD.insertDoctorSchedule(doctorId, date);
             for (String days : day) {
-                // update ca
-                String[] part = days.split("_");
-                int shift = Integer.parseInt(part[0]);
-                String slotstime[] = part[1].split("-");
-                
+
+                String slotstime[] = days.split("-");
+
                 Time timeStart = Time.valueOf(slotstime[0]);
-                
+
                 Time timeEnd = Time.valueOf(slotstime[1]);
-                
-                DSSD.insertScheduleSlot(schedule_id, shift, timeStart, timeEnd);
+
+                DSSD.insertScheduleSlot(schedule_id, timeStart, timeEnd);
             }
-            response.sendRedirect("doctorScheduleDetail");
+
+            response.sendRedirect("doctorScheduleDetail?doctorId=" + doctorId
+                    + "&doctorName=" + URLEncoder.encode(doctorName_, "UTF-8"));
         } else if (day == null) {
             DSD.deleteDayScheduleOfDoctor(doctorId, date);
-            response.sendRedirect("doctorScheduleDetail");
+            response.sendRedirect("doctorScheduleDetail?doctorId=" + doctorId
+                    + "&doctorName=" + URLEncoder.encode(doctorName_, "UTF-8"));
         }
     }
 

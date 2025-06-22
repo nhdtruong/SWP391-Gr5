@@ -85,7 +85,7 @@
                                                 </strong>
                                                 <div>
                                                     <input type="checkbox" id="checkAll_${i}" onchange="toggleAllSlots(${i})">
-                                                    <label for="checkAll_${i}" class="ms-1">Chọn tất cả</label>
+                                                    <label for="checkAll_${i}" class="ms-1">Chọn tất cả slot Sáng và Chiều</label>
                                                 </div>
                                             </div>
                                             <div class="card-body">
@@ -96,7 +96,7 @@
                                                         <div class="col-md-3">
                                                             <div class="form-check">
                                                                 <input class="form-check-input slot-${i}" type="checkbox"
-                                                                       name="day_${i}" value="1_${h}:00:00-${h+1}:00:00"
+                                                                       name="day_${i}" value="${h}:00:00-${h+1}:00:00"
                                                                        id="slot_${i}_m_${h}">
                                                                 <label class="form-check-label" for="slot_${i}_m_${h}">
                                                                     ${h}:00 - ${h+1}:00
@@ -111,9 +111,25 @@
                                                         <div class="col-md-3">
                                                             <div class="form-check">
                                                                 <input class="form-check-input slot-${i}" type="checkbox"
-                                                                       name="day_${i}" value="2_${h}:00:00-${h+1}:00:00"
+                                                                       name="day_${i}" value="${h}:00:00-${h+1}:00:00"
                                                                        id="slot_${i}_a_${h}">
                                                                 <label class="form-check-label" for="slot_${i}_a_${h}">
+                                                                    ${h}:00 - ${h+1}:00
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </c:forEach>
+                                                </div>
+                                                 <div><strong>Slot Tối</strong></div>
+                                                <div class="row mb-2">
+
+                                                    <c:forEach var="h" begin="18" end="21">
+                                                        <div class="col-md-3">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input slot-" type="checkbox"
+                                                                       name="day_${i}" value="${h}:00:00-${h+1}:00:00"
+                                                                       id="slot_${i}_m_${h}">
+                                                                <label class="form-check-label" for="slot_${i}_m_${h}">
                                                                     ${h}:00 - ${h+1}:00
                                                                 </label>
                                                             </div>

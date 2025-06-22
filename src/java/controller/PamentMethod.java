@@ -5,24 +5,20 @@
 
 package controller;
 
-import dal.CategoryServiceDAO;
-import dal.DoctorDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.CategoryServices;
-import model.Doctor;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name="HomeController", urlPatterns={"/home"})
-public class HomeController extends HttpServlet {
+@WebServlet(name="PaymentMethod", urlPatterns={"/paymentMethod"})
+public class PamentMethod extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,23 +29,20 @@ public class HomeController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        DoctorDAO doctorDAO = new DoctorDAO();
-        CategoryServiceDAO  categoryServiceDAO=  new CategoryServiceDAO();
-        List<Doctor> listD = doctorDAO.getTop6Doctor();
-        List<CategoryServices> listCa =  categoryServiceDAO.getAllCategoryServiceses();
-       // Doctor doc = doctorDAO.getDoctorById();
-        request.setAttribute("service",listCa);
-        request.setAttribute("doctor", listD);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet PamentMethod</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet PamentMethod at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
-    
-    public static void main(String[] args) {
-         DoctorDAO d = new DoctorDAO();
-        List<Doctor> l = d.getTop6Doctor();
-       
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -62,7 +55,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       request.getRequestDispatcher("paymentMethod.jsp").forward(request, response);
     } 
 
     /** 

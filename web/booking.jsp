@@ -2,8 +2,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,13 +19,24 @@
                         <nav aria-label="breadcrumb" class="d-inline-block mt-3">
                             <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
                                 <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
+
                                 <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
+
+                                <c:if test="${stepName == 'doctor'}">
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn bác sĩ</a></li>
+                                </c:if>
+                                <c:if test="${stepName == 'service'}">
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn dịch vụ</a></li>
+                                </c:if>
+                                <c:if test="${stepName == 'dateTime'}">
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn ngày khám</a></li>
+                                </c:if>
                             </ul>
                         </nav>
                     </div>
                     <div class="row g-4">
 
-                        <!-- Thông tin cơ sở y tế -->
+                     
                         <div class="col-12 col-lg-3">
                             <div class="card">
                                 <div class="card-header">
@@ -42,216 +53,373 @@
                                                 <span class="mb-0 text-muted">78 Đ.Giải Phóng, Đống Đa, Tp.Hà Nội</span>
                                             </div>
                                         </li>
-                                        <li class="d-flex">
-                                            <div class="me-2">
-                                                <i class="fa-solid fa-briefcase-medical opaxity"></i>
-                                            </div>
-                                            <div>
-                                                <p>Chuyên khoa: </p>
-                                                <span>${sessionScope.departmentName}</span>
-                                            </div>
-                                        </li>
-                                        <c:if test="${not empty sessionScope.doctor}">
-                                        <li class="d-flex">
-                                            <div class="me-2">
-                                                <i class="fa-solid fa-stethoscope opaxity"></i>
-                                            </div>
-                                            <div>
-                                                <p>Chuyên khoa: </p>
-                                                <span>Khám Da Liễu</span>
-                                            </div>
-                                        </li>
+
+                                        <c:if test="${not empty sessionScope.departmentName}">
+                                            <li class="d-flex">
+                                                <div class="me-2">
+                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                </div>
+                                                <div>
+                                                    <p>Chuyên khoa: </p>
+                                                    <span>${sessionScope.departmentName}</span>
+                                                </div>
+                                            </li>
                                         </c:if>
-                                       <c:if test="${not empty sessionScope.doctor}">
-                                        <li class="d-flex">
-                                            <div class="me-2">
-                                                <i class="fa-solid fa-stethoscope opaxity"></i>
-                                            </div>
-                                            <div>
-                                                <p>Chuyên khoa: </p>
-                                                <span>Khám Da Liễu</span>
-                                            </div>
-                                        </li>
+                                        <c:if test="${not empty sessionScope.doctorName}">
+                                            <li class="d-flex">
+                                                <div class="me-2">
+                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                </div>
+                                                <div>
+                                                    <p>Bác sĩ: </p>
+                                                    <span>${sessionScope.doctorName}</span>
+                                                </div>
+                                            </li>
                                         </c:if>
-                                       <c:if test="${not empty sessionScope.doctor}">
-                                        <li class="d-flex">
-                                            <div class="me-2">
-                                                <i class="fa-solid fa-stethoscope opaxity"></i>
-                                            </div>
-                                            <div>
-                                                <p>Chuyên khoa: </p>
-                                                <span>Khám Da Liễu</span>
-                                            </div>
-                                        </li>
+                                        <c:if test="${not empty sessionScope.serviceName}">
+                                            <li class="d-flex">
+                                                <div class="me-2">
+                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                </div>
+                                                <div>
+                                                    <p>Dịch vụ: </p>
+                                                    <span>${sessionScope.serviceName}</span>
+                                                </div>
+                                            </li>
+                                        </c:if>
+                                        <c:if test="${not empty sessionScope.dateTime}">
+                                            <li class="d-flex">
+                                                <div class="me-2">
+                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                </div>
+                                                <div>
+                                                    <p>Thời gian: </p>
+                                                    <span>${sessionScope.dateTime}</span>
+                                                </div>
+                                            </li>
                                         </c:if>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Chọn dịch vụ -->
-                        <div class="col-12 col-lg-9">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Vui lòng chọn dịch vụ</h5>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table  align-middle">
-                                        <thead class="">
-                                            <tr>
-                                                <th>#</th>
-                                                <th style="width: 55%">Tên dịch vụ</th>
-                                                <th style="width: 17%">Giá tiền</th>
-                                                <th style=""></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Dịch vụ 1 -->
-                                            <c:forEach var="s" items="${serviceOfDepartment}" varStatus="loop">
-                                                <tr>
-                                                    <td><strong>${loop.index +1 }</strong></td>
-                                                    <td>
-                                                        <b>${s.service_name}</b>
-                                                        <div class="text-muted small">
-                                                            <div>Lịch khám: Thứ 2 - CN</div>
-                                                            <div>Phí khám: 119,500 đ, BHYT giảm trừ theo quy định.</div>
-                                                        </div>
-                                                    </td>
-                                                   <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
-                                                    <td>
-                                                        <button class="btn btn-primary btn-sm dkn">Đặt khám ngay</button>
-                                                    </td>
-                                                </tr>
-                                                <tr id="bhyt-row" style="display: none;">
-                                                    <td></td>
-                                                    <td><b>Bạn có đăng ký khám BHYT?</b></td>
-                                                    <td colspan="2">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="bhyt" id="bhytNo" value="0">
-                                                            <label class="form-check-label" for="bhytNo">Không</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="bhyt" id="bhytYes" value="1">
-                                                            <label class="form-check-label" for="bhytYes">Có</label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>    
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <c:if test="${stepName == 'doctor'}">
+                            <div class="col-12 col-lg-9">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Vui lòng chọn Bác sĩ</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex mb-3 flex-wrap">
+                                            <input type="text" class="form-control me-2 mb-2" placeholder="Tìm nhanh bác sĩ" style="flex: 1 1 auto;">
+                                            <button class="btn btn-outline-primary me-2 mb-2">Học hàm / học vị</button>
+                                            <button class="btn btn-outline-primary me-2 mb-2">Chuyên khoa</button>
+                                            <button class="btn btn-outline-primary mb-2">Giới tính</button>
+                                        </div>
 
-                                <!-- Nút quay lại -->
-                                <div class="card-footer text-start">
-                                    <button class="btn btn-outline-secondary">
-                                        <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
-                                    </button>
+                             
+
+                                        <c:forEach var="doctor" items="${listDoctor}">
+                                            <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
+                                                <div class="border rounded p-3 mb-3 shadow-sm doctor-card">
+                                                    <div class="fw-bold text-warning">
+                                                        👨‍⚕️ ${doctor.doctor_name}
+                                                    </div>
+                                                    <div class="text-muted mt-1">
+                                                        👩 Giới tính: ${doctor.gender}
+                                                    </div>
+                                                    <div class="text-muted">
+                                                        🩺 Chuyên khoa: ${doctor.department.department_name}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </c:forEach>
+
+
+
+                                        <div class="card-footer text-start">
+                                            <a href="link-cua-ban.html" class="btn btn-outline-secondary">
+                                                <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
+                            </c:if>                    
+                            <c:if test="${stepName == 'service'}">
+                                <div class="col-12 col-lg-9">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Vui lòng chọn dịch vụ</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table  align-middle">
+                                                <thead class="">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th style="width: 55%">Tên dịch vụ</th>
+                                                        <th style="width: 17%">Giá tiền</th>
+                                                        <th style=""></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <c:forEach var="s" items="${listService}" varStatus="loop">
+                                                        <tr>
+                                                            <td><strong>${loop.index +1 }</strong></td>
+                                                            <td>
+                                                                <b>${s.service_name}</b>
+<!--                                                                <div class="text-muted small">
+                                                                    <div>Lịch khám: Thứ 2 - CN</div>
+                                                                    <div>Phí khám: 119,500 đ, BHYT giảm trừ theo quy định.</div>
+                                                                </div>-->
+                                                            </td>
+                                                            <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
+                                                            <td>
+                                                                <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&serviceName=${s.service_name}" class="btn btn-primary btn-sm dkn">Đặt khám ngay</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr id="bhyt-row" style="display: none;">
+                                                            <td></td>
+                                                            <td><b>Bạn có đăng ký khám BHYT?</b></td>
+                                                            <td colspan="2">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="bhyt" id="bhytNo" value="0">
+                                                                    <label class="form-check-label" for="bhytNo">Không</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="bhyt" id="bhytYes" value="1">
+                                                                    <label class="form-check-label" for="bhytYes">Có</label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>    
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="card-footer text-start">
+                                            <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
+                                                <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+
+
+                            <c:if test="${stepName == 'dateTime'}">
+                                <div class="col-12 col-lg-9">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Vui lòng chọn ngày khám, giờ khám</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <label for="dateSelect" style="margin-bottom: 15px"><strong>Chọn ngày khám:</strong></label>
+                                            <select id="dateSelect" class="form-select mb-3" onchange="showSlotsByDate(this.value)">
+                                                <c:forEach var="wds" items="${listWDS}" varStatus="i">
+                                                    <option value="date${i.index}">
+                                                        <fmt:formatDate value="${wds.workingDate}" pattern="dd/ MM/ yyyy" />
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+
+
+                                            <c:forEach var="wds" items="${listWDS}" varStatus="i">
+                                                <div id="date${i.index}" class="slot-group" style="${i.index == 0 ? '' : 'display:none'}">
+
+
+                                                    <c:if test="${not empty wds.getMorningSlots()}">
+                                                        <div style="margin-bottom: 15px"><strong>Buổi sáng</strong></div>
+                                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                                            <c:forEach var="slot" items="${wds.getMorningSlots()}">
+                                                                <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
+                                                                    <input type="hidden" name="stepName" value="chooseRecords" />
+                                                                    <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                    <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                    <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
+                                                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                                                        <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
+                                                                        <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
+                                                                    </button>
+                                                                </form>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </c:if>
+
+
+                                                    <c:if test="${not empty wds.getAfternoonSlots()}">
+                                                        <div style="margin-bottom: 15px"><strong>Buổi chiều</strong></div>
+                                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                                            <c:forEach var="slot" items="${wds.getAfternoonSlots()}">
+                                                                <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
+                                                                    <input type="hidden" name="stepName" value="chooseRecords" />
+                                                                    <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                    <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                    <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
+                                                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                                                        <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
+                                                                        <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
+                                                                    </button>
+                                                                </form>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </c:if>
+
+                                                    <c:if test="${not empty wds.getEveningSlots()}">
+                                                        <div style="margin-bottom: 15px"><strong>Buổi tối</strong></div>
+                                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                                            <c:forEach var="slot" items="${wds.getEveningSlots()}">
+                                                                <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
+                                                                    <input type="hidden" name="stepName" value="chooseRecords" />
+                                                                    <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                    <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                    <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
+                                                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                                                        <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
+                                                                        <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
+                                                                    </button>
+                                                                </form>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </c:if>
+
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+
+                                        <div class="card-footer text-start">
+                                            <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                            </a>
+                                        </div>
+
+                                    </div>
+
+                                </c:if>
                             </div>
                         </div>
-
                     </div>
+
+                    <jsp:include page="layout/footer.jsp"/>
+
                 </div>
-            </div>
 
-            <jsp:include page="layout/footer.jsp"/>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        </div>
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
+                <script>
+                    function showSlotsByDate(id) {
+                        const allGroups = document.querySelectorAll('.slot-group');
+                        allGroups.forEach(div => div.style.display = 'none');
+                        document.getElementById(id).style.display = 'block';
+                    }
+                </script>
 
-        <script>
-            
-        </script>
 
 
-        <style>
-            .card{
-                border-radius: 8px;
-                background: #fff;
-                box-shadow: 0 4px 30px 0 rgba(116,157,206,.2);
-                overflow: hidden;
-                padding-bottom: 3px;
-            }
 
-            html, body {
-                height: 100%;
-                margin: 0;
-            }
+                <style>
+                    .doctor-link {
+                        text-decoration: none;
+                        color: inherit;
+                        display: block;
+                    }
 
-            .wrapper {
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh; /* Quan trọng để đẩy footer xuống */
-            }
+                    .doctor-card {
+                        transition: border 0.3s, box-shadow 0.3s;
+                    }
 
-            .main-content {
-                flex: 1;
-                margin-top: 74px;
-                background: #e8f4fd /* Chiếm hết chiều cao còn lại */
-            }
-            .card-header{
-                background: linear-gradient(36deg,#00b5f1,#00e0ff);
-            }
-            .mb-0{
-                color: white;
-                text-align: center;
-            }
+                    .doctor-link:hover .doctor-card {
+                        border: 2px solid #4da6ff; /* Viền xanh khi hover */
+                        box-shadow: 0 0 10px rgba(77, 166, 255, 0.3); /* Bóng xanh nhẹ */
+                        border-radius: 10px;
+                    }
+                    .card{
+                        border-radius: 8px;
+                        background: #fff;
+                        box-shadow: 0 4px 30px 0 rgba(116,157,206,.2);
+                        overflow: hidden;
+                        padding-bottom: 3px;
+                    }
 
-            .table.no-border,
-            .table.no-border th,
-            .table.no-border td {
-                border: none ;
-            }
-            .table>:not(caption)>*>* {
-                padding: 1rem 1rem;
-                color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
-                background-color: var(--bs-table-bg);
-                border-bottom-width: var(--bs-border-width);
-                box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
-                font-family: Roboto,sans-serif!important;
-                font-size: medium;
-            }
+                    html, body {
+                        height: 100%;
+                        margin: 0;
+                    }
 
-            tbody, td, tfoot, th, thead, tr {
-                border-color:white;
-                border-style: none;
-                border-width: 0;
+                    .wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 100vh; /* Quan trọng để đẩy footer xuống */
+                    }
 
-            }
-            tbody > tr{
-                border-top:  .5px solid #b2b2b2;
+                    .main-content {
+                        flex: 1;
+                        margin-top: 74px;
+                        background: #e8f4fd /* Chiếm hết chiều cao còn lại */
+                    }
+                    .card-header{
+                        background: linear-gradient(36deg,#00b5f1,#00e0ff);
+                    }
+                    .mb-0{
+                        color: white;
+                        text-align: center;
+                    }
 
-            }
-            .card-body{
-                font-family: Roboto,sans-serif!important;
+                    .table.no-border,
+                    .table.no-border th,
+                    .table.no-border td {
+                        border: none ;
+                    }
+                    .table>:not(caption)>*>* {
+                        padding: 1rem 1rem;
+                        color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
+                        background-color: var(--bs-table-bg);
+                        border-bottom-width: var(--bs-border-width);
+                        box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
+                        font-family: Roboto,sans-serif!important;
+                        font-size: medium;
+                    }
 
-            }
-            p {
-                margin-bottom: 0px;
-            }
-            .opaxity{
-                opacity: 0.5;
-            }
-            .dkn{
-                background: linear-gradient(36deg,#00b5f1,#00e0ff);
+                    tbody, td, tfoot, th, thead, tr {
+                        border-color:white;
+                        border-style: none;
+                        border-width: 0;
 
-            }
-            .btn.btn-sm {
-                padding: 9px 5px;
-                font-weight: 600;
-                font-family: Roboto,sans-serif!important;
-                font-size: 15px;
-                width: 160px;
-            }
+                    }
+                    tbody > tr{
+                        border-top:  .5px solid #b2b2b2;
 
-        </style>
+                    }
+                    .card-body{
+                        font-family: Roboto,sans-serif!important;
 
-    </body>
+                    }
+                    p {
+                        margin-bottom: 0px;
+                    }
+                    .opaxity{
+                        opacity: 0.5;
+                    }
+                    .dkn{
+                        background: linear-gradient(36deg,#00b5f1,#00e0ff);
 
-</html>
+                    }
+                    .btn.btn-sm {
+                        padding: 9px 5px;
+                        font-weight: 600;
+                        font-family: Roboto,sans-serif!important;
+                        font-size: 15px;
+                        width: 160px;
+                    }
+
+                </style>
+
+                </body>
+
+                </html>

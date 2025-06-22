@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.DoctorScheduleDAO;
-import dal.DoctorScheduleSlotsDAO;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.WorkingDateSchedule;
 
@@ -62,31 +60,18 @@ public class DoctorScheduleDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String doctorId = (String) session.getAttribute("doctorId");
-        String doctorName = (String) session.getAttribute("doctorName");
-        
-        if (doctorId == null || doctorName == null) {
-
-            String doctorId_r = request.getParameter("doctorId");
-            String doctorName_r = request.getParameter("doctorName");
-            session.setAttribute("doctorId", doctorId_r);
-            session.setAttribute("doctorName", doctorName_r);
-            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-            List<WorkingDateSchedule> workingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId_r));
-            request.setAttribute("WorkingDateSchedule", workingDateSchedule);
-            request.setAttribute("doctorName", doctorName_r);
-            request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response);
-
-        } else if (doctorId != null && doctorName != null) {
+      
+            String doctorId = request.getParameter("doctorId");
+            String doctorName = request.getParameter("doctorName");
 
             DoctorScheduleDAO DSD = new DoctorScheduleDAO();
             List<WorkingDateSchedule> workingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId));
             request.setAttribute("WorkingDateSchedule", workingDateSchedule);
             request.setAttribute("doctorName", doctorName);
+            request.setAttribute("doctorId", doctorId);
             request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response);
 
-        }
+     
 
     }
 

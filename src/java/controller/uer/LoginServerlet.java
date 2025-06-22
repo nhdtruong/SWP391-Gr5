@@ -42,8 +42,8 @@ public class LoginServerlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         UserDAO dao =  new UserDAO();
-        String action = "";
-        action = request.getParameter("action");
+        String action =request.getParameter("action");
+        
         if(action == null ){
            request.getRequestDispatcher("login.jsp").forward(request, response);  
             return; 
@@ -71,6 +71,7 @@ public class LoginServerlet extends HttpServlet {
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
             }else if (account.getStatus() == 2) {
+                
                     request.setAttribute("acc",account);
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;

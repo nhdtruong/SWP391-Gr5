@@ -41,9 +41,9 @@
                     <h4 class=" mb-4">Thông tin chung</h4>
                     <form action="addrecords" method="post">
                         <div class="row g-3">
-                            <!-- Cột trái -->
+                         
                             <div class="col-md-6">
-                                <!-- Các input như đã có -->
+                                <input type="hidden" name="typeAddRecords" value="${typeAddRecords}" >
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Họ và tên (có dấu)<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control hei" name="patientName" value="${patientName}" oninvalid="CheckFullName(this);"  oninput="CheckFullName(this);" required placeholder="Ví dụ: Dư Văn Huy">

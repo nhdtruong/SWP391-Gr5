@@ -57,7 +57,7 @@
                                 </form>
                             </div>
                             <div class="col-md-1">
-                                <a href="adddoctorschedule" type="button"class="btn btn-info">Add+</a>         
+                                <a href="adddoctorschedule" type="button"class="btn btn-info">Add Schedule</a>         
                             </div>                         
                         </div>
 
@@ -71,10 +71,9 @@
                                                 <th class="border-bottom p-3" >Mã Bác sĩ</th>                                        
                                                 <th class="border-bottom p-3" >Họ tên</th>
                                                 <th class="border-bottom p-3" >Chuyên khoa</th>
-                                                <th class="border-bottom p-3" >Lịch</th>
-                                                <th class="border-bottom p-3" ></th>
-                                                <th class="border-bottom p-3" ></th>
-                                                <th class="border-bottom p-3" ></th>
+                                                <th class="border-bottom p-3" >Xem lịch chi tiết</th>
+                                                <th class="border-bottom p-3" >Sửa Lịch cố định</th>
+                                                <th class="border-bottom p-3" >Xóa Lịch</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -92,18 +91,9 @@
                                                     <td class="p-3">${d.getUsername()}</td>
                                                     <td class="p-3">${d.getDoctor_name()}</td>
                                                     <td class="p-3">${d.getDepartment().getDepartment_name()}</td>
-                                                    <c:if test="${d.getStatus() == 1}">
-                                                        <td class="p-3" style="color: green">Active</td>
-                                                    </c:if>
-                                                    <c:if test="${d.getStatus() == 0}">
-                                                        <td class="p-3" style="color: red">Disable</td>
-                                                    </c:if>
-                                                    <c:if test="${d.getStatus() ==  2}">
-                                                        <td class="p-3" style="color: yellow">Wait</td>
-                                                    </c:if>   
+                                                    
                                                     <td class="p-3">
                                                         <a href="doctorScheduleDetail?doctorId=${d.getDoctor_id()}&doctorName=${d.getDoctor_name()}" class="btn btn-info">
-                                                          
                                                             Detail
                                                         </a>
                                                     </td>
@@ -176,53 +166,53 @@
                     </div>
                 </div>
 
-             
-             
-
-
-
-                <c:if test="${deleteDoctorSuccess == 'deleteDoctorSuccess'}">
-                    <div class="alert alert-success text-center" role="alert"  
-                         style="position: fixed;
-                         top: 50%; left: 50%;
-                         transform: translate(-50%, -50%);
-                         z-index: 9999;
-                         width: 250px;
-                         height: 250px;
-                         font-size: 24px;
-                         padding: 0;
-                         font-weight: bold;
-                         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                         border-radius: 50%;
-                         display: flex;
-                         align-items: center;
-                         justify-content: center;
-                         text-align: center;">
-                        ✅<br>Xóa bác sĩ<br>thành công!
+             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <form action="updateDoctorSchedule?action=deleteSchedule" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Bạn có chắc chắn muốn <strong>xóa hết Lịch </strong>làm việc của bác sĩ <strong id="deleteDoctorName"></strong>?</p>
+                                    <input type="hidden" name="doctorId" id="deleteDoctorId">
+                                </div>
+                                <div class="modal-footer">
+                                    
+                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
-                    <script>
-                        setTimeout(function () {
-                            window.location.href = 'doctormanager?action=all';
-                        }, 500);
-                    </script>
-                </c:if> 
-                <script>
-                 
-                 
-
-                </script>
-
-
-
-
-
+                </div>
 
                 <jsp:include page="../admin/layout/footer.jsp"/>
             </main>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-       
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/simplebar.min.js"></script>
+        <script src="assets/js/select2.min.js"></script>
+        <script src="assets/js/select2.init.js"></script>
+        <script src="assets/js/flatpickr.min.js"></script>
+        <script src="assets/js/flatpickr.init.js"></script>
+        <script src="assets/js/jquery.timepicker.min.js"></script> 
+        <script src="assets/js/timepicker.init.js"></script> 
+        <script src="assets/js/feather.min.js"></script>
+        <script src="assets/js/app.js"></script>
+        <script>
+             function openDeleteModal(doctorId, doctorName) {
+                        document.getElementById('deleteDoctorName').innerText = doctorName;
+                        document.getElementById('deleteDoctorId').value = doctorId;
+                        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+
+                    }
+
+        </script>
     </body>
 
 </html>

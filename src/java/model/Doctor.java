@@ -50,7 +50,14 @@ public class Doctor {
     }
     private String adress;
 
-  
+    public Doctor(int doctor_id, String username, String doctor_name, Deparment department) {
+        this.doctor_id = doctor_id;
+        this.username = username;
+        this.doctor_name = doctor_name;
+        this.department = department;
+    }
+
+
 
     public Doctor(String doctor_name, Deparment department, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position) {
         this.doctor_name = doctor_name;

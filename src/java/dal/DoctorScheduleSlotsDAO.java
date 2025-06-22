@@ -37,7 +37,7 @@ public class DoctorScheduleSlotsDAO extends DBContext{
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int day = rs.getInt("day_of_week");
-                DoctorScheduleSlots slot = new DoctorScheduleSlots(rs.getInt("shift"), rs.getTime("slot_start"), rs.getTime("slot_end"));
+                DoctorScheduleSlots slot = new DoctorScheduleSlots( rs.getTime("slot_start"), rs.getTime("slot_end"));
                 List<DoctorScheduleSlots> slots = result.get(day);
                 if (slots == null) {
                     slots = new ArrayList<>();
@@ -52,13 +52,12 @@ public class DoctorScheduleSlotsDAO extends DBContext{
         return result;
     }
     
-        public void insertScheduleSlot(int schedule_id, int shift, Time start, Time end) {
-        String sql = "INSERT INTO doctor_schedule_slot (schedule_id, shift, slot_start, slot_end) VALUES (?, ?, ?, ?)";
+        public void insertScheduleSlot(int schedule_id, Time start, Time end) {
+        String sql = "INSERT INTO doctor_schedule_slot (schedule_id, slot_start, slot_end) VALUES ( ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, schedule_id);
-            ps.setInt(2, shift);
-            ps.setTime(3, start);
-            ps.setTime(4, end);
+            ps.setTime(2, start);
+            ps.setTime(3, end);
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
