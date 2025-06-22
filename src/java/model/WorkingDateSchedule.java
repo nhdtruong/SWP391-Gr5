@@ -5,7 +5,6 @@
 package model;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalTime;
@@ -26,6 +25,7 @@ public class WorkingDateSchedule {
     }
 
     public WorkingDateSchedule() {
+       
     }
 
     public Date getWorkingDate() {

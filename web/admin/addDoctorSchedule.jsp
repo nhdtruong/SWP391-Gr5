@@ -25,7 +25,7 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-4" style="text-align: center">
-                                <label for="doctor" class="form-label ">Lập lịch cứng cho bác sĩ</label>
+                                <label for="doctor" class="form-label ">Tạo lịch làm việc </label>
 
                             </div>
 
@@ -50,18 +50,16 @@
 
                             <c:if test="${not empty doctor}">
                                 <div class="col-md-12 mb-4" style="text-align: center">
-                                    <label for="doctor" class="form-label ">Lập lịch cứng cho bác sĩ : ${doctor.doctor_name}</label>
-
+                                    <label for="doctor" class="form-label ">Tạo lịch cho bác sĩ : ${doctor.doctor_name}</label>
                                 </div>
 
                             </c:if>
 
                             <c:if test="${empty doctor }">
                                 <div class="col-md-12 mb-4" style="text-align: center">
-                                    <label for="doctor" class="form-label ">Không thấy bác sĩ</label>
+                                    <label for="doctor" class="form-label ">Vui lòng nhập mã Bác sĩ</label>
 
                                 </div>
-
                             </c:if>
 
 

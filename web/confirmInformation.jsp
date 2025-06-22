@@ -116,14 +116,15 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
-                                                <div class="col-md-6"><i class="bi bi-credit-card me-1"></i> <span class="x">Mã số BHYT:</span>
-                                                    <c:if test="${not empty p.bhyt}"><strong>${p.bhyt}</strong></c:if>
-                                                    <c:if test="${empty p.bhyt}"><strong>Chưa cập nhật</strong></c:if>
+                                                <div class="col-md-6"><i class="bi bi-credit-card me-1"></i> <span class="x">Mã BHYT:</span>
+                                                <c:if test="${not empty p.bhyt}"><strong>${p.bhyt}</strong></c:if>
+                                                <c:if test="${empty p.bhyt}"><strong>Chưa cập nhật</strong></c:if>
                                                 </div>
                                                 <div class="col-md-6"><i class="bi bi-geo-alt-fill me-1"></i> <span class="x">Địa chỉ:</span><strong>${p.address}</strong></div>
                                         </div>
 
-                                        <div class="alert alert-danger mt-3 mb-0" role="alert">
+                                        <div class="alert mt-3 mb-0" role="alert"
+                                             style="background-color: #f8d7da; color: #842029;">
                                             <i class="bi bi-exclamation-triangle-fill me-1"></i>
                                             Trong thời gian quy định, nếu quý khách hủy phiếu khám sẽ được hoàn lại tiền khám và các dịch vụ đặt thêm (không bao gồm phí tiện ích).
                                         </div>
@@ -131,12 +132,12 @@
 
 
                                 </div>
-                                <div class="card-footer text-start">
+                                <div class="card-footer d-flex justify-content-between" style="margin-top: 20px">
                                     <a href="chooseRecords" class="btn btn-outline-secondary">
-                                        <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                     </a>
-                                    <a href="paymentMethod" class="btn btn-warning">
-                                        <i class="fa-solid fa-pen-to-square me-1"></i> Xác nhận
+                                    <a href="paymentMethod" class="btn btn-info">
+                                        <i class="fa-solid fa-check me-1"></i> Xác nhận
                                     </a>       
                                 </div>
                             </div>
@@ -173,7 +174,7 @@
         <style>
             .x{
                 display:  inline-block;
-                min-width: 100px;
+                min-width: 80px;
             }
             .doctor-link {
                 text-decoration: none;

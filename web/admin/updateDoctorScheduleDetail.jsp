@@ -19,20 +19,22 @@
                 <jsp:include page="../admin/layout/headmenu.jsp"/>
                 <div class="container-fluid">
                     <div class="layout-specing">
+                        <div style="margin-bottom: 30px"> <h4>Sửa lịch cho bác sĩ: ${doctorName}</h4></div>
 
                         <c:set var="day" value="${WDS}"></c:set>
-                            <form action="updateDoctorScheduleDetail" method="post">
+                            <form action="updateDoctorScheduleDetail?action=update" method="post">
                                 <div class="row">
-                                    <span>Sửa lịch cho bác sĩ ${doctorName} </span>
-                                <input type="hidden" name="doctorId" value="${doctorId}">
-                                <input type="hidden" name="doctorName" value="${doctorName}">
+                                    <!-- Cột trái: Thông tin lịch -->
+                                    <div class="col-md-8">
 
-                                <div class="col-md-6">
+                                        <input type="hidden" name="doctorId" value="${doctorId}">
+                                    <input type="hidden" name="doctorName" value="${doctorName}">
+
                                     <div class="card mb-4 shadow-sm">
                                         <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                                            <strong>   
+                                            <strong>
                                                 <input name="workingDate" value="${day.workingDate}" type="hidden">
-                                                Ngày:${day.workingDate} 
+                                                Ngày làm: <fmt:formatDate value="${day.workingDate}" pattern="dd/ MM/ yyyy"/>
                                             </strong>
                                             <div>
                                                 <input type="checkbox" id="checkAll" onchange="toggleAllSlots()">
@@ -40,29 +42,26 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-
+                                            <!-- Slot Sáng -->
                                             <div><strong>Slot Sáng</strong></div>
                                             <div class="row mb-2">
                                                 <c:forEach var="h" begin="7" end="10">
-                                                    <c:set var="slotStart" value="${h < 10 ? '0' : ''}${h}:00:00"/>
-                                                    <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00"/>
-                                                    <c:set var="isChecked" value="false"/>
-
-
+                                                    <c:set var="slotStart" value="${h < 10 ? '0' : ''}${h}:00:00" />
+                                                    <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00" />
+                                                    <c:set var="isChecked" value="false" />
                                                     <c:forEach var="slot" items="${day.slots}">
-                                                        <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
-                                                            <c:set var="isChecked" value="true"/>
+                                                        <c:if test="${slot.slotStart == slotStart and slot.slotEnd == slotEnd}">
+                                                            <c:set var="isChecked" value="true" />
                                                         </c:if>
                                                     </c:forEach>
-
 
                                                     <div class="col-md-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input slot" type="checkbox"
                                                                    name="day" value="${slotStart}-${slotEnd}"
-                                                                   id="slot_${i}_m_${h}"
+                                                                   id="slot_m_${h}"
                                                                    <c:if test="${isChecked}">checked</c:if>>
-                                                            <label class="form-check-label" for="slot_${2}_m_${h}">
+                                                            <label class="form-check-label" for="slot_m_${h}">
                                                                 ${h}:00 - ${h+1}:00
                                                             </label>
                                                         </div>
@@ -70,55 +69,53 @@
                                                 </c:forEach>
                                             </div>
 
-
+                                            <!-- Slot Chiều -->
                                             <div><strong>Slot Chiều</strong></div>
                                             <div class="row">
                                                 <c:forEach var="h" begin="13" end="16">
-                                                    <c:set var="slotStart" value="${h < 10 ? '0' : ''}${h}:00:00"/>
-                                                    <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00"/>
-                                                    <c:set var="isChecked" value="false"/>
-
-
-                                                            <c:forEach var="slot" items="${day.slots}">
-                                                                <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
-                                                                    <c:set var="isChecked" value="true"/>
-                                                                </c:if>
-                                                            </c:forEach>
+                                                    <c:set var="slotStart" value="${h}:00:00" />
+                                                    <c:set var="slotEnd" value="${h+1}:00:00" />
+                                                    <c:set var="isChecked" value="false" />
+                                                    <c:forEach var="slot" items="${day.slots}">
+                                                        <c:if test="${slot.slotStart == slotStart and slot.slotEnd == slotEnd}">
+                                                            <c:set var="isChecked" value="true" />
+                                                        </c:if>
+                                                    </c:forEach>
 
                                                     <div class="col-md-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input slot" type="checkbox"
-                                                                   name="day" value="${slotStart}-${slotEnd}"    
-                                                                   id="slot_${i}_a_${h}"
+                                                                   name="day" value="${slotStart}-${slotEnd}"
+                                                                   id="slot_a_${h}"
                                                                    <c:if test="${isChecked}">checked</c:if>>
-                                                            <label class="form-check-label" for="slot_${2}_a_${h}">
+                                                            <label class="form-check-label" for="slot_a_${h}">
                                                                 ${h}:00 - ${h+1}:00
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </c:forEach>
                                             </div>
+
+                                            <!-- Slot Tối -->
                                             <div><strong>Slot Tối</strong></div>
                                             <div class="row">
                                                 <c:forEach var="h" begin="18" end="21">
-                                                    <c:set var="slotStart" value="${h < 10 ? '0' : ''}${h}:00:00"/>
-                                                    <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00"/>
-                                                    <c:set var="isChecked" value="false"/>
-
-
-                                                            <c:forEach var="slot" items="${day.slots}">
-                                                                <c:if test="${slot.slotStart== slotStart and slot.slotEnd == slotEnd}">
-                                                                    <c:set var="isChecked" value="true"/>
-                                                                </c:if>
-                                                            </c:forEach>
+                                                    <c:set var="slotStart" value="${h}:00:00" />
+                                                    <c:set var="slotEnd" value="${h+1}:00:00" />
+                                                    <c:set var="isChecked" value="false" />
+                                                    <c:forEach var="slot" items="${day.slots}">
+                                                        <c:if test="${slot.slotStart == slotStart and slot.slotEnd == slotEnd}">
+                                                            <c:set var="isChecked" value="true" />
+                                                        </c:if>
+                                                    </c:forEach>
 
                                                     <div class="col-md-3">
                                                         <div class="form-check">
                                                             <input class="form-check-input slot1" type="checkbox"
-                                                                   name="day" value="${slotStart}-${slotEnd}"    
-                                                                   id="slot_${i}_a_${h}"
+                                                                   name="day" value="${slotStart}-${slotEnd}"
+                                                                   id="slot_e_${h}"
                                                                    <c:if test="${isChecked}">checked</c:if>>
-                                                            <label class="form-check-label" for="slot_${2}_a_${h}">
+                                                            <label class="form-check-label" for="slot_e_${h}">
                                                                 ${h}:00 - ${h+1}:00
                                                             </label>
                                                         </div>
@@ -129,14 +126,22 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-4 mt-4">
+                           
+                                    <div class="d-flex align-items-center mb-3 gap-2">
+                                        <button type="submit" class="btn btn-primary px-4 py-2">Lưu dữ liệu</button>
+                                        <a href="doctorScheduleDetail?doctorId=${doctorId}&doctorName=${doctorName}" class="btn btn-outline-secondary">Quay lại</a>
+                                    </div>
 
-
+         
+                                    <label for="statusSelect"><strong>Trạng thái:</strong></label>
+                                    <select name="status" id="statusSelect" class="form-select w-75">
+                                        <option value="1">Xuất bản</option>
+                                        <option value="0">Bản nháp</option>
+                                    </select>
+                                </div>
                             </div>
-
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary px-4 py-2">Lưu lịch</button>
-                            </div>
-                        </form>    
+                        </form>
 
 
                     </div>

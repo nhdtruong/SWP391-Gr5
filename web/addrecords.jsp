@@ -18,7 +18,7 @@
                     <nav aria-label="breadcrumb" class="mt-3">
                         <ul class="breadcrumb bg-transparent mb-0">
                             <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
-                            <li class="breadcrumb-item"><a href="#" style="color: #00b5f1;">Đặt khám chuyên khoa</a></li>
+                            <li class="breadcrumb-item"><a href="#" style="color: #00b5f1;">Tạo hồ sơ bệnh nhân</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -68,9 +68,9 @@
 
                             </div>
 
-                            <!-- Cột phải -->
+                      
                             <div class="col-md-6">
-                                <!-- Select2 CSS -->
+                   
 
 
                                 <div class="mb-4">
@@ -79,23 +79,22 @@
                                     </label>
                                     <div class="d-flex gap-2">
                                         <select class="form-select hei" id="year" name="year" required>
-                                            <option disabled hidden <c:if test="${empty year}">selected</c:if>>Năm</option>
+                                            <option value="" disabled hidden <c:if test="${empty year}">selected</c:if>>Năm</option>
                                             <c:forEach var="y" items="${year}">
                                                 <option value="${y}" <c:if test="${year == y}">selected</c:if>>${y}</option>
                                             </c:forEach>
                                         </select>
 
-                                        <!-- Month -->
                                         <select class="form-select hei" id="month" name="month" required>
-                                            <option disabled hidden <c:if test="${empty month}">selected</c:if>>Tháng</option>
+                                            <option value="" disabled hidden <c:if test="${empty month}">selected</c:if>>Tháng</option>
                                             <c:forEach var="m" items="${month}">
                                                 <option value="${m}" <c:if test="${month == m}">selected</c:if>>${m}</option>
                                             </c:forEach>
                                         </select>
 
-                                        <!-- Day -->
+                                            
                                         <select class="form-select hei" id="day" name="day" required>
-                                            <option disabled hidden <c:if test="${empty day}">selected</c:if>>Ngày</option>
+                                            <option value="" disabled hidden <c:if test="${empty day}">selected</c:if>>Ngày</option>
                                             <c:forEach var="d" items="${day}">
                                                 <option value="${d}" <c:if test="${day == d}">selected</c:if>>${d}</option>
                                             </c:forEach>
@@ -103,7 +102,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Select2 JS -->
 
 
                                 <div class="mb-4">
@@ -111,7 +109,7 @@
                                         <span style="color: red;">${errorGender}</span>
                                     </label>
                                     <select class="form-select hei" name="gender" required>
-                                        <option disabled hidden <c:if test="${empty gender}">selected</c:if>>Chọn giới tính</option>
+                                        <option value="" disabled hidden <c:if test="${empty gender}">selected</c:if>>Chọn giới tính</option>
                                         <option value="Nam" <c:if test="${gender == 'Nam'}">selected</c:if>>Nam</option>
                                         <option value="Nữ" <c:if test="${gender == 'Nữ'}">selected</c:if>>Nữ</option>
                                         <option value="Khác" <c:if test="${gender == 'Khác'}">selected</c:if>>Khác</option>

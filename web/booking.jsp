@@ -23,20 +23,20 @@
                                 <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
 
                                 <c:if test="${stepName == 'doctor'}">
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn bác sĩ</a></li>
-                                </c:if>
-                                <c:if test="${stepName == 'service'}">
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn dịch vụ</a></li>
-                                </c:if>
-                                <c:if test="${stepName == 'dateTime'}">
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn ngày khám</a></li>
-                                </c:if>
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn bác sĩ</a></li>
+                                    </c:if>
+                                    <c:if test="${stepName == 'service'}">
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn dịch vụ</a></li>
+                                    </c:if>
+                                    <c:if test="${stepName == 'dateTime'}">
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn ngày khám</a></li>
+                                    </c:if>
                             </ul>
                         </nav>
                     </div>
                     <div class="row g-4">
 
-                     
+
                         <div class="col-12 col-lg-3">
                             <div class="card">
                                 <div class="card-header">
@@ -46,18 +46,18 @@
                                     <ul class="list-unstyled">
                                         <li class="mb-3 d-flex">
                                             <div class="me-2">
-                                                <i class="fa-solid fa-hospital opaxity"></i>
+                                                <i class="fa-solid fa-hospital opacity"></i>
                                             </div>
                                             <div>
-                                                <p>Bệnh Viện Đaị Học FPT</p>
-                                                <span class="mb-0 text-muted">78 Đ.Giải Phóng, Đống Đa, Tp.Hà Nội</span>
+                                                <p>Bệnh Viện Đại Học FPT</p>
+                                                <span class="mb-0 text-muted">78 Đ. Giải Phóng, Đống Đa, Tp. Hà Nội</span>
                                             </div>
                                         </li>
 
                                         <c:if test="${not empty sessionScope.departmentName}">
                                             <li class="d-flex">
                                                 <div class="me-2">
-                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                    <i class="fa-solid fa-notes-medical opacity"></i>
                                                 </div>
                                                 <div>
                                                     <p>Chuyên khoa: </p>
@@ -65,10 +65,11 @@
                                                 </div>
                                             </li>
                                         </c:if>
+
                                         <c:if test="${not empty sessionScope.doctorName}">
                                             <li class="d-flex">
                                                 <div class="me-2">
-                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                    <i class="fa-solid fa-user-doctor opacity"></i>
                                                 </div>
                                                 <div>
                                                     <p>Bác sĩ: </p>
@@ -76,10 +77,11 @@
                                                 </div>
                                             </li>
                                         </c:if>
+
                                         <c:if test="${not empty sessionScope.serviceName}">
                                             <li class="d-flex">
                                                 <div class="me-2">
-                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                    <i class="fa-solid fa-briefcase-medical opacity"></i>
                                                 </div>
                                                 <div>
                                                     <p>Dịch vụ: </p>
@@ -87,10 +89,11 @@
                                                 </div>
                                             </li>
                                         </c:if>
+
                                         <c:if test="${not empty sessionScope.dateTime}">
                                             <li class="d-flex">
                                                 <div class="me-2">
-                                                    <i class="fa-solid fa-stethoscope opaxity"></i>
+                                                    <i class="fa-solid fa-clock opacity"></i>
                                                 </div>
                                                 <div>
                                                     <p>Thời gian: </p>
@@ -99,6 +102,7 @@
                                             </li>
                                         </c:if>
                                     </ul>
+
                                 </div>
                             </div>
                         </div>
@@ -118,7 +122,7 @@
                                             <button class="btn btn-outline-primary mb-2">Giới tính</button>
                                         </div>
 
-                             
+
 
                                         <c:forEach var="doctor" items="${listDoctor}">
                                             <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
@@ -139,8 +143,8 @@
 
 
                                         <div class="card-footer text-start">
-                                            <a href="link-cua-ban.html" class="btn btn-outline-secondary">
-                                                <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                            <a href="specialty" class="btn btn-outline-secondary">
+                                                <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                             </a>
                                         </div>
                                     </div>
@@ -169,17 +173,17 @@
                                                             <td><strong>${loop.index +1 }</strong></td>
                                                             <td>
                                                                 <b>${s.service_name}</b>
-<!--                                                                <div class="text-muted small">
-                                                                    <div>Lịch khám: Thứ 2 - CN</div>
-                                                                    <div>Phí khám: 119,500 đ, BHYT giảm trừ theo quy định.</div>
-                                                                </div>-->
+                                                                <!--                                                                <div class="text-muted small">
+                                                                                                                                    <div>Lịch khám: Thứ 2 - CN</div>
+                                                                                                                                    <div>Phí khám: 119,500 đ, BHYT giảm trừ theo quy định.</div>
+                                                                                                                                </div>-->
                                                             </td>
                                                             <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
                                                             <td>
                                                                 <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&serviceName=${s.service_name}" class="btn btn-primary btn-sm dkn">Đặt khám ngay</a>
                                                             </td>
                                                         </tr>
-                                                        <tr id="bhyt-row" style="display: none;">
+                                                        <tr id="bhyt-row">
                                                             <td></td>
                                                             <td><b>Bạn có đăng ký khám BHYT?</b></td>
                                                             <td colspan="2">
@@ -202,7 +206,7 @@
 
                                         <div class="card-footer text-start">
                                             <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
-                                                <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                                <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                             </a>
                                         </div>
                                     </div>
@@ -218,10 +222,11 @@
                                         </div>
                                         <div class="card-body">
                                             <label for="dateSelect" style="margin-bottom: 15px"><strong>Chọn ngày khám:</strong></label>
+                                            <fmt:setLocale value="vi_VN" />
                                             <select id="dateSelect" class="form-select mb-3" onchange="showSlotsByDate(this.value)">
                                                 <c:forEach var="wds" items="${listWDS}" varStatus="i">
                                                     <option value="date${i.index}">
-                                                        <fmt:formatDate value="${wds.workingDate}" pattern="dd/ MM/ yyyy" />
+                                                        <fmt:formatDate value="${wds.workingDate}" pattern="EEEE - dd/ MM/ yyyy" />
                                                     </option>
                                                 </c:forEach>
                                             </select>
@@ -240,7 +245,7 @@
                                                                     <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                     <input type="hidden" name="slotStart" value="${slot.slotStart}" />
                                                                     <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
-                                                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                                                    <button type="submit" class="btn btn-outline-info btn-sm"  onclick="return checkSlotTime('${wds.workingDate}', '${slot.slotStart}')">
                                                                         <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
                                                                         <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
                                                                     </button>
@@ -259,7 +264,7 @@
                                                                     <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                     <input type="hidden" name="slotStart" value="${slot.slotStart}" />
                                                                     <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
-                                                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                                                    <button type="submit" class="btn btn-outline-info btn-sm"  onclick="return checkSlotTime('${wds.workingDate}', '${slot.slotStart}')">
                                                                         <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
                                                                         <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
                                                                     </button>
@@ -277,7 +282,7 @@
                                                                     <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                     <input type="hidden" name="slotStart" value="${slot.slotStart}" />
                                                                     <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
-                                                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                                                    <button type="submit" class="btn btn-outline-info btn-sm"  onclick="return checkSlotTime('${wds.workingDate}', '${slot.slotStart}')">
                                                                         <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
                                                                         <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
                                                                     </button>
@@ -292,7 +297,7 @@
 
                                         <div class="card-footer text-start">
                                             <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                                <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                             </a>
                                         </div>
 
@@ -317,6 +322,25 @@
                         const allGroups = document.querySelectorAll('.slot-group');
                         allGroups.forEach(div => div.style.display = 'none');
                         document.getElementById(id).style.display = 'block';
+                    }
+
+
+                    function checkSlotTime(dateStr, slotStartStr) {
+                        const now = new Date();
+                        const slotDate = new Date(dateStr);
+                        const timeParts = slotStartStr.split(":");
+                        slotDate.setHours(parseInt(timeParts[0]));
+                        slotDate.setMinutes(parseInt(timeParts[1]));
+                        slotDate.setSeconds(0);
+
+                        const diffMinutes = (slotDate - now) / (1000 * 60);
+
+                        if (diffMinutes < 120) {
+                            alert("Bạn cần đặt lịch trước ít nhất 2 tiếng so với giờ bắt đầu!");
+                            return false;
+                        }
+
+                        return true;
                     }
                 </script>
 
@@ -403,7 +427,7 @@
                     p {
                         margin-bottom: 0px;
                     }
-                    .opaxity{
+                    .opacity{
                         opacity: 0.5;
                     }
                     .dkn{

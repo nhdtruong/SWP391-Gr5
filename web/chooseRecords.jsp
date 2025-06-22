@@ -31,9 +31,14 @@
 
                         <div class="styles_choosePatient__kabkW">
                             <div class="ant-row">
-                                <div class="ant-col ant-col-24">
-                                    <h1 class="styles_Title__lrJjf" style="text-align: center"><span>Chọn hồ sơ bệnh nhân</span></h1>
-                                </div>
+                                <h1 class="styles_Title__lrJjf"
+                                    style="text-align: center;
+                                    background: linear-gradient(83.63deg,#00b5f1 33.34%,#00e0ff 113.91%);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    font-weight: 700;margin-bottom: 20px">
+                                    <span>Chọn hồ sơ bệnh nhân</span>
+                                </h1>
                                 <div class="ant-col ant-col-24">
                                     <div style="min-height: 300px; opacity: 1;">
                                         <c:if test="${empty records}">
@@ -98,7 +103,7 @@
 
 
                                                                     <a href="confirmInformation?patientId=${r.getPatientId()}" class="btn btn-primary">
-                                                                        <i class="fa-solid fa-pen-to-square me-1"></i> Tiếp tục
+                                                                        Tiếp tục <i class="fa-solid fa-arrow-right ms-1"></i>
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -116,7 +121,7 @@
                             <div class="d-flex justify-content-between align-items-center">
 
                                 <a href="booking?stepName=dateTime&serviceId=${sessionScope.serviceId}&serviceName=${sessionScope.serviceName}&doctorId=${sessionScope.doctorId}" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-left-circle me-1"></i> Quay lại
+                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                 </a>
 
 

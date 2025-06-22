@@ -112,6 +112,7 @@ public class AddRecords extends HttpServlet {
         request.setAttribute("nation", nation);
         request.setAttribute("cccd", cccd);
         request.setAttribute("address", address);
+        request.setAttribute("typeAddRecords", typeAddRecords);
 
         if (bhyt.trim().isEmpty()) {
             Boolean isCCCD = pDAO.isCCCDExists(cccd);

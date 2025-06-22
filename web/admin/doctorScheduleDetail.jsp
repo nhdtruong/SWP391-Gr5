@@ -14,10 +14,16 @@
                 <div class="container-fluid">
                     <div class="layout-specing">
 
-
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-4">Lịch làm việc của bác sĩ: ${doctorName}</h5>
+                            <a href="addDoctorWorkingDay?doctorId=${doctorId}&doctorName=${doctorName}" class="btn btn-info" style="margin-left: 20px">
+                                + Thêm lịch làm việc
+                            </a>
+                        </div>
                         <div class="row mt-4">
                             <div class="col-12">
-                                <h5 class="mb-3">Lịch làm việc của bác sĩ: ${doctorName}</h5>
+
+
                                 <table class="table table-bordered table-striped text-center align-middle">
                                     <thead class="table-light">
                                         <tr>
@@ -31,14 +37,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="day" items="${WorkingDateSchedule}">
+                                        <c:forEach var="day" items="${listWorkingDateSchedule}">
                                             <tr>
 
                                                 <td>
                                                     <fmt:formatDate value="${day.workingDate}" pattern="dd / MM / yyyy" />
                                                 </td>
 
- 
+
                                                 <td>
                                                     <c:if test="${empty day.getMorningSlots()}">
                                                         <span class="text-muted">Trống</span>
@@ -75,32 +81,33 @@
 
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${day.status == 1}">
+                                                        <c:when test="${day.status == '1'}">
                                                             <span class="badge bg-primary">Xuất bản</span>
                                                         </c:when>
-                                                        <c:when test="${day.status == 0}">
-                                                            <span class="badge bg-secondary">Tạm ngưng</span>
+                                                        <c:when test="${day.status == '0'}">
+                                                            <span class="badge bg-warning">Bản nháp</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="badge bg-dark">Không rõ</span>
+                                                            <span class="badge bg-gradient">Không rõ</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
 
                                                 <td>
-                                                    <form action="updateDoctorScheduleDetail" method="get">
+                                                    <form action="updateDoctorScheduleDetail?action=update" method="get">
                                                         <input type="hidden" name="doctorId" value="${doctorId}" />
                                                         <input type="hidden" name="doctorName" value="${doctorName}" />
                                                         <input type="hidden" name="workingDate" value="${day.workingDate}" />
-                                                        <button type="submit" class="btn btn-sm btn-danger">Sửa</button>
+                                                        <button type="submit" class="btn btn-sm btn-info">Sửa</button>
                                                     </form>
                                                 </td>
 
                                                 <!-- Nút xóa -->
                                                 <td>
-                                                    <form action="doctorschedule?action=delete" method="post"
+                                                    <form action="updateDoctorScheduleDetail?action=delete" method="post"
                                                           onsubmit="return confirm('Bạn có chắc muốn xóa lịch ngày này?');">
                                                         <input type="hidden" name="doctorId" value="${doctorId}" />
+                                                        <input type="hidden" name="doctorName" value="${doctorName}" />
                                                         <input type="hidden" name="workingDate" value="${day.workingDate}" />
                                                         <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
                                                     </form>

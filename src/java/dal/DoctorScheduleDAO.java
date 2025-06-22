@@ -29,11 +29,12 @@ public class DoctorScheduleDAO extends DBContext {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public int insertDoctorSchedule(int doctorId, Date date) {
-        String sql = "INSERT INTO doctor_schedule(doctor_id,working_date) VALUES (?, ?)";
+    public int insertDoctorSchedule(int doctorId, Date date, int status) {
+        String sql = "INSERT INTO doctor_schedule(doctor_id,working_date,status) VALUES (?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, doctorId);
             ps.setDate(2, date);
+            ps.setInt(3, status);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
@@ -153,7 +154,7 @@ public class DoctorScheduleDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             ResultSet rs = ps.executeQuery();
-           
+
             while (rs.next()) {
                 Date date = rs.getDate("working_date");
                 int status = rs.getInt("status");
@@ -173,18 +174,38 @@ public class DoctorScheduleDAO extends DBContext {
                 slot.setSlotEnd(end);
                 day.getSlots().add(slot);
             }
-            
+
         } catch (Exception e) {
             System.out.println(e);
         }
         return new ArrayList<>(workingMap.values());
     }
 
+    public List<Date> getAllDaysWorkingInscheduleOfDoctor(int doctorId) {
+        String sql = "SELECT DISTINCT working_date FROM doctor_schedule WHERE doctor_id = ? ORDER BY working_date";
+        List<Date> dates = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Date date = rs.getDate("working_date");
+                dates.add(date);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error fetching working dates: " + e.getMessage());
+        }
+
+        return dates;
+    }
+
     public List<WorkingDateSchedule> getWorkingScheduleOfDoctor10Day(int doctorId) {
         String sql = "SELECT ds.working_date, ds.status, dss.slot_start, dss.slot_end "
                 + "FROM doctor_schedule ds "
                 + "JOIN doctor_schedule_slot dss ON ds.schedule_id = dss.schedule_id "
-                + "WHERE ds.doctor_id = ? "
+                + "WHERE ds.doctor_id = ? and ds.status = 1 "
                 + "AND ds.working_date IN ("
                 + "    SELECT TOP 10 working_date FROM ("
                 + "        SELECT DISTINCT working_date "
@@ -196,11 +217,10 @@ public class DoctorScheduleDAO extends DBContext {
                 + "ORDER BY ds.working_date, dss.slot_start";
         Map<Date, WorkingDateSchedule> workingMap = new LinkedHashMap<>();
         LocalDate today = LocalDate.now();
-        LocalTime nowPlus2Hours = LocalTime.now().plusHours(2);
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
-            ps.setInt(2, doctorId); // dùng cho subquery IN
+            ps.setInt(2, doctorId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -210,10 +230,7 @@ public class DoctorScheduleDAO extends DBContext {
                 Time start = rs.getTime("slot_start");
                 Time end = rs.getTime("slot_end");
 
-                if (workingDate.isEqual(today) && start.toLocalTime().isBefore(nowPlus2Hours)) {
-                    continue;
-                }
-
+                           
                 WorkingDateSchedule day = workingMap.computeIfAbsent(sqlDate, d -> {
                     WorkingDateSchedule w = new WorkingDateSchedule();
                     w.setWorkingDate(d);
@@ -221,7 +238,6 @@ public class DoctorScheduleDAO extends DBContext {
                     w.setSlots(new ArrayList<>());
                     return w;
                 });
-
 
                 Slot slot = new Slot();
                 slot.setSlotStart(start);
@@ -238,10 +254,10 @@ public class DoctorScheduleDAO extends DBContext {
     public static void main(String[] args) {
         DoctorScheduleDAO d = new DoctorScheduleDAO();
         int doctorId = 1; // ID bác sĩ cần test
-      //  Date date = Date.valueOf("2025-06-23");
+        //  Date date = Date.valueOf("2025-06-23");
         //     d.deleteDayScheduleOfDoctor(doctorId, date);
         //List<WorkingDateSchedule> schedules = d.getWorkingScheduleOfDoctor(1);
-      /*    
+        /*    
         WorkingDateSchedule w = d.getWorkingDayScheduleOfDoctor(1, date);
 
         System.out.println("Ngày: " + w.getWorkingDate() + " | Trạng thái: " + w.getStatus());
@@ -250,8 +266,8 @@ public class DoctorScheduleDAO extends DBContext {
                 System.out.println("    Slot: " + slot.getSlotStart() + " - " + slot.getSlotEnd());
             
         }
-       */  
-        
+         */
+ /*
         List<WorkingDateSchedule> schedules = d.getWorkingScheduleOfDoctor10Day(6);
         for (WorkingDateSchedule day : schedules) {
             System.out.println("Ngày: " + day.getWorkingDate() + " | Trạng thái: " + day.getStatus());
@@ -264,8 +280,8 @@ public class DoctorScheduleDAO extends DBContext {
 
             System.out.println(); // dòng trống giữa các ngày
         }
-  
-        System.out.println(); // dòng trống giữa các ngày
+         */
+        System.out.println(d.getAllDaysWorkingInscheduleOfDoctor(1));
 
     }
 

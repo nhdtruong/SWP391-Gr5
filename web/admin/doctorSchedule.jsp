@@ -57,7 +57,7 @@
                                 </form>
                             </div>
                             <div class="col-md-1">
-                                <a href="adddoctorschedule" type="button"class="btn btn-info">Add Schedule</a>         
+                                <a href="adddoctorschedule" type="button"class="btn btn-info">Tạo lịch nhanh</a>         
                             </div>                         
                         </div>
 

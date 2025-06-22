@@ -318,7 +318,6 @@ public class DoctorDAO extends DBContext {
                         rs.getString("username"),
                         rs.getString("doctor_name"),
                         getDepartmentByDoctor_department_id(rs.getInt("deparment_id"))
- 
                 );
                 list.add(d);
             }
@@ -425,6 +424,7 @@ public class DoctorDAO extends DBContext {
         List<Doctor> list = new ArrayList<>();
         String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status ,d.specialized,d.EducationHistory from doctors d "
                 + "where d.deparment_id = ?";
+
         try {
             ps = connection.prepareStatement(sql);
             ps.setInt(1, departmentId);
@@ -457,7 +457,53 @@ public class DoctorDAO extends DBContext {
 
         return null;
     }
-    
+
+    public List<Doctor> getAllDoctorInDepartmanentHaveSchedule(int departmentId) {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
+                + "d.deparment_id, d.address, d.img, d.description, d.position_id, "
+                + "d.AcademicTitle_id, d.AcademicDegree_id, d.status, d.specialized, d.EducationHistory "
+                + "FROM doctors d "
+                + "WHERE d.deparment_id = ? "
+                + "AND EXISTS ("
+                + "    SELECT 1 FROM doctor_schedule ds "
+                + "    WHERE ds.doctor_id = d.doctor_id "
+                + "    AND ds.working_date >= CAST(GETDATE() AS DATE)"
+                + ")";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, departmentId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getDate(5),
+                        rs.getString(6),
+                        getDepartmentByDoctor_department_id(rs.getInt(7)),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10),
+                        getPositionByDoctor_position_id(rs.getInt(11)),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt(12)),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt(13)),
+                        rs.getInt(14),
+                        rs.getString(15),
+                        rs.getString(16),
+                        getEmailDotorByUsernae(rs.getString(2)));
+                list.add(d);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
     public List<Doctor> getAllDoctorHaveSchedule() {
         List<Doctor> list = new ArrayList<>();
         String sql = "select d.doctor_id,d.username,d.doctor_name,d.deparment_id from doctors d join doctor_schedule ds\n"

@@ -120,6 +120,7 @@ public class UpdateRecords extends HttpServlet {
             Date dob = Date.valueOf(dobStr);
 
             Patient pTemp = new Patient(Integer.parseInt(patientId), patientName, gender, dob, job, phone, email, bhyt, nation, cccd, address);
+            request.setAttribute("typeUpdate", typeUpdate);
             request.setAttribute("records", pTemp);
 
             if (bhyt.trim().isEmpty()) {
@@ -182,10 +183,11 @@ public class UpdateRecords extends HttpServlet {
             String patientId = request.getParameter("patientId");
             PatientDAO pDao = new PatientDAO();
             pDao.deletePatientById(Integer.parseInt(patientId));
-            if (typeDelete.equals("unormal")) {
-                response.sendRedirect("chooseRecords");
-            } else {
+            if (typeDelete == null) {
                 response.sendRedirect("records");
+
+            } else if (typeDelete.equals("unormal")) {
+                response.sendRedirect("chooseRecords");
             }
 
         }

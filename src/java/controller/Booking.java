@@ -76,7 +76,7 @@ public class Booking extends HttpServlet {
             DoctorDAO doctDAO = new DoctorDAO();
             String departmentId = request.getParameter("departmentId");
             String departmentName = request.getParameter("departmentName");
-            List<Doctor> listDoctor = doctDAO.getAllDoctorInDepartmanent(Integer.parseInt(departmentId));
+            List<Doctor> listDoctor = doctDAO.getAllDoctorInDepartmanentHaveSchedule(Integer.parseInt(departmentId));
             session.setAttribute("departmentName", departmentName);
             session.setAttribute("departmentId", departmentId);
             session.removeAttribute("doctorId");

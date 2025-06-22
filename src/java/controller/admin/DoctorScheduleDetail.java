@@ -65,8 +65,8 @@ public class DoctorScheduleDetail extends HttpServlet {
             String doctorName = request.getParameter("doctorName");
 
             DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-            List<WorkingDateSchedule> workingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId));
-            request.setAttribute("WorkingDateSchedule", workingDateSchedule);
+            List<WorkingDateSchedule> listWorkingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId));
+            request.setAttribute("listWorkingDateSchedule", listWorkingDateSchedule);
             request.setAttribute("doctorName", doctorName);
             request.setAttribute("doctorId", doctorId);
             request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response);
