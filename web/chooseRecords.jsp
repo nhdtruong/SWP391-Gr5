@@ -102,7 +102,7 @@
                                                                     </div>
 
 
-                                                                    <a href="confirmInformation?patientId=${r.getPatientId()}" class="btn btn-primary">
+                                                                    <a href="confirmInformation?patientId=${r.patientId}" class="btn btn-primary">
                                                                         Tiếp tục <i class="fa-solid fa-arrow-right ms-1"></i>
                                                                     </a>
                                                                 </div>
@@ -120,7 +120,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
 
-                                <a href="booking?stepName=dateTime&serviceId=${sessionScope.serviceId}&serviceName=${sessionScope.serviceName}&doctorId=${sessionScope.doctorId}" class="btn btn-outline-secondary">
+                                <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${sessionScope.serviceBooking.service_id}" class="btn btn-outline-secondary">
                                     <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                 </a>
 

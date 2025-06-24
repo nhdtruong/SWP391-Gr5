@@ -181,6 +181,7 @@ public class UpdateRecords extends HttpServlet {
         if (action.equals("delete")) {
             String typeDelete = request.getParameter("typeDelete");
             String patientId = request.getParameter("patientId");
+            System.out.println(patientId);
             PatientDAO pDao = new PatientDAO();
             pDao.deletePatientById(Integer.parseInt(patientId));
             if (typeDelete == null) {

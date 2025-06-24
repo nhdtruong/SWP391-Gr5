@@ -173,14 +173,11 @@
                                                             <td><strong>${loop.index +1 }</strong></td>
                                                             <td>
                                                                 <b>${s.service_name}</b>
-                                                                <!--                                                                <div class="text-muted small">
-                                                                                                                                    <div>Lịch khám: Thứ 2 - CN</div>
-                                                                                                                                    <div>Phí khám: 119,500 đ, BHYT giảm trừ theo quy định.</div>
-                                                                                                                                </div>-->
+
                                                             </td>
                                                             <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
                                                             <td>
-                                                                <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&serviceName=${s.service_name}" class="btn btn-primary btn-sm dkn">Đặt khám ngay</a>
+                                                                <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}" class="btn btn-primary btn-sm dkn">Đặt khám ngay</a>
                                                             </td>
                                                         </tr>
                                                         <tr id="bhyt-row">
@@ -243,6 +240,7 @@
                                                                 <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
                                                                     <input type="hidden" name="stepName" value="chooseRecords" />
                                                                     <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                    <input type="hidden" name="slotId" value="${slot.slotId}" />
                                                                     <input type="hidden" name="slotStart" value="${slot.slotStart}" />
                                                                     <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
                                                                     <button type="submit" class="btn btn-outline-info btn-sm"  onclick="return checkSlotTime('${wds.workingDate}', '${slot.slotStart}')">
@@ -262,6 +260,7 @@
                                                                 <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
                                                                     <input type="hidden" name="stepName" value="chooseRecords" />
                                                                     <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                    <input type="hidden" name="slotId" value="${slot.slotId}" />
                                                                     <input type="hidden" name="slotStart" value="${slot.slotStart}" />
                                                                     <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
                                                                     <button type="submit" class="btn btn-outline-info btn-sm"  onclick="return checkSlotTime('${wds.workingDate}', '${slot.slotStart}')">
@@ -281,6 +280,7 @@
                                                                     <input type="hidden" name="stepName" value="chooseRecords" />
                                                                     <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                     <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                    <input type="hidden" name="slotId" value="${slot.slotId}" />
                                                                     <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
                                                                     <button type="submit" class="btn btn-outline-info btn-sm"  onclick="return checkSlotTime('${wds.workingDate}', '${slot.slotStart}')">
                                                                         <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -

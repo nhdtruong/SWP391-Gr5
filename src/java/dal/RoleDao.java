@@ -5,10 +5,8 @@
 package dal;
 
 import context.DBContext;
-import java.awt.Component;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import model.Role;

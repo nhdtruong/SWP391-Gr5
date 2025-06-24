@@ -29,6 +29,9 @@ public class Service {
         this.department_id = department_id;
         this.img = img;
     }
+
+    public Service() {
+    }
     
  
     

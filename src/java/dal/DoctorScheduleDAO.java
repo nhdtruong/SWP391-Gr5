@@ -202,7 +202,7 @@ public class DoctorScheduleDAO extends DBContext {
     }
 
     public List<WorkingDateSchedule> getWorkingScheduleOfDoctor10Day(int doctorId) {
-        String sql = "SELECT ds.working_date, ds.status, dss.slot_start, dss.slot_end "
+        String sql = "SELECT ds.working_date, ds.status, dss.slot_id, dss.slot_start, dss.slot_end "
                 + "FROM doctor_schedule ds "
                 + "JOIN doctor_schedule_slot dss ON ds.schedule_id = dss.schedule_id "
                 + "WHERE ds.doctor_id = ? and ds.status = 1 "
@@ -227,6 +227,7 @@ public class DoctorScheduleDAO extends DBContext {
                 Date sqlDate = rs.getDate("working_date");
                 LocalDate workingDate = sqlDate.toLocalDate();
                 int status = rs.getInt("status");
+                int slot_id = rs.getInt("slot_id");
                 Time start = rs.getTime("slot_start");
                 Time end = rs.getTime("slot_end");
 
@@ -240,6 +241,7 @@ public class DoctorScheduleDAO extends DBContext {
                 });
 
                 Slot slot = new Slot();
+                slot.setSlotId(slot_id);
                 slot.setSlotStart(start);
                 slot.setSlotEnd(end);
                 day.getSlots().add(slot);

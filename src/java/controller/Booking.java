@@ -81,9 +81,9 @@ public class Booking extends HttpServlet {
             session.setAttribute("departmentId", departmentId);
             session.removeAttribute("doctorId");
             session.removeAttribute("doctorName");
-            request.setAttribute("listDoctor", listDoctor);
-            
+            request.setAttribute("listDoctor", listDoctor);  
             request.getRequestDispatcher("booking.jsp").forward(request, response);
+            
         } 
         else if (stepName.equals("service")) {
             
@@ -92,8 +92,7 @@ public class Booking extends HttpServlet {
             String doctorName = request.getParameter("doctorName");
             session.setAttribute("doctorId", doctorId);
             session.setAttribute("doctorName", doctorName);
-            session.removeAttribute("serviceId");
-            session.removeAttribute("serviceName");
+            session.removeAttribute("serviceBooking");
             String departmentId = (String) session.getAttribute("departmentId");
             List<Service> listService = serviceDao.getAllServicesByDepartmentId(Integer.parseInt(departmentId));
             request.setAttribute("listService",listService);
@@ -102,12 +101,12 @@ public class Booking extends HttpServlet {
         else if(stepName.equals("dateTime")){
             
             DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+            ServiceDAO serviceDao = new ServiceDAO();
             String doctorId = (String) session.getAttribute("doctorId");
             List<WorkingDateSchedule> listWDS =  DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
             String serviceId = request.getParameter("serviceId");
-            String serviceName = request.getParameter("serviceName");
-            session.setAttribute("serviceId", serviceId);
-            session.setAttribute("serviceName",serviceName);
+            Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
+            session.setAttribute("serviceBooking", serviceBooking);
             session.removeAttribute("dateBooking");
             session.removeAttribute("slotStart");
             session.removeAttribute("slotEnd");
@@ -117,12 +116,14 @@ public class Booking extends HttpServlet {
         }
         else if(stepName.equals("chooseRecords")){
             String dateBooking_ = request.getParameter("dateBooking");
+            String slotId_ = request.getParameter("slotId");
             String slotStart_ = request.getParameter("slotStart");
             String slotEnd_ = request.getParameter("slotEnd");
             Date dateBooking = Date.valueOf(dateBooking_);
             Time slotStart = Time.valueOf(slotStart_);
             Time slotEnd = Time.valueOf(slotEnd_);
             session.setAttribute("dateBooking",dateBooking );
+            session.setAttribute("slotId", slotId_);
             session.setAttribute("slotStart", slotStart);
             session.setAttribute("slotEnd", slotEnd);
             response.sendRedirect("chooseRecords");

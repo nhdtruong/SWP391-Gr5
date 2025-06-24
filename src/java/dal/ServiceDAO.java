@@ -131,84 +131,122 @@ public class ServiceDAO extends DBContext {
             }
         }
     }
-    
+
     public List<Service> getAllServiceBySearchName(String search) {
-    List<Service> list = new ArrayList<>();
-    String sql = "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, " +
-                 "s.category_service_id, s.department_id, s.fee, s.discount, s.payment_type_id, s.img " +
-                 "FROM service s WHERE s.service_name LIKE ?";
+        List<Service> list = new ArrayList<>();
+        String sql = "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, "
+                + "s.category_service_id, s.department_id, s.fee, s.discount, s.payment_type_id, s.img "
+                + "FROM service s WHERE s.service_name LIKE ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, "%" + search + "%");
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + search + "%");
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Service s = new Service(
-                rs.getInt("service_id"),
-                rs.getString("service_name"),
-                rs.getBoolean("is_bhyt"),
-                rs.getString("description"),
-                getCategoryServiceByCategorySrvicId(rs.getInt("category_service_id")),
-                getDepartmentByDepartment_id(rs.getInt("department_id")),
-                rs.getDouble("fee"),
-                rs.getDouble("discount"),
-                rs.getInt("payment_type_id"),
-                rs.getString("img")
-            );
-            list.add(s);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Service s = new Service(
+                        rs.getInt("service_id"),
+                        rs.getString("service_name"),
+                        rs.getBoolean("is_bhyt"),
+                        rs.getString("description"),
+                        getCategoryServiceByCategorySrvicId(rs.getInt("category_service_id")),
+                        getDepartmentByDepartment_id(rs.getInt("department_id")),
+                        rs.getDouble("fee"),
+                        rs.getDouble("discount"),
+                        rs.getInt("payment_type_id"),
+                        rs.getString("img")
+                );
+                list.add(s);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return list;
     }
 
-    return list;
-}
+    public List<Service> getAllServiceByFilter(String categoryId, String departmentId) {
+        List<Service> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, "
+                + "s.category_service_id, s.department_id, s.fee, s.discount, s.payment_type_id, s.img "
+                + "FROM service s WHERE 1=1 "
+        );
+        List<Object> params = new ArrayList<>();
 
-    
-public List<Service> getAllServiceByFilter(String categoryId, String departmentId) {
-    List<Service> list = new ArrayList<>();
-    StringBuilder sql = new StringBuilder(
-        "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, " +
-        "s.category_service_id, s.department_id, s.fee, s.discount, s.payment_type_id, s.img " +
-        "FROM service s WHERE 1=1 "
-    );
-    List<Object> params = new ArrayList<>();
-
-    if (!categoryId.equalsIgnoreCase("all")) {
-        sql.append(" AND s.category_service_id = ?");
-        params.add(categoryId);
-    }
-
-    if (!departmentId.equalsIgnoreCase("all")) {
-        sql.append(" AND s.department_id = ?");
-        params.add(departmentId);
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-        for (int i = 0; i < params.size(); i++) {
-            ps.setObject(i + 1, params.get(i));
+        if (!categoryId.equalsIgnoreCase("all")) {
+            sql.append(" AND s.category_service_id = ?");
+            params.add(categoryId);
         }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            
-            Service s = new Service(rs.getInt("service_id"),
-                    rs.getString("service_name"),
-                    rs.getBoolean("is_bhyt"), 
-                    rs.getString("description"), 
-                    getCategoryServiceByCategorySrvicId(rs.getInt("category_service_id")),
-                    getDepartmentByDepartment_id(rs.getInt("department_id")),
-                    rs.getDouble("fee"), rs.getDouble("discount") ,
-                    rs.getInt("payment_type_id") , rs.getString("img"));
-            list.add(s);
+        if (!departmentId.equalsIgnoreCase("all")) {
+            sql.append(" AND s.department_id = ?");
+            params.add(departmentId);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                Service s = new Service(rs.getInt("service_id"),
+                        rs.getString("service_name"),
+                        rs.getBoolean("is_bhyt"),
+                        rs.getString("description"),
+                        getCategoryServiceByCategorySrvicId(rs.getInt("category_service_id")),
+                        getDepartmentByDepartment_id(rs.getInt("department_id")),
+                        rs.getDouble("fee"), rs.getDouble("discount"),
+                        rs.getInt("payment_type_id"), rs.getString("img"));
+                list.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
-    return list;
-}
+    public Service getServiceById(int service_id) {
+        String sql = "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, s.category_service_id, "
+                + "s.department_id, s.fee, s.discount, s.payment_type_id, c.name as category_name "
+                + "FROM [service] s "
+                + "LEFT JOIN category_service c ON s.category_service_id = c.category_service_id "
+                + "WHERE s.service_id = ?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, service_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Service(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getBoolean(3),
+                        rs.getString(4),
+                        getCategoryServiceByCategorySrvicId(rs.getInt(5)),
+                        getDepartmentByDepartment_id(rs.getInt(6)),
+                        rs.getDouble(7), rs.getDouble(8),
+                        rs.getInt(9));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     public void addService(String service_name, boolean bhyt, String description, int category_service_id, int department_id, double fee, double discount, int payment_type_id, String img) {
         String sql = "INSERT INTO [service] ( service_name, is_bhyt, description, category_service_id, "
@@ -292,46 +330,6 @@ public List<Service> getAllServiceByFilter(String categoryId, String departmentI
         }
     }
 
-    // Lấy dịch vụ theo ID (dùng cho chức năng sửa)
-    public Service getServiceById(int service_id) {
-        String sql = "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, s.category_service_id, "
-                + "s.department_id, s.fee, s.discount, s.payment_type_id, c.name as category_name "
-                + "FROM [service] s "
-                + "LEFT JOIN category_service c ON s.category_service_id = c.category_service_id "
-                + "WHERE s.service_id = ?";
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, service_id);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return new Service(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getBoolean(3),
-                        rs.getString(4),
-                        getCategoryServiceByCategorySrvicId(rs.getInt(5)),
-                        getDepartmentByDepartment_id(rs.getInt(6)),
-                        rs.getDouble(7), rs.getDouble(8),
-                        rs.getInt(9));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
     // Lấy danh sách tất cả category (Thể loại)
     public List<CategoryServices> getAllCategories() {
         List<CategoryServices> categories = new ArrayList<>();
@@ -402,10 +400,11 @@ public List<Service> getAllServiceByFilter(String categoryId, String departmentI
 
     public static void main(String[] args) {
         ServiceDAO sdao = new ServiceDAO();
+    
         System.out.println(sdao.getAllServices());
         System.out.println(sdao.getAllCategories());
         System.out.println(sdao.getAllDepartments());
-     //   sdao.updateService(17, "ok", true, "ok", 1, 2, 34000, 200, 1, "default");
+        //   sdao.updateService(17, "ok", true, "ok", 1, 2, 34000, 200, 1, "default");
         System.out.println(sdao.getAllServicesByDepartmentId(6));
     }
 }

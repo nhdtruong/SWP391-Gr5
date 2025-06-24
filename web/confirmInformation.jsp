@@ -68,18 +68,24 @@
                                                     <th style="width: 15%" >Bác sĩ</th>
                                                     <th style="width: 20%">Thời gian khám</th>
                                                     <th style="width: 20%">Tiền khám</th>
-                                                    <th style=""></th>
+                                                    <th style="width: 5%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <td>1</td>
                                             <td>${sessionScope.departmentName}</td>
-                                            <td>${sessionScope.serviceName}</td>
+                                            <td>${sessionScope.serviceBooking.service_name}</td>
                                             <td>${sessionScope.doctorName}</td>
                                             <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
 
-                                            <td></td>
-                                            <td></td>
+                                            <td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td>
+                                            <td>
+                                                <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" title="Xóa lịch khám" onclick="return confirm('Bạn có chắc muốn xóa thông tin đặt khám này?')">
+                                                    <i class="fa fa-trash" style="color: red;"></i>
+                                                </a>
+                                            <td>
+                                                
+                                         
 
 
                                             </tbody>
@@ -136,7 +142,7 @@
                                     <a href="chooseRecords" class="btn btn-outline-secondary">
                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                     </a>
-                                    <a href="paymentMethod" class="btn btn-info">
+                                    <a href="bookingSuccess" class="btn btn-info">
                                         <i class="fa-solid fa-check me-1"></i> Xác nhận
                                     </a>       
                                 </div>
