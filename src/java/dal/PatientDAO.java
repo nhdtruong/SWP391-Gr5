@@ -24,7 +24,7 @@ public class PatientDAO extends DBContext {
 
     public List<Patient> getPatientByUsername(String username) {
 
-         List<Patient> list = new ArrayList<>();
+        List<Patient> list = new ArrayList<>();
         String sql = "SELECT * FROM patients WHERE username = ? and status = 1";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -104,20 +104,17 @@ public class PatientDAO extends DBContext {
 
     }
 
-
-}
-public void deletePatientById(int id) {
-    String sql = "UPDATE patients SET status = 0 WHERE patient_id = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, id);
-        ps.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace(); 
-
+    public void deletePatientById(int id) {
+        String sql = "UPDATE patients SET status = 0 WHERE patient_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void insertPatient(String username, String name, String gender, Date dob, String job,
-
             String phone, String email, String bhyt, String nation,
             String cccd, String address) {
 
@@ -258,7 +255,7 @@ public void deletePatientById(int id) {
     }
 
     public String getImgByPatientid(int id) {
-        String sql = "	select users.img from patients join users on patients.username=users.username where patient_id = "+id;
+        String sql = "	select users.img from patients join users on patients.username=users.username where patient_id = " + id;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -269,7 +266,6 @@ public void deletePatientById(int id) {
                 String img = rs.getString(1);
                 return img;
             }
-            
 
         } catch (Exception e) {
             e.printStackTrace();
