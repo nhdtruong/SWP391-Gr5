@@ -66,7 +66,11 @@ public class ConfirmInformation extends HttpServlet {
         String patientId = request.getParameter("patientId");
         PatientDAO pDao = new PatientDAO();
         Patient patient = pDao.getPatientById(Integer.parseInt(patientId));
-        String isBHYT = (String) session.getAttribute("isBHYT");
+        String isBHYT = request.getParameter("isBHYT");
+        if(isBHYT == null){ // đầu tiên vào là ko có request cho nên == null ,khác null tức là  = 0 thì chạy bình thường 
+            isBHYT = (String) session.getAttribute("isBHYT");
+        }
+        
         if (isBHYT.equals("1") && patient.getBhyt().isEmpty()) {
             request.setAttribute("error", "Hồ sơ này chưa cập nhật BHYT");
             request.setAttribute("patientId", patientId);

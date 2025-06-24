@@ -93,6 +93,7 @@ public class Booking extends HttpServlet {
             session.setAttribute("doctorId", doctorId);
             session.setAttribute("doctorName", doctorName);
             session.removeAttribute("serviceBooking");
+            session.removeAttribute("isBHYT");
             String departmentId = (String) session.getAttribute("departmentId");
             List<Service> listService = serviceDao.getAllServicesByDepartmentId(Integer.parseInt(departmentId));
             request.setAttribute("listService",listService);
