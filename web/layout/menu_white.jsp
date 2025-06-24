@@ -105,6 +105,7 @@
                         <li><a href="service?type=1" class="sub-menu-item">Khám tổng quát</a></li>
                         <li><a href="service?type=2" class="sub-menu-item">Chuyên khoa</a></li>
                         <li><a href="service?type=3" class="sub-menu-item">Tư vấn online</a></li>
+                        <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
                     </ul>
                 </li>
 
