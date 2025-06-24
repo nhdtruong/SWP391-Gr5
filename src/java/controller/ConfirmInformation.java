@@ -66,12 +66,17 @@ public class ConfirmInformation extends HttpServlet {
         String patientId = request.getParameter("patientId");
         PatientDAO pDao = new PatientDAO();
         Patient patient = pDao.getPatientById(Integer.parseInt(patientId));
-        String isBHYT = request.getParameter("isBHYT");
-        if(isBHYT == null){ // đầu tiên vào là ko có request cho nên == null ,khác null tức là  = 0 thì chạy bình thường 
+
+        String isBHYT = request.getParameter("isBHYT"); //  thay đổi mới có dòng này 
+        if (isBHYT == null) { // đầu tiên vào là ko có request cho nên == null ,khác null tức là  = 0 thì chạy bình thường 
             isBHYT = (String) session.getAttribute("isBHYT");
         }
-        
-        if (isBHYT.equals("1") && patient.getBhyt().isEmpty()) {
+        if (isBHYT.equals("0")) {
+
+            session.setAttribute("patient", patient);
+            request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
+
+        } else if (isBHYT.equals("1") && patient.getBhyt().isEmpty()) {
             request.setAttribute("error", "Hồ sơ này chưa cập nhật BHYT");
             request.setAttribute("patientId", patientId);
             AccountUser acc = (AccountUser) session.getAttribute("user");
@@ -81,12 +86,20 @@ public class ConfirmInformation extends HttpServlet {
             }
             List<Patient> listPa = pDao.getPatientByUsername(acc.getUsername());
             request.setAttribute("records", listPa);
-            request.getRequestDispatcher("chooseRecords.jsp").forward(request, response);
-            return;
-        }
-        session.setAttribute("patient", patient);
+            if (acc == null) {
+                response.sendRedirect("login");
+                return;
+            }
 
-        request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
+            request.setAttribute("records", listPa);
+            request.getRequestDispatcher("chooseRecords.jsp").forward(request, response);
+
+        } else if (isBHYT.equals("1") && !patient.getBhyt().isEmpty()) {
+            session.setAttribute("patient", patient);
+            request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
+
+        }
+
     }
 
     /**

@@ -406,7 +406,6 @@
                                 document.querySelectorAll(".bhyt-row").forEach(row => row.classList.add("d-none"));
 
                                 if (hasBH) {
-                                
                                     document.getElementById("bhyt-row-" + serviceId).classList.remove("d-none");
                                 } else {
                                     

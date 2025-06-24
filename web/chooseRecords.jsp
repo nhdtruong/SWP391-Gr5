@@ -108,8 +108,8 @@
 
                                                                     </div>
 
-                                                                    <!--tức là có BHYT--> <c:if test="${ empty error || r.patientId != pId }">
-                                                                       <a href="confirmInformation?patientId=${r.patientId}&isBHYT=1" class="btn btn-primary">
+                                                                     <c:if test="${ empty error || r.patientId != pId }">
+                                                                       <a href="confirmInformation?patientId=${r.patientId}" class="btn btn-primary">
                                                                         Tiếp tục <i class="fa-solid fa-arrow-right ms-1"></i>
                                                                     </a>
                                                                     </c:if>
