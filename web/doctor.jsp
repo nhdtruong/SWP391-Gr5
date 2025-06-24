@@ -30,19 +30,31 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 col-lg-9 row align-items-center">
+                        <c:if test="${numberPage== 0}">
+                            <div class="alert alert-warning text-center" style="width: 100%;">
+                                Không có bác sĩ nào phù hợp với bộ lọc của bạn.
+                            </div>
+                        </c:if>
                         <c:forEach items="${doctor}" var="d">
                             <div class="col-xl-4 col-lg-4 col-md-6 mt-2 pt-2 d-flex">
                                 <div class="card team border-0 rounded shadow overflow-hidden d-flex flex-column w-100 h-100">
                                     <div style="display: none">${d.doctor_id}</div>
-
-                                    <!-- Avatar -->
-                                    <div class="team-person text-center mt-3">
-                                        <img src="${d.img}" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
-                                    </div>
-
+                                    <c:if test="${d.img!='default'}" >
+                                        <!-- Avatar -->
+                                        <div class="team-person text-center mt-3">
+                                            <img src="${d.img}" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
+                                        </div>
+                                    </c:if>
+                                        <c:if test="${d.img=='default'}" >
+                                        <!-- Avatar -->
+                                        <div class="team-person text-center mt-3">
+                                            <img src="assets/images/avata.png" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
+                                        </div>
+                                    </c:if>
                                     <!-- Nội dung chính -->
                                     <div class="card-body text-center flex-grow-1 d-flex flex-column justify-content-center">
                                         <a href="#" class="title text-dark h5 d-block mb-0">${d.doctor_name}</a>
+                                        <small class="text-muted speciality" style="min-height: 36px; display: block;">Chuyên môn: ${d.department_name}</small>
                                         <small class="text-muted speciality" style="min-height: 36px; display: block;">Chức vụ: ${d.position.getName()}</small>
                                         <p class="text-muted mb-0">${d.number_rate_star} feedbacks</p>
                                     </div>
@@ -56,40 +68,40 @@
                             </div>
 
                         </c:forEach>
-                        <div style="
-                             text-align: center;
-                             margin-top: 20px;
-                             font-size: 18px;
-                             font-weight: 500;
-                             color: #333;
-                             font-family: 'Segoe UI', sans-serif;
-                             ">
-                            <span style="
-                                  cursor: pointer;
-                                  padding: 5px 10px;
-                                  border-radius: 5px;
-                                  background-color: #f0f0f0;
-                                  margin-right: 8px;
-                                  transition: background-color 0.2s ease;
-                                  ">&lt;</span>
+                            <div style="
+                                 text-align: center;
+                                 margin-top: 20px;
+                                 font-size: 18px;
+                                 font-weight: 500;
+                                 color: #333;
+                                 font-family: 'Segoe UI', sans-serif;
+                                 ">
+                                <a style="
+                                   cursor: pointer;
+                                   padding: 5px 10px;
+                                   border-radius: 5px;
+                                   background-color: #f0f0f0;
+                                   margin-right: 8px;
+                                   transition: background-color 0.2s ease;
+                                   " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex-1}">&lt;</a>
 
-                            <span style="font-weight: bold; color: #007bff;">1</span>/<span style="color: #555;">2</span>
+                                <span style="font-weight: bold; color: #007bff;">${pagIndex}</span>/<span style="color: #555;">${numberPage}</span>
 
-                            <span style="
-                                  cursor: pointer;
-                                  padding: 5px 10px;
-                                  border-radius: 5px;
-                                  background-color: #f0f0f0;
-                                  margin-left: 8px;
-                                  transition: background-color 0.2s ease;
-                                  ">&gt;</span>
-                        </div>
+                                <a style="
+                                   cursor: pointer;
+                                   padding: 5px 10px;
+                                   border-radius: 5px;
+                                   background-color: #f0f0f0;
+                                   margin-left: 8px;
+                                   transition: background-color 0.2s ease;
+                                   " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex+1}" >&gt;</a>
+                            </div>
                     </div>
 
                     <div class="col-lg-3 col-md-3 mt-3 pt-2">
                         <div class="card border-0 sidebar sticky-bar rounded shadow">
                             <div class="card-body">
-                                <form action="doctor?action=filter" method="POST" onSubmit="document.getElementById('submit').disabled = true;">
+                                <form action="doctor?action=filter" method="get" onSubmit="document.getElementById('submit').disabled = true;">
                                     <div class="widget mb-4 pb-2">
                                         <h5 class="widget-title">Lọc</h5>
                                         <div class="row align-items-center">
