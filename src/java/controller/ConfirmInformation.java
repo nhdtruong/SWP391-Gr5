@@ -90,11 +90,11 @@ public class ConfirmInformation extends HttpServlet {
                 response.sendRedirect("login");
                 return;
             }
-
             request.setAttribute("records", listPa);
             request.getRequestDispatcher("chooseRecords.jsp").forward(request, response);
 
         } else if (isBHYT.equals("1") && !patient.getBhyt().isEmpty()) {
+            
             session.setAttribute("patient", patient);
             request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
 

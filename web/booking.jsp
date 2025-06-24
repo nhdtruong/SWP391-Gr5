@@ -234,7 +234,7 @@
                                                                 <div class="alert alert-info d-flex justify-content-between align-items-center">
                                                                     <strong>Dịch vụ áp dụng BHYT. Bạn có đăng ký khám BHYT?</strong>
                                                                     <div>
-                                                                        <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&isInBHYT=0"
+                                                                        <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&isBHYT=0"
                                                                            class="btn btn-outline-secondary me-2">
                                                                             Không
                                                                         </a>
