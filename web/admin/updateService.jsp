@@ -32,7 +32,7 @@
                                     </div>
 
                                     <div class="col-md-12 mb-3">
-                                        <label class="form-label">Mô tả</label>
+                                        <label class="form-label">Ghi chú - Mô tả</label>
                                         <textarea name="description" id="editors" class="form-control" rows="3">${service.description}</textarea>
                                     </div>
 
@@ -77,7 +77,7 @@
                                         </div>
 
                                         <div class="mt-3">
-                                            <button type="submit" class="btn btn-primary">Thêm</button>
+                                            <button type="submit" class="btn btn-primary">Lưu</button>
                                             <a href="servicemanager?action=all" class="btn btn-secondary">Hủy</a>
                                         </div>
                                     </div>

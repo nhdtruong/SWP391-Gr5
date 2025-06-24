@@ -50,11 +50,17 @@
                                         </c:if>
                                         <c:if test="${not empty records}">
                                             <ul class="list-unstyled">
+                                                <c:set value="${patientId}" var="pId"/>
                                                 <c:forEach items="${records}" var="r">
 
                                                     <li class="mb-4">
+
                                                         <div class="card shadow-sm">
+                                                            <c:if test="${not empty error && r.patientId == pId }"> <b style="display: inline-block;text-align: center;color: red">${requestScope.error}</b><br>
+                                                                Nếu bạn không có BHYT vui lòng chọn "Tôi không có thẻ BHYT" để tiếp tục.
+                                                            </c:if>
                                                             <div class="card-body">
+
                                                                 <ul class="list-unstyled mb-4">
 
                                                                     <li class="d-flex align-items-center margin5px">
@@ -77,8 +83,9 @@
 
                                                                     <li class="d-flex align-items-start margin5px">
                                                                         <i class="fa-solid fa-location-dot text-info me-2 mt-1" style="opacity: 0.5;min-width: 20px"></i>
-                                                                        <span class="me-2 text-secondary" style="min-width: 100px;">Địa chỉ:</span>
-                                                                        <strong>${r.getAddress()}</strong>
+                                                                        <span class="me-2 text-secondary" style="min-width: 100px;">BHYT:</span>
+                                                                        <c:if test="${empty r.bhyt}"><strong>Chưa cập nhật</strong></c:if>
+                                                                        <strong>${r.bhyt}</strong>
                                                                     </li>
 
                                                                     <li class="d-flex align-items-center margin5px">
@@ -95,16 +102,23 @@
                                                                             <i class="fa-solid fa-trash me-1"></i> Xóa
                                                                         </button>
                                                                         <a href="updaterecords?id=${r.getPatientId()}&typeUpdate=unormal" class="btn btn-info" style="opacity: 0.7;">
-                                                                            <i class="fa-solid fa-pen-to-square me-1"></i> Sửa
+                                                                            <i class="fa-solid fa-pen-to-square me-1"></i> Cập nhật
                                                                         </a>
 
 
                                                                     </div>
 
-
-                                                                    <a href="confirmInformation?patientId=${r.patientId}" class="btn btn-primary">
+                                                                    <c:if test="${ empty error || r.patientId != pId }"> 
+                                                                       <a href="confirmInformation?patientId=${r.patientId}&isBHYT=1" class="btn btn-primary">
                                                                         Tiếp tục <i class="fa-solid fa-arrow-right ms-1"></i>
                                                                     </a>
+                                                                    </c:if>
+                                                                     <c:if test="${not empty error && r.patientId == pId }"> 
+                                                                       <a href="confirmInformation?patientId=${r.patientId}&isBHYT=0" class="btn btn-primary">
+                                                                        Tôi không có thẻ BHYT <i class="fa-solid fa-arrow-right ms-1"></i>
+                                                                    </a>
+                                                                    </c:if>      
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>

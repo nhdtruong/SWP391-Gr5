@@ -105,6 +105,10 @@ public class Booking extends HttpServlet {
             String doctorId = (String) session.getAttribute("doctorId");
             List<WorkingDateSchedule> listWDS =  DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
             String serviceId = request.getParameter("serviceId");
+            String isBHYT = request.getParameter("isBHYT");
+            if(isBHYT != null){
+               session.setAttribute("isBHYT", isBHYT); 
+            }
             Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
             session.setAttribute("serviceBooking", serviceBooking);
             session.removeAttribute("dateBooking");

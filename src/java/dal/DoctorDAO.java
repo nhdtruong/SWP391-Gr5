@@ -490,7 +490,7 @@ public class DoctorDAO extends DBContext {
                 + "d.deparment_id, d.description, d.img, d.position_id, "
                 + "d.AcademicTitle_id, d.AcademicDegree_id, d.EducationHistory "
                 + "FROM doctors d "
-                + "WHERE d.deparment_id = ? "
+                + "WHERE d.deparment_id = ? and d.status = 1 "
                 + "AND EXISTS ("
                 + "    SELECT 1 FROM doctor_schedule ds "
                 + "    WHERE ds.doctor_id = d.doctor_id "

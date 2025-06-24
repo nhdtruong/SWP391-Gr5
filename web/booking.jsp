@@ -56,7 +56,7 @@
 
                                         <c:if test="${not empty sessionScope.departmentName}">
                                             <li class="d-flex">
-                                                <div class="me-2">
+                                                <div class="me-3">
                                                     <i class="fa-solid fa-notes-medical opacity"></i>
                                                 </div>
                                                 <div>
@@ -68,7 +68,7 @@
 
                                         <c:if test="${not empty sessionScope.doctorName}">
                                             <li class="d-flex">
-                                                <div class="me-2">
+                                                <div class="me-3">
                                                     <i class="fa-solid fa-user-doctor opacity"></i>
                                                 </div>
                                                 <div>
@@ -78,21 +78,21 @@
                                             </li>
                                         </c:if>
 
-                                        <c:if test="${not empty sessionScope.serviceName}">
+                                        <c:if test="${not empty sessionScope.serviceBooking}">
                                             <li class="d-flex">
-                                                <div class="me-2">
+                                                <div class="me-3">
                                                     <i class="fa-solid fa-briefcase-medical opacity"></i>
                                                 </div>
                                                 <div>
                                                     <p>Dịch vụ: </p>
-                                                    <span>${sessionScope.serviceName}</span>
+                                                    <span>${sessionScope.serviceBooking.service_name}</span>
                                                 </div>
                                             </li>
                                         </c:if>
 
                                         <c:if test="${not empty sessionScope.dateTime}">
                                             <li class="d-flex">
-                                                <div class="me-2">
+                                                <div class="me-3">
                                                     <i class="fa-solid fa-clock opacity"></i>
                                                 </div>
                                                 <div>
@@ -130,35 +130,55 @@
 
                                             </div>
                                         </c:if>
-                                        <c:forEach var="doctor" items="${listDoctor}">
-                                            <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
-                                                <div class="border rounded p-3 mb-3 shadow-sm doctor-card">
-                                                    <div class="fw-bold text-warning">
-                                                        <i class="fas fa-user-md m"></i> ${doctor.doctor_name}
+                                        <div class="doctor-list-scroll">
+                                            <c:forEach var="doctor" items="${listDoctor}">
+                                                <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
+                                                    <div class="border rounded p-3 mb-3 shadow-sm doctor-card">
+                                                        <div class="fw-bold text-warning">
+
+                                                            <i class="fas fa-user-md m"> </i> 
+                                                            <c:if test="${doctor.getAcademicTitle().getName().isEmpty() && doctor.getAcademicDegree().getName().isEmpty()}">
+                                                                ${doctor.getPosition().getName()}.${doctor.getDoctor_name()}
+
+                                                            </c:if>
+                                                            <c:if test="${doctor.getAcademicTitle().getName().isEmpty() && !doctor.getAcademicDegree().getName().isEmpty()}">
+                                                                ${doctor.getAcademicDegree().getName()}.Bác sĩ.${doctor.getDoctor_name()}
+
+                                                            </c:if>
+                                                            <c:if test="${!doctor.getAcademicTitle().getName().isEmpty() && !doctor.getAcademicDegree().getName().isEmpty()}">
+                                                                ${doctor.getAcademicTitle().getName()}.${doctor.getAcademicDegree().getName()}.${doctor.getDoctor_name()}
+
+                                                            </c:if>
+                                                            <c:if test="${!doctor.getAcademicTitle().getName().isEmpty() && doctor.getAcademicDegree().getName().isEmpty()}">
+                                                                ${doctor.getAcademicTitle().getName()}.${doctor.getDoctor_name()} 
+
+                                                            </c:if> 
+                                                        </div>
+                                                        <div class="text-muted mt-1">
+                                                            <i class="fas fa-venus-mars m"></i> Giới tính: ${doctor.gender}
+                                                        </div>
+                                                        <div class="text-muted">
+                                                            <i class="fas fa-hospital-symbol m" ></i> Chuyên khoa: ${doctor.department.department_name}
+                                                        </div>
+                                                        <div class="text-muted">
+                                                            <i class="fas fa-calendar-alt m"></i> Lịch khám: Thứ 
+                                                            <c:forEach var="day" items="${doctor.workingWeekdays}" varStatus="loop">
+                                                                <c:choose>
+                                                                    <c:when test="${day == 7}">
+                                                                        CN
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        ${day + 1}
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                                <c:if test="${!loop.last}">,</c:if>
+                                                            </c:forEach>
+                                                        </div>
                                                     </div>
-                                                    <div class="text-muted mt-1">
-                                                        <i class="fas fa-venus-mars m"></i> Giới tính: ${doctor.gender}
-                                                    </div>
-                                                    <div class="text-muted">
-                                                        <i class="fas fa-hospital-symbol m" ></i> Chuyên khoa: ${doctor.department.department_name}
-                                                    </div>
-                                                    <div class="text-muted">
-                                                        <i class="fas fa-calendar-alt m"></i> Lịch khám: Thứ 
-                                                        <c:forEach var="day" items="${doctor.workingWeekdays}" varStatus="loop">
-                                                            <c:choose>
-                                                                <c:when test="${day == 7}">
-                                                                    CN
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    ${day + 1}
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                            <c:if test="${!loop.last}">,</c:if>
-                                                        </c:forEach>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </c:forEach>
+                                                </a>
+                                            </c:forEach>
+                                        </div>
+
 
 
 
@@ -193,24 +213,37 @@
                                                             <td><strong>${loop.index +1 }</strong></td>
                                                             <td>
                                                                 <b>${s.service_name}</b>
-
+                                                                ${s.description}
                                                             </td>
                                                             <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
                                                             <td>
-                                                                <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}" class="btn btn-primary btn-sm dkn">Đặt khám ngay</a>
+                                                                <button 
+                                                                    type="button"
+                                                                    class="btn btn-primary btn-sm dkn"
+                                                                    data-service-id="${s.service_id}"
+                                                                    data-has-bhyt="${s.is_bhyt}">
+                                                                    Đặt khám ngay ${s.is_bhyt}
+                                                                    ${s.service_id}
+                                                                </button>
                                                             </td>
                                                         </tr>
-                                                        <tr id="bhyt-row">
+
+                                                        <tr id="bhyt-row-${s.service_id}" class="bhyt-row d-none">
                                                             <td></td>
-                                                            <td><b>Bạn có đăng ký khám BHYT?</b></td>
-                                                            <td colspan="2">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="bhyt" id="bhytNo" value="0">
-                                                                    <label class="form-check-label" for="bhytNo">Không</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="bhyt" id="bhytYes" value="1">
-                                                                    <label class="form-check-label" for="bhytYes">Có</label>
+                                                            <td colspan="3">
+                                                                <div class="alert alert-info d-flex justify-content-between align-items-center">
+                                                                    <strong>Dịch vụ áp dụng BHYT. Bạn có đăng ký khám BHYT?</strong>
+                                                                    <div>
+                                                                        <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&isInBHYT=0"
+                                                                           class="btn btn-outline-secondary me-2">
+                                                                            Không
+                                                                        </a>
+
+                                                                        <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${s.service_id}&isBHYT=1"
+                                                                           class="btn btn-primary">
+                                                                            Có
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -362,12 +395,42 @@
 
                         return true;
                     }
+
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        document.querySelectorAll(".dkn").forEach(function (btn) {
+                            btn.addEventListener("click", function () {
+                                const serviceId = this.getAttribute("data-service-id");
+                                const hasBH = this.getAttribute("data-has-bhyt") === "true";
+
+                                document.querySelectorAll(".bhyt-row").forEach(row => row.classList.add("d-none"));
+
+                                if (hasBH) {
+                                
+                                    document.getElementById("bhyt-row-" + serviceId).classList.remove("d-none");
+                                } else {
+                                    
+                                    window.location.href = "booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId+"&isBHYT=0";
+                                }
+                            });
+                        });
+                    });
+
                 </script>
 
 
 
 
                 <style>
+                    .d-none {
+                        display: none;
+                    }
+                    .doctor-list-scroll {
+                        max-height: 500px; /* hoặc chiều cao bạn muốn */
+                        overflow-y: auto;
+                        padding-right: 10px; /* tránh che mất nội dung bởi thanh cuộn */
+                        margin-bottom: 1rem;
+                    }
                     .doctor-link {
                         text-decoration: none;
                         color: inherit;
@@ -379,7 +442,7 @@
                     }
 
                     .doctor-link:hover .doctor-card {
-                        border: 2px solid #4da6ff; /* Viền xanh khi hover */
+                        border: 10px solid #4da6ff; /* Viền xanh khi hover */
                         box-shadow: 0 0 10px rgba(77, 166, 255, 0.3); /* Bóng xanh nhẹ */
                         border-radius: 10px;
                     }
@@ -462,7 +525,8 @@
                         width: 160px;
                     }
                     .m{
-                        min-width: 15px;
+                        min-width: 25px;
+                        margin-bottom: 10px;
                     }
 
                 </style>
