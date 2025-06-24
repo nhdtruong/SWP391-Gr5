@@ -103,7 +103,7 @@ public class PatientController extends HttpServlet {
         } else if (action.equals("detail")) {
             processRequestForDetail(request, response);
         }
-
+//
     }
 
     /**
