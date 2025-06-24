@@ -123,7 +123,13 @@
                                         </div>
 
 
+                                        <c:if test="${empty listDoctor}">
+                                            <div class="text-center mt-5">
+                                                <h5 class="mt-3 text-muted">Không tìm thấy bác sĩ có lịch khám.</h5>
+                                                <img src="assets\images\norecords\norecords.png" alt="Không có dữ liệu" style="max-width: 300px; height: auto;">
 
+                                            </div>
+                                        </c:if>
                                         <c:forEach var="doctor" items="${listDoctor}">
                                             <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
                                                 <div class="border rounded p-3 mb-3 shadow-sm doctor-card">
@@ -135,6 +141,20 @@
                                                     </div>
                                                     <div class="text-muted">
                                                         🩺 Chuyên khoa: ${doctor.department.department_name}
+                                                    </div>
+                                                    <div class="text-muted">
+                                                        🩺 Lịch khám: Thứ 
+                                                        <c:forEach var="day" items="${doctor.workingWeekdays}" varStatus="loop">
+                                                            <c:choose>
+                                                                <c:when test="${day == 1}">
+                                                                    CN
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    ${day}
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                            <c:if test="${!loop.last}">,</c:if>
+                                                        </c:forEach>
                                                     </div>
                                                 </div>
                                             </a>

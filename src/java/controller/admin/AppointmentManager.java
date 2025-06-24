@@ -51,9 +51,15 @@ public class AppointmentManager extends HttpServlet {
             }else if (action.equals("search")) {
                 String text = request.getParameter("text");
                 request.setAttribute("text", text);
-                //listAppointment = appointmentDao.getAllAppointments(text);
-                
+                listAppointment = appointmentDao.getAllAppointmentsSearchDoctor(text);
                 url = "appointmentManager?action=search&text="+text;
+            }else if (action.equals("filter")){
+                 String status = request.getParameter("status");
+
+                request.setAttribute("status", status);
+
+                listAppointment = appointmentDao.getAllAppointmentsFilterStatus(status);
+                url = "appointmentManager?action=filter&status="+status;
             }
             
             if (listAppointment!= null) {

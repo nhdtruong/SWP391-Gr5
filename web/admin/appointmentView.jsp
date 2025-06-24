@@ -28,7 +28,7 @@
                                 <div class="col-md-8">
                                     <div class="search-bar p-0 d-lg-block ms-2">                                                        
                                         <div id="search" class="menu-search mb-0">
-                                            <form action="doctormanager?action=search" method="POST" id="searchform" class="searchform">
+                                            <form action="appointmentManager?action=search" method="POST" id="searchform" class="searchform">
                                                 <div>
                                                     <input type="text" class="form-control border rounded-pill" name="text" id="s" placeholder="Tìm kiếm bác sĩ...">
                                                     <input type="submit" id="searchsubmit" value="Search">
@@ -39,23 +39,26 @@
                                 </div>
                             </div>
                             <div class="col-md-8 ">
-                                <form class="row" action="doctormanager?action=filter" method="POST" onSubmit="document.getElementById('submit').disabled = true;">
+                                <form class="row" action="appointmentManager?action=filter" method="POST" onSubmit="document.getElementById('submit').disabled = true;">
                                     <div class=" justify-content-md-end row">
 
 
-                                        <div class="col-md-4 row align-items-center">
+                                        <div class="col-md-3 row align-items-center">
                                             <div class="col-md-5" style="text-align: end">
-                                                <label  class="form-label">Chuyên khoa</label>
+                                                <label  class="form-label">Trạng thái</label>
                                             </div>
                                             <div class="col-md-7">
-                                                <select name="department_id" class="form-select">
-                                                    <option <c:if test="${department_id == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                    <c:forEach items="${department}" var="de">
-                                                        <option <c:if test="${de.getId().toString() == department_id}"> selected </c:if> value="${de.getId()}">${de.getDepartment_name()}</option>
-                                                    </c:forEach>
-                                                </select>  
+                                                <select name="status" class="form-select">
+                                                    <option <c:if test="${status == 'all'}"> selected </c:if> value="all">Tất cả</option>
+                                                    <option <c:if test="${status == '1'}"> selected </c:if> value="1">Đã đặt</option>
+                                                    <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã xác nhận</option>
+                                                    <option <c:if test="${status == '3'}"> selected </c:if> value="3">Đang chờ</option>
+                                                    <option <c:if test="${status == '4'}"> selected </c:if> value="4">Đã hoàn tất</option>
+                                                    <option <c:if test="${status == '5'}"> selected </c:if> value="5">Đã hủy</option>
+                                                    <option <c:if test="${status == '0'}"> selected </c:if> value="0">Hủy</option>
+                                                    </select>  
+                                                </div>
                                             </div>
-                                        </div>
                                         <div class="col-md-1 md-0">
                                             <button type="submit" class="btn btn-primary">Lọc</button>
                                         </div>

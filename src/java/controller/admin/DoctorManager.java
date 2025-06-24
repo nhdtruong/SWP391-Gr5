@@ -64,7 +64,7 @@ public class DoctorManager extends HttpServlet {
             }
             if (action.equals("filter")) {
                 
-                String gender = request.getParameter("gender");
+                String gender = request.getParameter("status");
                 String position = request.getParameter("position_id");
                 String department = request.getParameter("department_id");
 
