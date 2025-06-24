@@ -10,11 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import model.AcademicDegree;
 import model.AcademicTitle;
 import model.Deparment;
@@ -463,7 +465,7 @@ public class DoctorDAO extends DBContext {
     }
 
     public Set<Integer> getWeekdayNumbersOfDoctor(int doctorId) {
-        Set<Integer> weekdays = new LinkedHashSet<>();
+        Set<Integer> weekdays = new TreeSet<>();
         String sql = "SELECT TOP 10 working_date FROM doctor_schedule "
                 + "WHERE doctor_id = ? AND working_date >= CAST(GETDATE() AS DATE) "
                 + "ORDER BY working_date";
@@ -471,17 +473,14 @@ public class DoctorDAO extends DBContext {
             ps.setInt(1, doctorId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Date date = rs.getDate("working_date");
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                Date sqlDate = rs.getDate("working_date");
+                LocalDate localDate = sqlDate.toLocalDate(); 
+                int dayOfWeek = localDate.getDayOfWeek().getValue();
                 weekdays.add(dayOfWeek);
             }
-           
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return weekdays;
     }
 
@@ -855,6 +854,7 @@ public class DoctorDAO extends DBContext {
 
         return doctors;
     }
+
     public int GetListDoctorNumber(String gender, int[] departmentIds, String sortType) {
         //List<Doctor> doctors = new ArrayList<>();
 
@@ -864,7 +864,7 @@ public class DoctorDAO extends DBContext {
         sql.append("dp.department_name, ");
         sql.append("AVG(CAST(rs.star AS FLOAT)) AS average_rating, ");
         sql.append("ROW_NUMBER() OVER (ORDER BY ");
-        
+
         switch (sortType) {
             case "rating":
                 sql.append("AVG(CAST(rs.star AS FLOAT)) DESC ");
@@ -925,15 +925,13 @@ public class DoctorDAO extends DBContext {
 
 //            int startRow = (pageIndex - 1) * pageSize + 1;
 //            int endRow = pageIndex * pageSize;
-
 //            ps.setInt(paramIndex++, startRow);
 //            ps.setInt(paramIndex++, endRow);
-
             ResultSet rs = ps.executeQuery();
             PositionDAO positionDAO = new PositionDAO();
             int count = 0;
             while (rs.next()) {
-                count=count+1;
+                count = count + 1;
             }
             return count;
         } catch (Exception e) {

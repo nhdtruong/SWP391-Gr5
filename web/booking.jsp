@@ -134,23 +134,23 @@
                                             <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
                                                 <div class="border rounded p-3 mb-3 shadow-sm doctor-card">
                                                     <div class="fw-bold text-warning">
-                                                        👨‍⚕️ ${doctor.doctor_name}
+                                                        <i class="fas fa-user-md m"></i> ${doctor.doctor_name}
                                                     </div>
                                                     <div class="text-muted mt-1">
-                                                        👩 Giới tính: ${doctor.gender}
+                                                        <i class="fas fa-venus-mars m"></i> Giới tính: ${doctor.gender}
                                                     </div>
                                                     <div class="text-muted">
-                                                        🩺 Chuyên khoa: ${doctor.department.department_name}
+                                                        <i class="fas fa-hospital-symbol m" ></i> Chuyên khoa: ${doctor.department.department_name}
                                                     </div>
                                                     <div class="text-muted">
-                                                        🩺 Lịch khám: Thứ 
+                                                        <i class="fas fa-calendar-alt m"></i> Lịch khám: Thứ 
                                                         <c:forEach var="day" items="${doctor.workingWeekdays}" varStatus="loop">
                                                             <c:choose>
-                                                                <c:when test="${day == 1}">
+                                                                <c:when test="${day == 7}">
                                                                     CN
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    ${day}
+                                                                    ${day + 1}
                                                                 </c:otherwise>
                                                             </c:choose>
                                                             <c:if test="${!loop.last}">,</c:if>
@@ -460,6 +460,9 @@
                         font-family: Roboto,sans-serif!important;
                         font-size: 15px;
                         width: 160px;
+                    }
+                    .m{
+                        min-width: 15px;
                     }
 
                 </style>
