@@ -62,6 +62,8 @@ public class AddRecords extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String typeAddRecords = request.getParameter("typeAddRecords");
+        request.setAttribute("typeAddRecords", typeAddRecords);
         request.getRequestDispatcher("addrecords.jsp").forward(request, response);
     }
 
@@ -83,6 +85,7 @@ public class AddRecords extends HttpServlet {
             response.sendRedirect("login");
             return;
         }
+        String typeAddRecords = request.getParameter("typeAddRecords");
         String patientName = request.getParameter("patientName");
         String gender = request.getParameter("gender");
         String year = request.getParameter("year");
@@ -109,6 +112,7 @@ public class AddRecords extends HttpServlet {
         request.setAttribute("nation", nation);
         request.setAttribute("cccd", cccd);
         request.setAttribute("address", address);
+        request.setAttribute("typeAddRecords", typeAddRecords);
 
         if (bhyt.trim().isEmpty()) {
             Boolean isCCCD = pDAO.isCCCDExists(cccd);
@@ -137,7 +141,12 @@ public class AddRecords extends HttpServlet {
         }
 
         pDAO.insertPatient(acc.getUsername(), patientName, gender, dob, job, phone, email, bhyt, nation, cccd, address);
-        response.sendRedirect("records");
+        if(typeAddRecords.equals("unormal")){
+            response.sendRedirect("chooseRecords");
+        }else{
+            response.sendRedirect("records");
+        }
+        
     }
 
     /**

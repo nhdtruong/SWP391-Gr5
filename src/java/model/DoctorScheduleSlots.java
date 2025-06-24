@@ -13,23 +13,15 @@ import java.text.SimpleDateFormat;
  */
 public class DoctorScheduleSlots {
 
-    private int shift;
     private Time start;
     private Time end;
 
-    public DoctorScheduleSlots(int shift, Time start, Time end) {
-        this.shift = shift;
+    public DoctorScheduleSlots(Time start, Time end) {
+
         this.start = start;
         this.end = end;
     }
 
-    public int getShift() {
-        return shift;
-    }
-
-    public void setShift(int shift) {
-        this.shift = shift;
-    }
 
     public Time getStart() {
         return start;
@@ -48,7 +40,7 @@ public class DoctorScheduleSlots {
     }
 
     public String toFormValue() {
-        return shift + "_" + start.toString() + "-" + end.toString();
+        return  start.toString() + "-" + end.toString();
     }
 
  

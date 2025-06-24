@@ -9,6 +9,7 @@ import java.sql.Time;
  * @author DELL
  */
 public class Slot {
+    
     private int slotId;
     private Time slotStart;
     private Time slotEnd;

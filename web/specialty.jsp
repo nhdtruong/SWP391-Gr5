@@ -27,7 +27,7 @@
                                     <img style="height:80px;width: 80px"src="${d.getImg()}" class="" alt="">
                                 </div>
                                 <div class="card-body content text-center">
-                                    <a href="booking?department_id=${d.getId()}&departmentName=${d.getDepartment_name()}" class="title text- h5 d-block mb-0">${d.getDepartment_name()}</a>
+                                    <a href="booking?stepName=doctor&departmentId=${d.getId()}&departmentName=${d.getDepartment_name()}" class="title text- h5 d-block mb-0">${d.getDepartment_name()}</a>
                                    
                                 </div>
                             </div>

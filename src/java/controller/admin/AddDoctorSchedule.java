@@ -96,10 +96,15 @@ public class AddDoctorSchedule extends HttpServlet {
             String doctorID = request.getParameter("doctorID");
 
             String action = request.getParameter("action");
+            if (doctorID == null) {
+                request.setAttribute("Hãy chọn bác sĩ để thêm lịch!", this);
+                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                return;
+            }
 
             if (action.equals("saveTemplate")) {
                 saveTemplate(request, Integer.parseInt(doctorID));
-                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                response.sendRedirect("doctorschedule?action=all");
 
             } else if (action.equals("saveAndApply")) {
 
@@ -113,14 +118,14 @@ public class AddDoctorSchedule extends HttpServlet {
                 System.out.println("End Date: " + request.getParameter("endDate"));
 
                 applySchedule(request, Integer.parseInt(doctorID), start, end);
-                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                response.sendRedirect("doctorschedule?action=all");
             }
 
         }
 
     }
 
-    private void saveTemplate(HttpServletRequest request, int doctorID) throws ServletException, IOException {
+    private void saveTemplate(HttpServletRequest request, int doctorId) throws ServletException, IOException {
 
         WeeklyDoctorScheduleDAO WDSD = new WeeklyDoctorScheduleDAO();
         WeeklyScheduleSlotDAO WSSD = new WeeklyScheduleSlotDAO();
@@ -128,20 +133,19 @@ public class AddDoctorSchedule extends HttpServlet {
             String[] day = request.getParameterValues("day_" + i);
             if (day != null) {
 
-                int template_Id = WDSD.insertTemplateSchdule(doctorID, i);
+                int template_Id = WDSD.insertTemplateSchdule(doctorId, i);
 
                 for (String slots : day) {
-                    String parts[] = slots.split("_");
 
-                    int shift = Integer.parseInt(parts[0]);
-
-                    String slotstime[] = parts[1].split("-");
+                    String slotstime[] = slots.split("-");
 
                     Time timeStart = Time.valueOf(slotstime[0]);
 
                     Time timeEnd = Time.valueOf(slotstime[1]);
-
-                    WSSD.insertSlot(template_Id, shift, timeStart, timeEnd);
+                    System.out.println(slots);
+                    System.out.println(timeEnd);
+                    System.out.println(timeStart);
+                    WSSD.insertSlot(template_Id, timeStart, timeEnd);
                 }
 
             }
@@ -158,22 +162,18 @@ public class AddDoctorSchedule extends HttpServlet {
             String[] day = request.getParameterValues("day_" + dayOfWeek);
             if (day != null) {
                 System.out.println("doctorid:" + doctorID);
-                System.out.println("date"+date);
-                int scheduleId = DSD.insertDoctorSchedule(doctorID, java.sql.Date.valueOf(date));
-                System.out.println("ScID"+scheduleId);
+                System.out.println("date" + date);
+                int scheduleId = DSD.insertDoctorSchedule(doctorID, java.sql.Date.valueOf(date), 1);
+                System.out.println("ScID" + scheduleId);
                 for (String days : day) {
 
-                    String parts[] = days.split("_");
-
-                    int shift = Integer.parseInt(parts[0]);
-
-                    String slotstime[] = parts[1].split("-");
+                    String slotstime[] = days.split("-");
 
                     Time timeStart = Time.valueOf(slotstime[0]);
 
                     Time timeEnd = Time.valueOf(slotstime[1]);
 
-                    DSSD.insertScheduleSlot(scheduleId, shift, timeStart, timeEnd);
+                    DSSD.insertScheduleSlot(scheduleId, timeStart, timeEnd);
                 }
             }
         }

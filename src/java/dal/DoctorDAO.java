@@ -10,7 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import model.AcademicDegree;
 import model.AcademicTitle;
 import model.Deparment;
@@ -183,6 +187,28 @@ public class DoctorDAO extends DBContext {
         return list;
     }
 
+    public List<Doctor> getAllDoctorHaveScheduleBySearchNameOrUsername(String name) {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "select d.doctor_id,d.username,d.doctor_name,d.deparment_id from doctors d join doctor_schedule ds\n"
+                + "on d.doctor_id = ds.doctor_id \n"
+                + "group by d.doctor_id,d.username,d.doctor_name,d.deparment_id \n"
+                + "having d.doctor_name LIKE ? or d.username LiKE ?  ";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ps.setString(2, name);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(rs.getInt(1), rs.getString(2), rs.getString(3), getDepartmentByDoctor_department_id(rs.getInt(4)));
+                list.add(d);
+            }
+            return list;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public List<Doctor> getAllDoctorBySearchName(String name) {
         List<Doctor> list = new ArrayList<>();
         String sql = "SELECT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
@@ -211,6 +237,7 @@ public class DoctorDAO extends DBContext {
                         rs.getString("EducationHistory"),
                         getEmailDotorByUsernae(rs.getString("username"))
                 );
+
                 list.add(d);
             }
 
@@ -258,6 +285,43 @@ public class DoctorDAO extends DBContext {
                         rs.getString("specialized"),
                         rs.getString("EducationHistory"),
                         getEmailDotorByUsernae(rs.getString("username"))
+                );
+                list.add(d);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Doctor> getAllDoctorHaveScheduleFilterDepartment(String department) {
+        List<Doctor> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("select d.doctor_id,d.username,d.doctor_name,d.deparment_id from doctors d join doctor_schedule ds\n"
+                + "on d.doctor_id = ds.doctor_id \n"
+                + "group by d.doctor_id,d.username,d.doctor_name,d.deparment_id \n"
+                + "having 1 = 1 ");
+
+        List<Object> params = new ArrayList<>();
+
+        if (!department.equalsIgnoreCase("all")) {
+            sql.append(" and d.deparment_id = ?");
+            params.add(department);
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(
+                        rs.getInt("doctor_id"),
+                        rs.getString("username"),
+                        rs.getString("doctor_name"),
+                        getDepartmentByDoctor_department_id(rs.getInt("deparment_id"))
                 );
                 list.add(d);
             }
@@ -349,6 +413,150 @@ public class DoctorDAO extends DBContext {
                         rs.getString(15),
                         rs.getString(16),
                         getEmailDotorByUsernae(rs.getString(2)));
+                list.add(d);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public List<Doctor> getAllDoctorInDepartmanent(int departmentId) {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status ,d.specialized,d.EducationHistory from doctors d "
+                + "where d.deparment_id = ?";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, departmentId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getDate(5),
+                        rs.getString(6),
+                        getDepartmentByDoctor_department_id(rs.getInt(7)),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10),
+                        getPositionByDoctor_position_id(rs.getInt(11)),
+                        getAcademictitleByDoctor_Academictile_id(rs.getInt(12)),
+                        getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt(13)),
+                        rs.getInt(14),
+                        rs.getString(15),
+                        rs.getString(16),
+                        getEmailDotorByUsernae(rs.getString(2)));
+                list.add(d);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public Set<Integer> getWeekdayNumbersOfDoctor(int doctorId) {
+        Set<Integer> weekdays = new LinkedHashSet<>();
+        String sql = "SELECT TOP 10 working_date FROM doctor_schedule "
+                + "WHERE doctor_id = ? AND working_date >= CAST(GETDATE() AS DATE) "
+                + "ORDER BY working_date";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Date date = rs.getDate("working_date");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                weekdays.add(dayOfWeek);
+            }
+           
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return weekdays;
+    }
+
+    public List<Doctor> getAllDoctorInDepartmanentHaveSchedule(int departmentId) {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "SELECT d.doctor_id, d.doctor_name, d.gender, "
+                + "d.deparment_id, d.description, d.img, d.position_id, "
+                + "d.AcademicTitle_id, d.AcademicDegree_id, d.EducationHistory "
+                + "FROM doctors d "
+                + "WHERE d.deparment_id = ? "
+                + "AND EXISTS ("
+                + "    SELECT 1 FROM doctor_schedule ds "
+                + "    WHERE ds.doctor_id = d.doctor_id "
+                + "    AND ds.working_date >= CAST(GETDATE() AS DATE)"
+                + ")";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, departmentId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int doctorId = rs.getInt("doctor_id");
+                String doctorName = rs.getString("doctor_name");
+                String gender = rs.getString("gender");
+                int departmentIdFromDb = rs.getInt("deparment_id");
+                String description = rs.getString("description");
+                String img = rs.getString("img");
+                int positionId = rs.getInt("position_id");
+                int academicTitleId = rs.getInt("AcademicTitle_id");
+                int academicDegreeId = rs.getInt("AcademicDegree_id");
+                String educationHistory = rs.getString("EducationHistory");
+
+                Deparment department = getDepartmentByDoctor_department_id(departmentIdFromDb);
+                AcademicTitle academicTitle = getAcademictitleByDoctor_Academictile_id(academicTitleId);
+                AcademicDegree academicDegree = getAcademicDegreeByDoctor_AcademicDegre_id(academicDegreeId);
+                Position position = getPositionByDoctor_position_id(positionId);
+
+                Set<Integer> workingWeekdays = getWeekdayNumbersOfDoctor(doctorId);
+
+                Doctor d = new Doctor(
+                        doctorId,
+                        doctorName,
+                        gender,
+                        department,
+                        description,
+                        img,
+                        academicDegree,
+                        academicTitle,
+                        position,
+                        educationHistory,
+                        workingWeekdays
+                );
+
+                list.add(d);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<Doctor> getAllDoctorHaveSchedule() {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "select d.doctor_id,d.username,d.doctor_name,d.deparment_id from doctors d join doctor_schedule ds\n"
+                + "on d.doctor_id = ds.doctor_id \n"
+                + "group by d.doctor_id,d.username,d.doctor_name,d.deparment_id ";
+        try {
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Doctor d = new Doctor(rs.getInt(1), rs.getString(2), rs.getString(3), getDepartmentByDoctor_department_id(rs.getInt(4)));
                 list.add(d);
             }
             return list;
@@ -547,7 +755,7 @@ public class DoctorDAO extends DBContext {
     }
 
     public String sang = "";
-    
+
     public List<Doctor> GetListDoctor(String gender, int[] departmentIds, String sortType, int pageIndex, int pageSize) {
         List<Doctor> doctors = new ArrayList<>();
 
@@ -557,7 +765,7 @@ public class DoctorDAO extends DBContext {
         sql.append("dp.department_name, ");
         sql.append("AVG(CAST(rs.star AS FLOAT)) AS average_rating, ");
         sql.append("ROW_NUMBER() OVER (ORDER BY ");
-        
+
         switch (sortType) {
             case "rating":
                 sql.append("AVG(CAST(rs.star AS FLOAT)) DESC ");
@@ -737,10 +945,16 @@ public class DoctorDAO extends DBContext {
 
     public static void main(String[] args) {
         DoctorDAO d = new DoctorDAO();
-        int[] department = new int[0];
-        List<Doctor> l = d.GetListDoctor("", department, "rating", 1, 2);
+        List<Doctor> l = d.getAllDoctorInDepartmanentHaveSchedule(1);
         for (Doctor doctor : l) {
-            System.out.println(doctor.getDoctor_id());
+            System.out.println(doctor.getWorkingWeekdays().size());
         }
+        System.out.println(d.getAllDoctorInDepartmanentHaveSchedule(1));
+
+//        int[] department = new int[0];
+//        List<Doctor> l = d.GetListDoctor("", department, "rating", 1, 2);
+//        for (Doctor doctor : l) {
+//            System.out.println(doctor.getDoctor_id());
+//        }
     }
 }

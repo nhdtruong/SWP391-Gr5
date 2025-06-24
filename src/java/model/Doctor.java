@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.Set;
 
 /**
  *
@@ -30,10 +31,34 @@ public class Doctor {
     private Position position;
     private String specialized;
     private String EducationHistory;
-//===========================
+    private String adress;
     private float averageRateStar;
     private int number_rate_star;
     private String department_name;
+
+    private Set<Integer> workingWeekdays;
+
+    public Doctor(int doctor_id, String doctor_name, String gender, Deparment department, String description, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String EducationHistory, Set<Integer> workingWeekdays) {
+        this.doctor_id = doctor_id;
+        this.doctor_name = doctor_name;
+        this.gender = gender;
+        this.department = department;
+        this.description = description;
+        this.img = img;
+        this.academicDegree = academicDegree;
+        this.academicTitle = academicTitle;
+        this.position = position;
+        this.EducationHistory = EducationHistory;
+        this.workingWeekdays = workingWeekdays;
+    }
+
+    public Set<Integer> getWorkingWeekdays() {
+        return workingWeekdays;
+    }
+
+    public void setWorkingWeekdays(Set<Integer> workingWeekdays) {
+        this.workingWeekdays = workingWeekdays;
+    }
 
     public String getDepartment_name() {
         return department_name;
@@ -74,7 +99,27 @@ public class Doctor {
     public void setEducationHistory(String EducationHistory) {
         this.EducationHistory = EducationHistory;
     }
-    private String adress;
+
+    public Doctor(int doctor_id, String doctor_name, String gender, Deparment department, String description, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String specialized, String EducationHistory) {
+        this.doctor_id = doctor_id;
+        this.doctor_name = doctor_name;
+        this.gender = gender;
+        this.department = department;
+        this.description = description;
+        this.img = img;
+        this.academicDegree = academicDegree;
+        this.academicTitle = academicTitle;
+        this.position = position;
+        this.specialized = specialized;
+        this.EducationHistory = EducationHistory;
+    }
+
+    public Doctor(int doctor_id, String username, String doctor_name, Deparment department) {
+        this.doctor_id = doctor_id;
+        this.username = username;
+        this.doctor_name = doctor_name;
+        this.department = department;
+    }
 
     public Doctor() {
     }

@@ -23,8 +23,10 @@ public class PatientDAO extends DBContext {
     ResultSet rs = null;
 
     public List<Patient> getPatientByUsername(String username) {
-        List<Patient> list = new ArrayList<>();
-        String sql = "SELECT * FROM patients WHERE username = ?";
+
+         List<Patient> list = new ArrayList<>();
+        String sql = "SELECT * FROM patients WHERE username = ? and status = 1";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
@@ -102,17 +104,20 @@ public class PatientDAO extends DBContext {
 
     }
 
-    public void deletePatientById(int id) {
-        String sql = "DELETE FROM patients WHERE patient_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace(); // hoặc ghi log nếu cần
-        }
+
+}
+public void deletePatientById(int id) {
+    String sql = "UPDATE patients SET status = 0 WHERE patient_id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace(); 
+
     }
 
     public void insertPatient(String username, String name, String gender, Date dob, String job,
+
             String phone, String email, String bhyt, String nation,
             String cccd, String address) {
 

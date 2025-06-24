@@ -46,44 +46,42 @@ public class AccountManager extends HttpServlet {
         String url = null;
         request.setAttribute("role", listRole);
         String action = request.getParameter("action");
-        
+
         try {
             if (action.equals("all")) {
                 url = "accountmanager?action=all";
                 listAcc = uDao.getListAllAccount();
-            }
-            if (action.equals("search")){
+            } else if (action.equals("search")) {
                 String text = request.getParameter("text");
-                request.setAttribute("text",text);
-                url = "accountmanager?action=all&text="+text;
+                request.setAttribute("text", text);
+                url = "accountmanager?action=all&text=" + text;
                 listAcc = uDao.SearchAll(text);
-            }
-            if (action.equals("filter")) {
+            } else if (action.equals("filter")) {
                 String roleId = request.getParameter("roleId");
                 String status = request.getParameter("status");
-                request.setAttribute("role_id",roleId);
+                request.setAttribute("role_id", roleId);
                 request.setAttribute("status", status);
                 if (roleId.equals("all") && status.equals("all")) {
                     response.sendRedirect("accountmanager?action=all");
                 } else if (roleId.equals("all")) {
                     listAcc = uDao.getAccByFilterStatus(status);
-                    url = "accountmanager?action=filter&roleId=all&status="+status;
+                    url = "accountmanager?action=filter&roleId=all&status=" + status;
                 } else if (status.equals("all")) {
                     listAcc = uDao.getAccByFilterRoleId(roleId);
-                    url = "accountmanager?action=filter&roleId="+roleId+"&status=all";
+                    url = "accountmanager?action=filter&roleId=" + roleId + "&status=all";
                 } else {
-                    listAcc = uDao.getAccByFilter(roleId,status);
-                    url = "accountmanager?action=filter&roleId="+roleId +"&status="+status;
+                    listAcc = uDao.getAccByFilter(roleId, status);
+                    url = "accountmanager?action=filter&roleId=" + roleId + "&status=" + status;
                 }
 
             }
 
-            if ( listAcc != null ) {
+            if (listAcc != null) {
                 int page, numberPerPage = 8;
                 int size = listAcc.size();
                 int numberPage = (size % numberPerPage == 0) ? (size / numberPerPage) : ((size / numberPerPage) + 1);
                 String xpage = request.getParameter("page");
-                if (xpage == null ) {
+                if (xpage == null) {
                     page = 1;
                 } else {
                     page = Integer.parseInt(xpage);
@@ -105,7 +103,6 @@ public class AccountManager extends HttpServlet {
             System.out.println(e);
         }
     }
-    
 
     private List<AccountUser> getListAccDisplay(List<AccountUser> listAcc, int start, int end) {
         List<AccountUser> listAccDisplay = new ArrayList<>();

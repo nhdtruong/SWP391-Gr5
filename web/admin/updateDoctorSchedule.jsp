@@ -25,18 +25,18 @@
 
                         <div class="row">
                             <div class="col-md-12 mb-4" style="text-align: center">
-                                <label for="doctor" class="form-label ">Lập lịch cứng cho bác sĩ</label>
+                                <label for="doctor" class="form-label ">Sửa lịch cứng cho bác sĩ</label>
 
                             </div>
 
                         </div>
 
-                        <!--  <c:forEach var="entry" items="${ScheduleTemplate}">
-                            <p>Ngày: ${entry.key}</p>
-                            <c:forEach var="slot" items="${entry.value}">
-                                <p>Shift: ${slot.shift}, start: ${slot.start}, end: ${slot.end}</p>
+<!--                       <c:forEach var="days" items="${ScheduleTemplate}">
+                            <p>Ngày: ${days.key}</p>
+                            <c:forEach var="slot" items="${days.value}">
+                                <p>start: ${slot.start}, end: ${slot.end}</p>
                             </c:forEach>
-                        </c:forEach>-->   
+                        </c:forEach>   -->
 
                         <form action="updateDoctorSchedule?action=updateScheduleExcute" method="post">
                             <div class="row">
@@ -67,10 +67,10 @@
                                                         <c:set var="slotEnd" value="${(h + 1) < 10 ? '0' : ''}${h + 1}:00:00"/>
                                                         <c:set var="isChecked" value="false"/>
 
-                                                        <c:forEach var="entry" items="${ScheduleTemplate}">
-                                                            <c:if test="${entry.key eq i}">
-                                                                <c:forEach var="slot" items="${entry.value}">
-                                                                    <c:if test="${slot.shift == 1 and slot.start== slotStart and slot.end == slotEnd}">
+                                                        <c:forEach var="days" items="${ScheduleTemplate}">
+                                                            <c:if test="${days.key eq i}">
+                                                                <c:forEach var="slot" items="${days.value}">
+                                                                    <c:if test="${ slot.start== slotStart and slot.end == slotEnd}">
                                                                         <c:set var="isChecked" value="true"/>
                                                                     </c:if>
                                                                 </c:forEach>
@@ -79,7 +79,7 @@
                                                         <div class="col-md-3">
                                                             <div class="form-check">
                                                                 <input class="form-check-input slot-${i}" type="checkbox"
-                                                                       name="day_${i}" value="1_${slotStart}-${slotEnd}"
+                                                                       name="day_${i}" value="${slotStart}-${slotEnd}"
                                                                        id="slot_${i}_m_${h}"
                                                                        <c:if test="${isChecked}">checked</c:if>>
                                                                 <label class="form-check-label" for="slot_${i}_m_${h}">
@@ -94,14 +94,14 @@
                                                 <div><strong>Slot Chiều</strong></div>
                                                 <div class="row">
                                                     <c:forEach var="h" begin="13" end="16">
-                                                        <c:set var="slotStart" value="${h lt 10 ? '0' : ''}${h}:00:00"/>
-                                                        <c:set var="slotEnd" value="${h + 1 lt 10 ? '0' : ''}${h + 1}:00:00"/>
+                                                        <c:set var="slotStart" value="${h}:00:00"/>
+                                                        <c:set var="slotEnd" value="$${h + 1}:00:00"/>
                                                         <c:set var="isChecked" value="false"/>
 
-                                                        <c:forEach var="entry" items="${ScheduleTemplate}">
-                                                            <c:if test="${entry.key eq i}">
-                                                                <c:forEach var="slot" items="${entry.value}">
-                                                                    <c:if test="${slot.shift == 2 and slot.start == slotStart and slot.end == slotEnd}">
+                                                        <c:forEach var="days" items="${ScheduleTemplate}">
+                                                            <c:if test="${days.key eq i}">
+                                                                <c:forEach var="slot" items="${days.value}">
+                                                                    <c:if test="${slot.start == slotStart and slot.end == slotEnd}">
                                                                         <c:set var="isChecked" value="true"/>
                                                                     </c:if>
                                                                 </c:forEach>
@@ -111,7 +111,37 @@
                                                         <div class="col-md-3">
                                                             <div class="form-check">
                                                                 <input class="form-check-input slot-${i}" type="checkbox"
-                                                                       name="day_${i}" value="2_${slotStart}-${slotEnd}"    
+                                                                       name="day_${i}" value="${slotStart}-${slotEnd}"    
+                                                                       id="slot_${i}_a_${h}"
+                                                                       <c:if test="${isChecked}">checked</c:if>>
+                                                                <label class="form-check-label" for="slot_${i}_a_${h}">
+                                                                    ${h}:00 - ${h+1}:00
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </c:forEach>
+                                                </div>
+                                                <div><strong>Slot Tối</strong></div>
+                                                <div class="row">
+                                                    <c:forEach var="h" begin="18" end="21">
+                                                        <c:set var="slotStart" value="${h}:00:00"/>
+                                                        <c:set var="slotEnd" value="${h + 1}:00:00"/>
+                                                        <c:set var="isChecked" value="false"/>
+
+                                                        <c:forEach var="days" items="${ScheduleTemplate}">
+                                                            <c:if test="${days.key eq i}">
+                                                                <c:forEach var="slot" items="${days.value}">
+                                                                    <c:if test="${slot.start == slotStart and slot.end == slotEnd}">
+                                                                        <c:set var="isChecked" value="true"/>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </c:if>
+                                                        </c:forEach>
+
+                                                        <div class="col-md-3">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input slot-" type="checkbox"
+                                                                       name="day_${i}" value="${slotStart}-${slotEnd}"    
                                                                        id="slot_${i}_a_${h}"
                                                                        <c:if test="${isChecked}">checked</c:if>>
                                                                 <label class="form-check-label" for="slot_${i}_a_${h}">

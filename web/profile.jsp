@@ -5,73 +5,7 @@
 <html lang="en">
     <jsp:include page="layout/head.jsp"/>
     <body>
-        <style>
-            .Choicefile{
-                display: block;
-                background: #396CF0;
-                border: 1px solid #fff;
-                color: #fff;
-                width: 150px;
-                text-align: center;
-                text-decoration: none;
-                cursor: pointer;
-                padding: 5px 0px;
-                border-radius: 5px;
-                font-weight: 500;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .Choicefile:hover {
-                text-decoration: none;
-                color: white;
-            }
-
-            #uploadfile,
-            .removeimg {
-                display: none;
-            }
-
-            #thumbbox {
-                position: relative;
-                width: 100%;
-                margin-bottom: 20px;
-            }
-
-            .removeimg {
-                height: 25px;
-                position: absolute;
-                background-repeat: no-repeat;
-                top: 5px;
-                left: 5px;
-                background-size: 25px;
-                width: 25px;
-                border-radius: 50%;
-
-            }
-
-            .removeimg::before {
-                -webkit-box-sizing: border-box;
-                box-sizing: border-box;
-                content: '';
-                border: 1px solid red;
-                background: red;
-                text-align: center;
-                display: block;
-                margin-top: 11px;
-                transform: rotate(45deg);
-            }
-
-            .removeimg::after {
-                content: '';
-                background: red;
-                border: 1px solid red;
-                text-align: center;
-                display: block;
-                transform: rotate(-45deg);
-                margin-top: -2px;
-            }
-        </style>
+       
         <jsp:include page="layout/menu_white.jsp"/>
         <section class="bg-dashboard">
             <div class="container">
@@ -196,6 +130,73 @@
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
+         <style>
+            .Choicefile{
+                display: block;
+                background: #396CF0;
+                border: 1px solid #fff;
+                color: #fff;
+                width: 150px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                padding: 5px 0px;
+                border-radius: 5px;
+                font-weight: 500;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .Choicefile:hover {
+                text-decoration: none;
+                color: white;
+            }
+
+            #uploadfile,
+            .removeimg {
+                display: none;
+            }
+
+            #thumbbox {
+                position: relative;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .removeimg {
+                height: 25px;
+                position: absolute;
+                background-repeat: no-repeat;
+                top: 5px;
+                left: 5px;
+                background-size: 25px;
+                width: 25px;
+                border-radius: 50%;
+
+            }
+
+            .removeimg::before {
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                content: '';
+                border: 1px solid red;
+                background: red;
+                text-align: center;
+                display: block;
+                margin-top: 11px;
+                transform: rotate(45deg);
+            }
+
+            .removeimg::after {
+                content: '';
+                background: red;
+                border: 1px solid red;
+                text-align: center;
+                display: block;
+                transform: rotate(-45deg);
+                margin-top: -2px;
+            }
+        </style>
         <script>
             function readURL(input, thumbimage) {
                 if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome

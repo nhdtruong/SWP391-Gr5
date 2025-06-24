@@ -43,7 +43,7 @@
                         <div class="row g-3">
                             <!-- Cột trái -->
                             <div class="col-md-6">
-                                <!-- Các input như đã có -->
+                                <input type="hidden" name="typeUpdate" value="${typeUpdate}" />
                                 <input type="hidden" name="patientId" value="${records.patientId}" />
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Họ và tên (có dấu)<span class="text-danger">*</span></label>

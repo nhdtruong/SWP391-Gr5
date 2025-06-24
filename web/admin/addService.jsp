@@ -21,10 +21,11 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Áp dụng BHYT</label>
-                                        <select name="is_bhyt" class="form-control">
-                                            <option value="1">Có</option>
+                                        <label class="form-label">Áp dụng BHYT<span class="text-danger">*</span></label>
+                                        <select name="is_bhyt" class="form-select">
                                             <option value="0">Không</option>
+                                            <option value="1">Có</option>
+                                            
                                         </select>
                                     </div>
 
@@ -64,9 +65,9 @@
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Phương thức thanh toán<span class="text-danger">*</span></label>
                                         <select name="payment_type_id" class="form-select">
-
-                                            <option value="1" <c:if test="${service.payment_type_id == 1}">selected</c:if>>Thanh toán tại bệnh viện</option>
                                             <option value="2" <c:if test="${service.payment_type_id == 2}">selected</c:if>>Thanh toán online</option>
+                                            <option value="1" <c:if test="${service.payment_type_id == 1}">selected</c:if>>Thanh toán tại bệnh viện</option>
+
 
                                             </select>
                                         </div>

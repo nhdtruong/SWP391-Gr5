@@ -64,6 +64,7 @@ public class UpdateRecords extends HttpServlet {
         HttpSession session = request.getSession();
         PatientDAO pDAO = new PatientDAO();
         String id = request.getParameter("id");
+        String typeUpdate = request.getParameter("typeUpdate");
         Patient records = pDAO.getPatientById(Integer.parseInt(id));
         session.setAttribute("currentRecords", records);
         String year = String.valueOf(records.getDob().toLocalDate().getYear());
@@ -73,6 +74,7 @@ public class UpdateRecords extends HttpServlet {
         request.setAttribute("month", month);
         request.setAttribute("day", day);
         request.setAttribute("records", records);
+        request.setAttribute("typeUpdate", typeUpdate);
         request.getRequestDispatcher("updaterecords.jsp").forward(request, response);
     }
 
@@ -93,10 +95,11 @@ public class UpdateRecords extends HttpServlet {
         if (action.equals("update")) {
             HttpSession session = request.getSession();
             Patient currentRecords = (Patient) session.getAttribute("currentRecords");
-            if(currentRecords == null){
+            if (currentRecords == null) {
                 response.sendRedirect("login");
             }
             PatientDAO pDAO = new PatientDAO();
+            String typeUpdate = request.getParameter("typeUpdate");
             String patientId = request.getParameter("patientId");
             String patientName = request.getParameter("patientName");
             String gender = request.getParameter("gender");
@@ -117,8 +120,9 @@ public class UpdateRecords extends HttpServlet {
             Date dob = Date.valueOf(dobStr);
 
             Patient pTemp = new Patient(Integer.parseInt(patientId), patientName, gender, dob, job, phone, email, bhyt, nation, cccd, address);
+            request.setAttribute("typeUpdate", typeUpdate);
             request.setAttribute("records", pTemp);
-            
+
             if (bhyt.trim().isEmpty()) {
                 if (!cccd.equals(currentRecords.getCccd())) {
                     Boolean isCCCD = pDAO.isCCCDExists(cccd);
@@ -147,15 +151,15 @@ public class UpdateRecords extends HttpServlet {
                         request.getRequestDispatcher("updaterecords.jsp").forward(request, response);
                         return;
                     }
-                }else if(!cccd.equals(currentRecords.getCccd()) && bhyt.equals(currentRecords.getBhyt())){
+                } else if (!cccd.equals(currentRecords.getCccd()) && bhyt.equals(currentRecords.getBhyt())) {
                     Boolean isCCCD = pDAO.isCCCDExists(cccd);
                     if (isCCCD) {
                         request.setAttribute("errorCCCD", "Mã định danh đã tồn tại trên hệ thống.");
                         request.getRequestDispatcher("updaterecords.jsp").forward(request, response);
                         return;
                     }
-                    
-                }else if(cccd.equals(currentRecords.getCccd()) && !bhyt.equals(currentRecords.getBhyt())){
+
+                } else if (cccd.equals(currentRecords.getCccd()) && !bhyt.equals(currentRecords.getBhyt())) {
                     Boolean isBHYT = pDAO.isBHYTExists(bhyt);
                     if (isBHYT) {
                         request.setAttribute("errorBHYT", "Mã BHYT đã tồn tại trên hệ thống");
@@ -166,19 +170,27 @@ public class UpdateRecords extends HttpServlet {
 
             }
             pDAO.updatePatient(pTemp);
-            response.sendRedirect("records");
+            if (typeUpdate.equals("unormal")) {
+                response.sendRedirect("chooseRecords");
+            } else {
+                response.sendRedirect("records");
+            }
 
         }
 
         if (action.equals("delete")) {
-            System.out.println(">>> doPost được gọi");
-            System.out.println(">>> action = " + action);
+            String typeDelete = request.getParameter("typeDelete");
             String patientId = request.getParameter("patientId");
-            System.out.println(">>> patientId = '" + patientId + "'");
+            System.out.println(patientId);
             PatientDAO pDao = new PatientDAO();
-
             pDao.deletePatientById(Integer.parseInt(patientId));
-            response.sendRedirect("records");
+            if (typeDelete == null) {
+                response.sendRedirect("records");
+
+            } else if (typeDelete.equals("unormal")) {
+                response.sendRedirect("chooseRecords");
+            }
+
         }
     }
 

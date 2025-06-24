@@ -25,40 +25,44 @@ public class WeeklyScheduleSlotDAO extends DBContext {
 
     
     
-    public Map<Integer, List<DoctorScheduleSlots>> getTemplateScheduleByDoctorId(int doctorId) {
-        Map<Integer, List<DoctorScheduleSlots>> result = new HashMap<>();
+   public Map<Integer, List<DoctorScheduleSlots>> getTemplateScheduleByDoctorId(int doctorId) {
+    Map<Integer, List<DoctorScheduleSlots>> result = new HashMap<>();
 
-        String sql = "SELECT d.day_of_week, s.shift, s.slot_start, s.slot_end "
-                + "FROM weekly_schedule_doctor d JOIN weekly_schedule_slot s ON d.template_id = s.template_id "
-                + "WHERE d.doctor_id = ?";
+    String sql = """
+        SELECT d.day_of_week, s.slot_start, s.slot_end
+        FROM weekly_schedule_doctor d
+        JOIN weekly_schedule_slot s ON d.template_id = s.template_id
+        WHERE d.doctor_id = ?
+    """;
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int day = rs.getInt("day_of_week");
-                DoctorScheduleSlots slot = new DoctorScheduleSlots(rs.getInt("shift"), rs.getTime("slot_start"), rs.getTime("slot_end"));
-                List<DoctorScheduleSlots> slots = result.get(day);
-                if (slots == null) {
-                    slots = new ArrayList<>();
-                    result.put(day, slots);
-                }
-                slots.add(slot);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, doctorId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int dayOfWeek = rs.getInt("day_of_week");
+            Time start = rs.getTime("slot_start");
+            Time end = rs.getTime("slot_end");
+
+            DoctorScheduleSlots slot = new DoctorScheduleSlots(start, end);
+
+            // Nếu chưa có danh sách cho ngày này thì tạo mới
+            result.computeIfAbsent(dayOfWeek, k -> new ArrayList<>()).add(slot);
         }
 
-        return result;
+    } catch (Exception e) {
+        e.printStackTrace(); // hoặc dùng Logger
     }
-    
-        public void insertSlot(int templateId, int shift, Time start, Time end) {
-        String sql = "INSERT INTO weekly_schedule_slot (template_id, shift, slot_start, slot_end) VALUES (?, ?, ?, ?)";
+
+    return result;
+}
+
+        public void insertSlot(int templateId, Time start, Time end) {
+        String sql = "INSERT INTO weekly_schedule_slot (template_id, slot_start, slot_end) VALUES ( ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, templateId);
-            ps.setInt(2, shift);
-            ps.setTime(3, start);
-            ps.setTime(4, end);
+            ps.setTime(2, start);
+            ps.setTime(3, end);
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);

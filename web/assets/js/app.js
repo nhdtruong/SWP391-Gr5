@@ -337,6 +337,7 @@ function CheckCCCD(text) {
     text.reportValidity();
     return true;
 }
+
 function CheckBHYT(text) {
     const value = text.value;
 
@@ -357,6 +358,7 @@ function CheckBHYT(text) {
     text.reportValidity();
     return true;
 }
+
 function CheckPhone(text) {
     const value = text.value;
 
