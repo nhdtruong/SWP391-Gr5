@@ -111,10 +111,8 @@
                         <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
                         <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
                         <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>
-                        <li><a href="service?type=1" class="sub-menu-item">Khám tổng quát</a></li>
-                        <li><a href="service?type=2" class="sub-menu-item">Chuyên khoa</a></li>
-                        <li><a href="service?type=3" class="sub-menu-item">Tư vấn online</a></li>
-                        
+
+
                     </ul>
                 </li>
 
