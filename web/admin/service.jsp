@@ -261,7 +261,17 @@
 
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+         <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/simplebar.min.js"></script>
+        <script src="assets/js/select2.min.js"></script>
+        <script src="assets/js/select2.init.js"></script>
+        <script src="assets/js/flatpickr.min.js"></script>
+        <script src="assets/js/flatpickr.init.js"></script>
+        <script src="assets/js/jquery.timepicker.min.js"></script> 
+        <script src="assets/js/timepicker.init.js"></script> 
+        <script src="assets/js/feather.min.js"></script>
+        <script src="assets/js/app.js"></script>
         <script>
                                                                function openServiceDetailModal(name, category, department, description, bhyt, fee, discount, payment, img) {
                                                                    document.getElementById('serviceName').innerText = name;
