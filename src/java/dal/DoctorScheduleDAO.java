@@ -10,13 +10,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Date;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import static java.time.LocalDate.now;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import model.Shifts;
 import model.Slot;
 import model.WorkingDateSchedule;
 
@@ -201,22 +203,41 @@ public class DoctorScheduleDAO extends DBContext {
         return dates;
     }
 
+    public int getStatusSlotBasedOnAppointment(int slotId) {
+        String sql = "select ";
+        return 0;
+    }
+
     public List<WorkingDateSchedule> getWorkingScheduleOfDoctor10Day(int doctorId) {
-        String sql = "SELECT ds.working_date, ds.status, dss.slot_id, dss.slot_start, dss.slot_end "
-                + "FROM doctor_schedule ds "
-                + "JOIN doctor_schedule_slot dss ON ds.schedule_id = dss.schedule_id "
-                + "WHERE ds.doctor_id = ? and ds.status = 1 "
-                + "AND ds.working_date IN ("
-                + "    SELECT TOP 10 working_date FROM ("
-                + "        SELECT DISTINCT working_date "
-                + "        FROM doctor_schedule "
-                + "        WHERE doctor_id = ? AND working_date >= CAST(GETDATE() AS DATE)"
-                + "    ) AS temp "
-                + "    ORDER BY working_date"
-                + ") "
-                + "ORDER BY ds.working_date, dss.slot_start";
+        String sql = "SELECT \n"
+                + "    ds.doctor_id,\n"
+                + "    ds.working_date, \n"
+                + "    ds.status, \n"
+                + "    dss.slot_id, \n"
+                + "    dss.slot_start, \n"
+                + "    dss.slot_end,\n"
+                + "    COUNT(a.appointment_id) AS appointment_count\n"
+                + "FROM doctor_schedule ds\n"
+                + "JOIN doctor_schedule_slot dss ON ds.schedule_id = dss.schedule_id\n"
+                + "LEFT JOIN appointment a ON dss.slot_id = a.slot_id AND a.status != 0\n"
+                + "WHERE ds.status = 1 \n"
+                + "  AND ds.doctor_id = ?\n"
+                + "  AND ds.working_date IN (\n"
+                + "      SELECT TOP 10 working_date \n"
+                + "      FROM (\n"
+                + "          SELECT DISTINCT working_date \n"
+                + "          FROM doctor_schedule \n"
+                + "          WHERE working_date >= CAST(GETDATE() AS DATE)\n"
+                + "            AND doctor_id = ?\n"
+                + "      ) AS temp \n"
+                + "      ORDER BY working_date\n"
+                + "  )\n"
+                + "GROUP BY ds.doctor_id, ds.working_date, ds.status, dss.slot_id, dss.slot_start, dss.slot_end\n"
+                + "ORDER BY ds.working_date, dss.slot_start;";
+
         Map<Date, WorkingDateSchedule> workingMap = new LinkedHashMap<>();
         LocalDate today = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
@@ -227,11 +248,11 @@ public class DoctorScheduleDAO extends DBContext {
                 Date sqlDate = rs.getDate("working_date");
                 LocalDate workingDate = sqlDate.toLocalDate();
                 int status = rs.getInt("status");
-                int slot_id = rs.getInt("slot_id");
+                int slotId = rs.getInt("slot_id");
                 Time start = rs.getTime("slot_start");
                 Time end = rs.getTime("slot_end");
+                int appointmentCount = rs.getInt("appointment_count");
 
-                           
                 WorkingDateSchedule day = workingMap.computeIfAbsent(sqlDate, d -> {
                     WorkingDateSchedule w = new WorkingDateSchedule();
                     w.setWorkingDate(d);
@@ -241,13 +262,42 @@ public class DoctorScheduleDAO extends DBContext {
                 });
 
                 Slot slot = new Slot();
-                slot.setSlotId(slot_id);
+                slot.setSlotId(slotId);
                 slot.setSlotStart(start);
                 slot.setSlotEnd(end);
+
+                if (workingDate.isEqual(today)) {
+                    LocalDateTime slotStartTime = LocalDateTime.of(workingDate, start.toLocalTime());
+                    Duration duration = Duration.between(now, slotStartTime);
+                    if (duration.toHours() < 2) {
+                        slot.setStatus(-1); // quá gần
+                    } else if (appointmentCount >= 4) {
+                        slot.setStatus(0); // full
+                    } else {
+                        slot.setStatus(1); // còn chỗ
+                    }
+                } else {
+                    slot.setStatus(appointmentCount >= 4 ? 0 : 1);
+                }
+
                 day.getSlots().add(slot);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        // bỏ ngày hôm nay nếu tất cả slot đều -1
+        Iterator<Map.Entry<Date, WorkingDateSchedule>> iterator = workingMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Date, WorkingDateSchedule> entry = iterator.next();
+            LocalDate d = entry.getKey().toLocalDate();
+            if (d.isEqual(today)) {
+                List<Slot> slots = entry.getValue().getSlots();
+                if (slots.stream().allMatch(s -> s.getStatus() == -1)) {
+                    iterator.remove(); // xóa hôm nay
+                }
+                break; // đã xử lý hôm nay, không cần duyệt tiếp
+            }
         }
 
         return new ArrayList<>(workingMap.values());
@@ -283,7 +333,7 @@ public class DoctorScheduleDAO extends DBContext {
             System.out.println(); // dòng trống giữa các ngày
         }
          */
-        System.out.println(d.getAllDaysWorkingInscheduleOfDoctor(1));
+        System.out.println(d.getWorkingScheduleOfDoctor10Day(1));
 
     }
 

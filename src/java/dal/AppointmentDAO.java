@@ -32,7 +32,8 @@ public class AppointmentDAO extends DBContext {
         }
 
     }
-
+    
+   
     public List<AppointmentView> getAllAppointmentsSearchDoctor(String text) {
         List<AppointmentView> list = new ArrayList<>();
         String sql = "SELECT \n"
