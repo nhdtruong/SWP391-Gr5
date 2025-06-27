@@ -46,7 +46,7 @@ public class ajaxServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+     //
         HttpSession session = req.getSession();
         PaymentDAO payDAO = new PaymentDAO();
         AppointmentDAO appointmentDao = new AppointmentDAO();
