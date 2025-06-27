@@ -61,17 +61,7 @@ public class BookingSuccess extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        AppointmentDAO appointment = new AppointmentDAO();
-        Patient p = (Patient) session.getAttribute("patient");
-        Service s = (Service) session.getAttribute("serviceBooking");
-        appointment.insertAppointment(p.getPatientId(), Integer.parseInt((String)session.getAttribute("slotId")), s.getService_id(), "");
-//        session.removeAttribute("patient");
-//        session.removeAttribute("serviceBooking");
-//        session.removeAttribute("dateBooking");
-//        session.removeAttribute("slotStart");
-//        session.removeAttribute("slotEnd");
-
+        
         request.getRequestDispatcher("bookingSuccess.jsp").forward(request, response);
     }
 

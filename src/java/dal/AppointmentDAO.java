@@ -8,32 +8,48 @@ import context.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import model.AppointmentView;
+import java.sql.Time;
+import java.sql.SQLException;
 
+import java.sql.Statement;
 /**
  *
  * @author DELL
  */
 public class AppointmentDAO extends DBContext {
 
-    public void insertAppointment(int patientId, int slotId, int serviceId, String note) {
-        String sql = "INSERT INTO appointment (patient_id, slot_id, service_id, note) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, patientId);
-            ps.setInt(2, slotId);
-            ps.setInt(3, serviceId);
-            ps.setString(4, note);
+    public int insertAppointment(String appointmentCode, int patientId, int slotId, int serviceId, String note) {
+        String sql = "INSERT INTO appointment (appointment_code, patient_id, slot_id, service_id, note) VALUES (?, ?, ?, ?, ?)";
 
-            ps.executeUpdate();
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, appointmentCode);
+            ps.setInt(2, patientId);
+            ps.setInt(3, slotId);
+            ps.setInt(4, serviceId);
+            ps.setString(5, note);
 
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating appointment failed, no rows affected.");
+            }
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); 
+                } else {
+                    throw new SQLException("Creating appointment failed, no ID obtained.");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        return -1; // Nếu có lỗi
     }
-    
-   
+
     public List<AppointmentView> getAllAppointmentsSearchDoctor(String text) {
         List<AppointmentView> list = new ArrayList<>();
         String sql = "SELECT \n"
@@ -168,6 +184,60 @@ public class AppointmentDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public int checkPatientBookingConflictDetailed(int patientId, int departmentId, Date dateBooking, Time slotStart, Time slotEnd) {
+
+        String sqlDept = "SELECT COUNT(*) FROM appointment a " //đã đặt cùng chuyên khoa trong ngày
+                + "JOIN [service] s ON a.service_id = s.service_id "
+                + "JOIN doctor_schedule_slot dss ON a.slot_id = dss.slot_id "
+                + "JOIN doctor_schedule ds ON dss.schedule_id = ds.schedule_id "
+                + "WHERE a.patient_id = ? "
+                + "AND ds.working_date = ? "
+                + "AND s.department_id = ? "
+                + "AND a.status != 0";
+
+        String sqlTime = "SELECT COUNT(*) FROM appointment a "
+                + "JOIN [service] s ON a.service_id = s.service_id "
+                + "JOIN doctor_schedule_slot dss ON a.slot_id = dss.slot_id "
+                + "JOIN doctor_schedule ds ON dss.schedule_id = ds.schedule_id "
+                + "WHERE a.patient_id = ? "
+                + "AND ds.working_date = ? "
+                + "AND s.department_id != ? "
+                + "AND CONVERT(varchar, dss.slot_start, 108) = CONVERT(varchar, ?, 108) "
+                + "AND CONVERT(varchar, dss.slot_end, 108) = CONVERT(varchar, ?, 108) "
+                + "AND a.status != 0";
+
+        try {
+            //  lỗi 1
+            try (PreparedStatement ps = connection.prepareStatement(sqlDept)) {
+                ps.setInt(1, patientId);
+                ps.setDate(2, dateBooking);
+                ps.setInt(3, departmentId);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return 1;
+                }
+            }
+
+            // lỗi 2
+            try (PreparedStatement ps = connection.prepareStatement(sqlTime)) {
+                ps.setInt(1, patientId);
+                ps.setDate(2, dateBooking);
+                ps.setInt(3, departmentId);
+                ps.setTime(4, slotStart);
+                ps.setTime(5, slotEnd);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return 2;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0; // Không lỗi
     }
 
     public static void main(String[] args) {

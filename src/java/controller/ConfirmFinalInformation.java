@@ -11,18 +11,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Patient;
-import dal.PatientDAO;
+import dal.AppointmentDAO;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import model.AccountUser;
+import java.sql.Date;
+import model.Patient;
+import java.sql.Time;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name = "ConfirmInformation", urlPatterns = {"/confirmInformation"})
-public class ConfirmInformation extends HttpServlet {
+@WebServlet(name = "ConfirmFinalInformation", urlPatterns = {"/confirmFinalInformation"})
+public class ConfirmFinalInformation extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class ConfirmInformation extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ConfirmInformation</title>");
+            out.println("<title>Servlet ConfirmFinalInformation</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ConfirmInformation at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ConfirmFinalInformation at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,51 +63,22 @@ public class ConfirmInformation extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String patientId = request.getParameter("patientId");
-        Patient patient = null;
-         PatientDAO pDao = new PatientDAO();
-        if(patientId == null){
-            patient = (Patient) session.getAttribute("patient");
-        }else{
-            patient = pDao.getPatientById(Integer.parseInt(patientId));
-        }
-       
-        
-        String isBHYT = request.getParameter("isBHYT"); //  thay đổi mới có dòng này 
-        if (isBHYT == null) { // đầu tiên vào là ko có request cho nên == null ,khác null tức là  = 0 thì chạy bình thường 
-            isBHYT = (String) session.getAttribute("isBHYT");
-        }else{
-            session.setAttribute("isBHYT", isBHYT);
-        }
-        if (isBHYT.equals("0")) { // ko sử dụng bhyt => ko cần chek có hay ko 
-            
-            session.setAttribute("patient", patient);
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
+        Patient patient = (Patient) session.getAttribute("patient");
+        int departmentId = Integer.parseInt((String) session.getAttribute("departmentId"));
+        Date dateBooking = (Date) session.getAttribute("dateBooking");
+        Time slotStart = (Time) session.getAttribute("slotStart");
+        Time slotEnd = (Time)session.getAttribute("slotEnd");
+        int check = appointmentDAO.checkPatientBookingConflictDetailed(patient.getPatientId(), departmentId, dateBooking, slotStart, slotEnd);
+        if (check == 1) {
+            request.setAttribute("error", "Bạn đã đặt khám chuyên khoa này trong ngày rồi. Vui lòng xem lại phiếu khám!");
             request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
-
-        } else if (isBHYT.equals("1") && patient.getBhyt().isEmpty()) { //  bảo có  nhưung hồ sơ ko có => sai
-            request.setAttribute("error", "Hồ sơ này chưa cập nhật BHYT");
-            request.setAttribute("patientId", patientId);
-            AccountUser acc = (AccountUser) session.getAttribute("user");
-            if (acc == null) {
-                response.sendRedirect("login");
-                return;
-            }
-            List<Patient> listPa = pDao.getPatientByUsername(acc.getUsername());
-            request.setAttribute("records", listPa);
-            if (acc == null) {
-                response.sendRedirect("login");
-                return;
-            }
-            request.setAttribute("records", listPa);
-            request.getRequestDispatcher("chooseRecords.jsp").forward(request, response);
-
-        } else if (isBHYT.equals("1") && !patient.getBhyt().isEmpty()) { //  bảo muốn có và hồ sơ có bhyt
-            
-            session.setAttribute("patient", patient);
+        } else if (check == 2) {
+            request.setAttribute("error", "Bạn đã đặt khám trùng giờ với chuyên khoa khác trong ngày rồi. Vui lòng xem lại phiếu khám!");
             request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
-           return;
+        } else if (check == 0) {
+            response.sendRedirect("payment");
         }
-
     }
 
     /**
@@ -122,6 +93,7 @@ public class ConfirmInformation extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
     }
 
     /**

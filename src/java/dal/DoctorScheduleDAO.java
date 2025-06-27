@@ -12,7 +12,6 @@ import java.sql.Time;
 import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDate;
-import static java.time.LocalDate.now;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -77,18 +77,26 @@
                                             <td>${sessionScope.serviceBooking.service_name}</td>
                                             <td>${sessionScope.doctorName}</td>
                                             <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
-
-                                            <td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td>
+                                            <c:if test="${sessionScope.isBHYT == '0'}"><td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td></c:if>
+                                            <c:if test="${sessionScope.isBHYT == '1'}">
+                                                <td>
+                                                    <del>
+                                                        <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
+                                                    </del>
+                                                    &nbsp;
+                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount}" pattern="#,##0"/> đ
+                                                </td>
+                                            </c:if>
                                             <td>
                                                 <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" title="Xóa lịch khám" onclick="return confirm('Bạn có chắc muốn xóa thông tin đặt khám này?')">
                                                     <i class="fa fa-trash" style="color: red;"></i>
                                                 </a>
                                             <td>
-                                                
-                                         
 
 
-                                            </tbody>
+
+
+                                                </tbody>
                                         </table>
                                     </div>
 
@@ -142,7 +150,7 @@
                                     <a href="chooseRecords" class="btn btn-outline-secondary">
                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                     </a>
-                                    <a href="bookingSuccess" class="btn btn-info">
+                                    <a href="confirmFinalInformation" class="btn btn-info">
                                         <i class="fa-solid fa-check me-1"></i> Xác nhận
                                     </a>       
                                 </div>
@@ -161,10 +169,20 @@
 
         </div>
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+        <!-- Bootstrap 5 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+        <c:if test="${not empty error}">
+            <script>
+                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                        var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
+                                                        errorModal.show();
+                                                    });
+            </script>
+        </c:if>
 
         <script>
             function showSlotsByDate(id) {
@@ -277,5 +295,23 @@
             }
 
         </style>
+        <!-- Modal thông báo lỗi -->
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="errorModalLabel"><i class="fa fa-exclamation-triangle me-2"></i>Thông báo lỗi</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    </div>
+                    <div class="modal-body text-center fw-bold">
+                        ${error}
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>
