@@ -135,7 +135,7 @@
                                             <h5 class="widget-title">Sắp xếp</h5>
                                             <div class="row align-items-center">
                                                 <div class="col-md-12">
-                                                    <select name="SortType" onchange="Sort(this.value)" class="form-select">
+                                                    <select name="SortType" class="form-select">
                                                         <option <c:if test="${sort == 'all'}"> selected </c:if> value="all">Tất cả</option>
                                                         <option <c:if test="${sort == 'star'}"> selected </c:if> value="star">Star</option>
                                                         <option <c:if test="${sort == 'latest'}"> selected </c:if> value="latest">Mới nhất</option>

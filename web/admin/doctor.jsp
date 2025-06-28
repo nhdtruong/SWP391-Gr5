@@ -135,14 +135,16 @@
                                                         <a href="updatedoctor?action=updateDoc&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
                                                     </td>
 
-                                                    <td class="p-3">
-                                                        <a href="#" class="btn btn-danger"
-                                                           onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
-                                                            Delete
-                                                        </a>
-                                                    </td>
+                                                    <c:if test="${sessionScope.user.getRole()== 1}">
 
+                                                        <td class="p-3">
+                                                            <a href="#" class="btn btn-danger"
+                                                               onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
+                                                                Delete
+                                                            </a>
+                                                        </td>
 
+                                                    </c:if>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -244,7 +246,7 @@
                                         </div>
                                         <div class="row mb-2">
                                             <div class="col-md-2 fw-bold">Tiểu sử:</div>
-                                          
+
                                         </div>
                                         <div class="row mb-2">
 
@@ -331,7 +333,7 @@
                     }
 
                     function openDetailModal(specialized, educationHistory, academicDegree, academicTitle, description, img, name, gender, position, department, status) {
-                       
+
                         if (img === 'default' || img.trim() === '') {
                             if (gender === 'Nam') {
                                 document.getElementById('doctorImage').src = 'assets/images/doctors/doctormale.jpg';
@@ -344,8 +346,8 @@
                             document.getElementById('doctorImage').src = img;
                         }
 
-                  
-                       
+
+
                         document.getElementById('detailName').innerText = name;
                         document.getElementById('detailGender').innerText = gender;
                         document.getElementById('detailPosition').innerText = position;
@@ -353,12 +355,12 @@
                         document.getElementById('detailStatus').innerText = status;
                         document.getElementById('detailSpecialized').innerText = specialized?.trim() || 'Đang cập nhật';
                         document.getElementById('detailEducation').innerHTML = educationHistory?.trim() || 'Đang cập nhật';
-                        document.getElementById('detailDegree').innerText = academicDegree === "" ? 'Không':academicDegree;
-                        document.getElementById('detailTitle').innerText = academicTitle === "" ? 'Không':academicTitle;
+                        document.getElementById('detailDegree').innerText = academicDegree === "" ? 'Không' : academicDegree;
+                        document.getElementById('detailTitle').innerText = academicTitle === "" ? 'Không' : academicTitle;
                         document.getElementById('description').innerHTML = description?.trim() || 'Đang cập nhật';
                         new bootstrap.Modal(document.getElementById('detailModal')).show();
                     }
-                 
+
 
                 </script>
 

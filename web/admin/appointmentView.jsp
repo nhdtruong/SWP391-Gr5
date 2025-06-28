@@ -59,34 +59,34 @@
                                                     </select>  
                                                 </div>
                                             </div>
-                                        <div class="col-md-1 md-0">
-                                            <button type="submit" class="btn btn-primary">Lọc</button>
+                                            <div class="col-md-1 md-0">
+                                                <button type="submit" class="btn btn-primary">Lọc</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
+                                <div class="col-md-1">
+                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
+                                </div>                         
                             </div>
-                            <div class="col-md-1">
-                                <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
-                            </div>                         
-                        </div>
 
-                        <div class="row">
-                            <div class="col-12 mt-4">
-                                <div class="table-responsive bg-white shadow rounded">
-                                    <table class="table mb-0 table-center" style="text-align: center">
-                                        <thead>
-                                            <tr>                          
-                                                <th class="border-bottom p-3" >STT</th>
-                                                <th class="border-bottom p-3" >Bác sĩ</th>                                        
-                                                <th class="border-bottom p-3" >Bệnh nhân</th>
-                                                <th class="border-bottom p-3" >Dịch vụ</th>
-                                                <th class="border-bottom p-3" >Ngày hẹn</th>
-                                                <th class="border-bottom p-3" >Giờ hẹn</th>
-                                                <th class="border-bottom p-3" >Trạng thái</th>
-                                                <th class="border-bottom p-3" >Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                            <div class="row">
+                                <div class="col-12 mt-4">
+                                    <div class="table-responsive bg-white shadow rounded">
+                                        <table class="table mb-0 table-center" style="text-align: center">
+                                            <thead>
+                                                <tr>                          
+                                                    <th class="border-bottom p-3" >STT</th>
+                                                    <th class="border-bottom p-3" >Bác sĩ</th>                                        
+                                                    <th class="border-bottom p-3" >Bệnh nhân</th>
+                                                    <th class="border-bottom p-3" >Dịch vụ</th>
+                                                    <th class="border-bottom p-3" >Ngày hẹn</th>
+                                                    <th class="border-bottom p-3" >Giờ hẹn</th>
+                                                    <th class="border-bottom p-3" >Trạng thái</th>
+                                                    <th class="border-bottom p-3" >Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                             <c:if test="${empty Appointment}">
                                                 <tr>
                                                     <td colspan="6" class="text-center text-danger p-3">
@@ -113,14 +113,15 @@
                                                         <td class="p-3" style="color: yellow">Wait</td>
                                                     </c:if>   
                                                     <td class="p-3">
-                                                        
+
 
                                                         <a href="updatedoctor?action=updateDoc&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
-
-                                                        <a href="#" class="btn btn-danger"
-                                                           onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
-                                                            Delete
-                                                        </a>
+                                                        <c:if test="${sessionScope.user.getRole()== 1}">
+                                                            <a href="#" class="btn btn-danger"
+                                                               onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
+                                                                Delete
+                                                            </a>
+                                                        </c:if>
                                                     </td>
 
 

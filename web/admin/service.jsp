@@ -92,7 +92,7 @@
                                             </tr>
                                         </thead>
                                         <tbody >
-                                             <c:if test="${empty service}">
+                                            <c:if test="${empty service}">
                                                 <tr>
                                                     <td colspan="6" class="text-center text-danger p-3">
                                                         Không có dịch vụ nào được tìm thấy.
@@ -111,9 +111,10 @@
                                                     <td class="p-3">
                                                         <a href="#" class="btn btn-info" onclick="openServiceDetailModal('${fn:escapeXml(s.getService_name())}', '${fn:escapeXml(s.getCategory_service().getName())}', '${fn:escapeXml(s.getDepartment().getDepartment_name())}', '${fn:escapeXml(s.getDescription())}', '${s.isIs_bhyt() ? "Có" : "Không"}', '${s.getFee()}', '${s.getDiscount()}', '${fn:escapeXml(s.getPayment_type_id()) == 1 ? "Thanh toán tại bệnh viện" : "Thanh toán online"}', '${s.getImg()}')">Chi tiết</a>
                                                         <a href="updateservice?action=updateService&serviceId=${s.service_id}" class="btn btn-primary">Sửa</a>
-                                                        <a href="#" class="btn btn-danger"
-                                                           onclick="openDeleteModal('${s.getService_id()}' )">Xóa</a>
-
+                                                        <c:if test="${sessionScope.user.getRole()== 1}">
+                                                            <a href="#" class="btn btn-danger"
+                                                               onclick="openDeleteModal('${s.getService_id()}')">Xóa</a>
+                                                        </c:if>
                                                     </td>
                                                 </tr>
                                                 <c:set var="st" value="${st + 1}"  />
@@ -281,7 +282,7 @@
                                                                }
 
                                                                function openDeleteModal(serviceId) {
-                                                                   
+
                                                                    document.getElementById('deleteServiceId').value = serviceId;
                                                                    new bootstrap.Modal(document.getElementById('deleteModal')).show();
                                                                }
