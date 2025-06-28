@@ -35,8 +35,8 @@
                             <div class="col-md-8 ">
                                 <form class="row" action="doctorschedule?action=filter" method="POST" onSubmit="document.getElementById('submit').disabled = true;">
                                     <div class=" justify-content-md-end row">
-                                        
-                                          
+
+
                                         <div class="col-md-4 row align-items-center">
                                             <div class="col-md-5" style="text-align: end">
                                                 <label  class="form-label">Chuyên khoa</label>
@@ -84,14 +84,14 @@
                                                     </td>
                                                 </tr>
                                             </c:if>
-                                        <c:set var="i" value="${start + 1}"/>   
+                                            <c:set var="i" value="${start + 1}"/>   
                                             <c:forEach items="${doctor}" var="d" >
                                                 <tr>                                                 
                                                     <td class="p-3">${i}</td>
                                                     <td class="p-3">${d.getUsername()}</td>
                                                     <td class="p-3">${d.getDoctor_name()}</td>
                                                     <td class="p-3">${d.getDepartment().getDepartment_name()}</td>
-                                                    
+
                                                     <td class="p-3">
                                                         <a href="doctorScheduleDetail?doctorId=${d.getDoctor_id()}&doctorName=${d.getDoctor_name()}" class="btn btn-info">
                                                             Detail
@@ -101,14 +101,15 @@
                                                     <td class="p-3">
                                                         <a href="updateDoctorSchedule?action=updateSchedule&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
                                                     </td>
+                                                    <c:if test="${sessionScope.user.getRole()== 1}">
 
-                                                    <td class="p-3">
-                                                        <a href="#" class="btn btn-danger"
-                                                           onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
-                                                            Delete
-                                                        </a>
-                                                    </td>
-
+                                                        <td class="p-3">
+                                                            <a href="#" class="btn btn-danger"
+                                                               onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
+                                                                Delete
+                                                            </a>
+                                                        </td>
+                                                    </c:if>
 
                                                 </tr>
                                                 <c:set var="i" value="${i + 1}"/>
@@ -166,7 +167,7 @@
                     </div>
                 </div>
 
-             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <form action="updateDoctorSchedule?action=deleteSchedule" method="post">
@@ -179,7 +180,7 @@
                                     <input type="hidden" name="doctorId" id="deleteDoctorId">
                                 </div>
                                 <div class="modal-footer">
-                                    
+
                                     <button type="submit" class="btn btn-danger">Xóa</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                                 </div>
@@ -205,12 +206,12 @@
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
         <script>
-             function openDeleteModal(doctorId, doctorName) {
-                        document.getElementById('deleteDoctorName').innerText = doctorName;
-                        document.getElementById('deleteDoctorId').value = doctorId;
-                        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+                                                               function openDeleteModal(doctorId, doctorName) {
+                                                                   document.getElementById('deleteDoctorName').innerText = doctorName;
+                                                                   document.getElementById('deleteDoctorId').value = doctorId;
+                                                                   new bootstrap.Modal(document.getElementById('deleteModal')).show();
 
-                    }
+                                                               }
 
         </script>
     </body>
