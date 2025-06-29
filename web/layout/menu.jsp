@@ -154,6 +154,11 @@
                                     <a class="dropdown-item text-dark" href="logout">
                                         <i class="uil uil-sign-out-alt me-1"></i> Đăng xuất
                                     </a>
+                                    <c:if test="${sessionScope.user.role == 1 || sessionScope.user.role == 3}">
+                                        <a class="dropdown-item text-dark" href="dashboard">
+                                            <i class="uil uil-sign-out-alt me-1"></i> Quản Lý
+                                        </a>
+                                    </c:if>
                                 </c:if>
                             </div>
                         </div>
