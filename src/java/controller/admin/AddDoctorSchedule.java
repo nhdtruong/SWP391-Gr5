@@ -85,7 +85,21 @@ public class AddDoctorSchedule extends HttpServlet {
 
             String doctorUsername = request.getParameter("doctorUsername");
             DoctorDAO dDAO = new DoctorDAO();
+            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+            
             Doctor doctor = dDAO.getDoctorByDoctorUsername(doctorUsername);
+            if(doctor == null){
+                request.setAttribute("errorBs", "Không tìm thấy bác sĩ!");
+                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                return;
+            }
+            int doctorId = dDAO.getDoctorIdByDoctorUsername(doctorUsername);
+            
+            if(DSD.checkDoctorHasSchedule(doctorId)){
+                request.setAttribute("error","Bác sĩ này đã có lịch làm việc!");
+                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                return;
+            }
             request.setAttribute("doctor", doctor);
             request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
             return;
@@ -111,11 +125,6 @@ public class AddDoctorSchedule extends HttpServlet {
                 LocalDate start = LocalDate.parse(request.getParameter("startDate"));
                 LocalDate end = LocalDate.parse(request.getParameter("endDate"));
                 saveTemplate(request, Integer.parseInt(doctorID));
-                System.out.println("Action form: " + actionform);
-                System.out.println("Action: " + action);
-                System.out.println("Doctor ID: " + doctorID);
-                System.out.println("Start Date: " + request.getParameter("startDate"));
-                System.out.println("End Date: " + request.getParameter("endDate"));
 
                 applySchedule(request, Integer.parseInt(doctorID), start, end);
                 response.sendRedirect("doctorschedule?action=all");

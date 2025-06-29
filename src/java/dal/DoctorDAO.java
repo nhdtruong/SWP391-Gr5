@@ -629,6 +629,24 @@ public class DoctorDAO extends DBContext {
         }
         return null;
     }
+    
+    public int  getDoctorIdByDoctorUsername(String username) {
+        String sql = "select d.doctor_id from doctors d where d.username = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return 0;
+    }
+    
 
     public Doctor getDoctorByDoctorId(String id) {
         String sql = "select d.doctor_id,d.username,d.doctor_name,d.gender,d.dob,d.phone,d.deparment_id,d.address,d.img,d.description,d.position_id,d.AcademicTitle_id,d.AcademicDegree_id,d.status,d.specialized,d.EducationHistory from doctors d where d.doctor_id = ?";

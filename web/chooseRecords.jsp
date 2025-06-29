@@ -27,7 +27,7 @@
                             </nav>
                         </div>
                     </div>
-                    <div class="row align-items-center" style="margin: 0 28%">
+                    <div class="row align-items-center" style="margin: 0 20%">
 
                         <div class="styles_choosePatient__kabkW">
                             <div class="ant-row">
@@ -57,7 +57,9 @@
 
                                                         <div class="card shadow-sm">
                                                             <c:if test="${not empty error && r.patientId == pId }"> <b style="display: inline-block;text-align: center;color: red">${requestScope.error}</b><br>
-                                                                Nếu bạn không có BHYT vui lòng chọn "Tôi không có thẻ BHYT" để tiếp tục.
+                                                                <span style="margin-left: 15px">Vui lòng "Cập nhật" thông tin để được áp dụng mức phí hỗ trợ theo quy định.</span><br>
+                                                                <span style="margin-left: 15px">Nếu bạn không có BHYT vui lòng chọn "Tôi không có thẻ BHYT" để tiếp tục.</span>
+                                                                
                                                             </c:if>
                                                             <div class="card-body">
 
@@ -91,6 +93,10 @@
                                                                     <li class="d-flex align-items-center margin5px">
                                                                         <i class="fa-solid fa-people-group text-info me-2" style="opacity: 0.5;min-width: 20px"></i>
                                                                         <span class="me-2 text-secondary" style="min-width: 100px;">Dân tộc:</span>
+                                                                        <c:if test="${empty r.getNation()}">
+                                                                            <strong>Chưa cập nhật</strong>
+                                                                        </c:if>
+                                                                            
                                                                         <strong>${r.getNation()}</strong>
                                                                     </li>
                                                                 </ul>
@@ -114,7 +120,7 @@
                                                                     </a>
                                                                     </c:if>
                                                                      <c:if test="${not empty error && r.patientId == pId }"> 
-                                                                       <a href="confirmInformation?patientId=${r.patientId}&isBHYT=0" class="btn btn-primary">
+                                                                       <a href="confirmInformation?patientId=${r.patientId}&isBHYT=1" class="btn btn-primary">
                                                                         Tôi không có thẻ BHYT <i class="fa-solid fa-arrow-right ms-1"></i>
                                                                     </a>
                                                                     </c:if>      

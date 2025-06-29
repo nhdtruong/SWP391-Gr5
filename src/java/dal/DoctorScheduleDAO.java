@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,6 +30,22 @@ public class DoctorScheduleDAO extends DBContext {
 
     PreparedStatement ps = null;
     ResultSet rs = null;
+    
+       public boolean checkDoctorHasSchedule(int doctorId) {
+        String sql = "SELECT 1 FROM doctor_schedule WHERE doctor_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false; 
+    }
+
 
     public int insertDoctorSchedule(int doctorId, Date date, int status) {
         String sql = "INSERT INTO doctor_schedule(doctor_id,working_date,status) VALUES (?, ?, ?)";

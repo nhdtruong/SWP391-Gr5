@@ -32,6 +32,12 @@
 
                             <div class="col-md-5 mb-4 row">
 
+
+                                <div class="col-md-4 mb-4" style="text-align: center">
+                                    <label for="doctor" class="form-label ">Nhập mã Bác sĩ:</label>
+
+                                </div>
+
                                 <div class="col-md-8">
                                     <div class="search-bar p-0 d-lg-block ms-2">                                                        
                                         <div id="search" class="menu-search mb-0">
@@ -54,11 +60,14 @@
                                 </div>
 
                             </c:if>
-
-                            <c:if test="${empty doctor }">
+                            <c:if test="${not empty error}">
                                 <div class="col-md-12 mb-4" style="text-align: center">
-                                    <label for="doctor" class="form-label ">Vui lòng nhập mã Bác sĩ</label>
-
+                                    <label for="doctor" class="form-label "> <span style="color: red; align-content: center;">${error}</span></label>
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty errorBs}">
+                                <div class="col-md-12 mb-4" style="text-align: center">
+                                    <label for="doctor" class="form-label "><span style="color: red; align-content: center;">${errorBs}</span></label>
                                 </div>
                             </c:if>
 
@@ -118,7 +127,7 @@
                                                         </div>
                                                     </c:forEach>
                                                 </div>
-                                                 <div><strong>Slot Tối</strong></div>
+                                                <div><strong>Slot Tối</strong></div>
                                                 <div class="row mb-2">
 
                                                     <c:forEach var="h" begin="18" end="21">
@@ -146,17 +155,17 @@
                             </div>
 
                             <div class="row mt-4 justify-content-center text-center">
-                                <!-- Nút Lưu mẫu -->
-                                <div class="col-12 mb-3">
-                                    <button type="submit" name="action" value="saveTemplate" class="btn btn-secondary px-4 py-2">Lưu mẫu</button>
-                                </div>
+                                <!--                                
+                                                                <div class="col-12 mb-3">
+                                                                    <button type="submit" name="action" value="saveTemplate" class="btn btn-secondary px-4 py-2">Lưu mẫu</button>
+                                                                </div>
+                                
+                                                               
+                                                                <div class="col-12 mb-3 fw-bold">
+                                                                    <span>HOẶC</span>
+                                                                </div>-->
 
-                                <!-- Chữ HOẶC -->
-                                <div class="col-12 mb-3 fw-bold">
-                                    <span>HOẶC</span>
-                                </div>
 
-                                <!-- Nút Lưu và áp dụng + chọn ngày -->
                                 <div class="col-md-8">
                                     <div class="mb-3">
                                         <button type="submit" name="action" value="saveAndApply" class="btn btn-primary px-4 py-2">Lưu và áp dụng ngay</button>
@@ -186,7 +195,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <script>
-                                                        
+
                                                         function toggleAllSlots(day) {
                                                             const checkAll = document.getElementById('checkAll_' + day);
                                                             const slots = document.querySelectorAll('.slot-' + day);
@@ -195,7 +204,7 @@
                                                             });
                                                         }
 
-                                                   
+
                                                         document.addEventListener("DOMContentLoaded", () => {
                                                             for (let day = 2; day <= 8; day++) {
                                                                 const checkAll = document.getElementById('checkAll_' + day);

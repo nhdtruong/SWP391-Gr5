@@ -30,7 +30,7 @@
                             <div class="p-4">
                                 <form action="user?action=update_image" method="POST" enctype="multipart/form-data">
                                     <h5 class="mb-0">Chỉnh sửa thông tin :</h5>
-                                    <div>
+<!--                                    <div>
                                         <p class="text-muted">Cập nhật ảnh đại diện.</p>
                                         <div id="myfileupload">
                                             <input type="file" name="image" id="uploadfile" name="ImageUpload" onchange="readURL(this);" />
@@ -46,7 +46,7 @@
                                                    value="Cập nhật">
                                             <p style="clear:both"></p>
                                         </div> 
-                                    </div>
+                                    </div>-->
                                 </form>
                                 <form action="updateprofile?action=updateInfor" method="POST">
                                     <label class="form-label"><span style="color: red; align-content: center;">${requestScope.error}</span></label>

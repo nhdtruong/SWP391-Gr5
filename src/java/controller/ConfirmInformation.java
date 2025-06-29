@@ -73,11 +73,14 @@ public class ConfirmInformation extends HttpServlet {
         }
        
         
-        String isBHYT = request.getParameter("isBHYT"); //  thay đổi mới có dòng này 
+        String isBHYT = request.getParameter("isBHYT"); //  thay đổi không còn muốn sử dụng bhyt mới có dòng này , tức là các trưgf hợp khác 
         if (isBHYT == null) { // đầu tiên vào là ko có request cho nên == null ,khác null tức là  = 0 thì chạy bình thường 
             isBHYT = (String) session.getAttribute("isBHYT");
-        }else{
-            session.setAttribute("isBHYT", isBHYT);
+        }else{ // tức là có thay đổi ở đây
+            session.setAttribute("changeY", "change");
+            session.setAttribute("patient", patient);
+            request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
+            return;
         }
         if (isBHYT.equals("0")) { // ko sử dụng bhyt => ko cần chek có hay ko 
             

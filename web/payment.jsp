@@ -21,7 +21,7 @@
                         <nav aria-label="breadcrumb" class="d-inline-block mt-3">
                             <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
                                 <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Xác nhận thông tin</a></li>
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn phương thức thanh toán</a></li>
                             </ul>
                         </nav>
                     </div>

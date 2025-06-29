@@ -130,6 +130,7 @@
 
                                                 </div>
                                             </c:if>
+                                            
                                             <div class="doctor-list-scroll">
                                                 <c:forEach var="doctor" items="${listDoctor}">
                                                     <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
@@ -222,8 +223,7 @@
                                                                         class="btn btn-primary btn-sm dkn"
                                                                         data-service-id="${s.service_id}"
                                                                         data-has-bhyt="${s.is_bhyt}">
-                                                                        Đặt khám ngay ${s.is_bhyt}
-                                                                        ${s.service_id}
+                                                                        Đặt khám ngay 
                                                                     </button>
                                                                 </td>
                                                             </tr>

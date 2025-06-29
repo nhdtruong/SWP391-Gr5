@@ -78,13 +78,19 @@
                                             <td>${sessionScope.doctorName}</td>
                                             <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
                                             <c:if test="${sessionScope.isBHYT == '0'}"><td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td></c:if>
-                                            <c:if test="${sessionScope.isBHYT == '1'}">
+                                            <c:if test="${sessionScope.isBHYT == '1' && empty sessionScope.changeY}">
                                                 <td>
                                                     <del>
                                                         <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
                                                     </del>
                                                     &nbsp;
                                                     <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount}" pattern="#,##0"/> đ
+                                                </td>
+                                            </c:if>
+
+                                            <c:if test="${sessionScope.isBHYT == '1' && not empty sessionScope.changeY }">
+                                                <td>
+                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
                                                 </td>
                                             </c:if>
                                             <td>

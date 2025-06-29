@@ -72,7 +72,7 @@
                                                 <th class="border-bottom p-3" >Họ tên</th>
                                                 <th class="border-bottom p-3" >Chuyên khoa</th>
                                                 <th class="border-bottom p-3" >Xem lịch chi tiết</th>
-                                                <th class="border-bottom p-3" >Sửa Lịch cố định</th>
+                                                
                                                 <th class="border-bottom p-3" >Xóa Lịch</th>
                                             </tr>
                                         </thead>
@@ -96,10 +96,6 @@
                                                         <a href="doctorScheduleDetail?doctorId=${d.getDoctor_id()}&doctorName=${d.getDoctor_name()}" class="btn btn-info">
                                                             Detail
                                                         </a>
-                                                    </td>
-
-                                                    <td class="p-3">
-                                                        <a href="updateDoctorSchedule?action=updateSchedule&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
                                                     </td>
 
                                                     <td class="p-3">

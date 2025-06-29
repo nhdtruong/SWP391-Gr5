@@ -26,8 +26,8 @@
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Áp dụng BHYT</label>
                                         <select name="is_bhyt" class="form-control">
-                                            <option value="1">Có</option>
-                                            <option value="0">Không</option>
+                                            <option value="1" ${service.is_bhyt == true ? 'selected' : ''}>Có</option>
+                                            <option value="0" ${service.is_bhyt == false ? 'selected' : ''}>Không</option>
                                         </select>
                                     </div>
 
@@ -113,7 +113,7 @@
             formatMoneyInput(feeDiscount);
 
             // Trước khi submit, xoá dấu chấm trong cả fee và discount
-           
+
             $(document).ready(function () {
                 $('#editors').trumbowyg();
             });

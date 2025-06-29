@@ -38,6 +38,12 @@ public class Doctor {
 
     private Set<Integer> workingWeekdays;
 
+    public Doctor(int doctor_id) {
+        this.doctor_id = doctor_id;
+    }
+
+    
+    
     public Doctor(int doctor_id, String doctor_name, String gender, Deparment department, String description, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String EducationHistory, Set<Integer> workingWeekdays) {
         this.doctor_id = doctor_id;
         this.doctor_name = doctor_name;
