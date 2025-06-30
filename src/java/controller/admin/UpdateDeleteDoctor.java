@@ -15,6 +15,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import model.AcademicDegree;
 import model.AcademicTitle;
@@ -69,19 +72,41 @@ public class UpdateDeleteDoctor extends HttpServlet {
         if (action.equals("update")) {
 
             String doctor_id = request.getParameter("doctor_id");
-            String doctor_name = request.getParameter("name");
+            String doctor_name = request.getParameter("name").trim();
             String gender = request.getParameter("gender");
             String phone = request.getParameter("phone");
             String DOB = request.getParameter("DOB");
-            String description = request.getParameter("description");
+            String description = request.getParameter("description").trim();
             String department_id = request.getParameter("department_id");
-            String EducationHistory = request.getParameter("EducationHistory");
-            String specialized = request.getParameter("specialized");
+            String EducationHistory = request.getParameter("EducationHistory").trim();
+            String specialized = request.getParameter("specialized").trim();
             String positionId = request.getParameter("positionId");
             String academicDegreeId = request.getParameter("academicDegreeId");
             String academicTitleId = request.getParameter("academicTitleId");
             String status = request.getParameter("status");
 
+            String oldImage = request.getParameter("oldImage");
+
+            Part filePart = request.getPart("newImage");
+            String newFileName;
+
+            if (filePart != null && filePart.getSize() > 0) {
+
+                String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+                newFileName = "assets/images/doctors/" + originalFileName;
+
+                String uploadPath = "D:/Doctris/NhomNam/web/assets/images/doctors";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                filePart.write(uploadPath + File.separator + originalFileName);
+            } else {
+
+                newFileName = oldImage;
+            }
             DoctorDAO d = new DoctorDAO();
             UserDAO udao = new UserDAO();
             String username = d.getUsernameByDoctorId(doctor_id);
@@ -89,7 +114,7 @@ public class UpdateDeleteDoctor extends HttpServlet {
 
             d.updateDoctor(Integer.parseInt(doctor_id), doctor_name,
                     gender, phone, DOB, description, Integer.parseInt(department_id), Integer.parseInt(status), specialized, EducationHistory,
-                    Integer.parseInt(positionId), Integer.parseInt(academicDegreeId), Integer.parseInt(academicTitleId));
+                    Integer.parseInt(positionId), Integer.parseInt(academicDegreeId), Integer.parseInt(academicTitleId), newFileName);
 
             response.sendRedirect("doctormanager?action=all");
 

@@ -61,8 +61,8 @@ public class LoginServerlet extends HttpServlet {
             request.setAttribute("password", password);
             String enPassWord = EncodeData.enCode(password);
 
-            // AccountUser account = dao.Login(username, enPassWord);
-            AccountUser account = dao.Login(username, password);
+             AccountUser account = dao.Login(username, enPassWord);
+            //AccountUser account = dao.Login(username, password);
             if (account == null) {
                 request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác");
                 request.getRequestDispatcher("login.jsp").forward(request, response);

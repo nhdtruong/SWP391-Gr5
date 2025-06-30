@@ -25,7 +25,7 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">                                               
                                                 <label class="form-label">Tên tài khoản <span class="text-danger">*</span> <span style="color: red; align-content: center;">${requestScope.errorTK}</span></label>
-                                                <input value="${requestScope.username}" type="text" oninvalid="CheckUserName(this);"  class="form-control" name="username" required="">
+                                                <input value="${requestScope.username}" type="text"  oninput="CheckUserName(this);" class="form-control" name="username" required="">
                                             </div>
                                         </div>
                                        
@@ -34,13 +34,13 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Email <span class="text-danger">*</span> <span style="color: red; align-content: center;">${requestScope.errorEM}</span></label> 
-                                            <input value="${requestScope.email}" type="email" oninvalid="CheckEmail(this);"  class="form-control" name="email" required="">
+                                            <input value="${requestScope.email}" type="email"  oninput="CheckEmail(this);" class="form-control" name="email" required="">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                                            <input value="${requestScope.password}" type="password"   oninvalid="CheckPassword(this);"  id="password"  class="form-control" name="password" required="">
+                                            <input value="${requestScope.password}" type="password"    oninput="CheckPassword(this);" id="password"  class="form-control" name="password" required="">
                                              
                                         </div>
                                             
@@ -48,7 +48,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3" style="position: relative">
                                             <label class="form-label">Nhập lại mật khẩu <span class="text-danger">*</span></label>
-                                            <input value="${requestScope.repassword}" type="password" oninvalid="CheckRePassword(this);" class="form-control" name="repassword" required="">
+                                            <input value="${requestScope.repassword}" type="password" oninput="CheckRePassword(this);" class="form-control" name="repassword" required="">
                                         </div>
                                     </div>
                                     <div class="col-md-12">

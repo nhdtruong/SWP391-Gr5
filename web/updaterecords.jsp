@@ -47,24 +47,24 @@
                                 <input type="hidden" name="patientId" value="${records.patientId}" />
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Họ và tên (có dấu)<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control hei" name="patientName" value="${records.patientName}" oninvalid="CheckFullName(this);"  oninput="CheckFullName(this);" required placeholder="Ví dụ: Dư Văn Huy">
+                                    <input type="text" class="form-control hei" name="patientName" value="${records.patientName}"  oninput="CheckFullName(this);" required placeholder="Ví dụ: Dư Văn Huy">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Số điện thoại<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control hei" name="phone" oninvalid="CheckPhone(this);" oninput="CheckPhone(this);" value="${records.phone}" required placeholder="Vui lòng nhập số điện thoại...">
+                                    <input type="text" class="form-control hei" name="phone"  oninput="CheckPhone(this);" value="${records.phone}" required placeholder="Vui lòng nhập số điện thoại...">
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Nghề nghiệp</label>
-                                    <input type="text" class="form-control hei" name="job" value="${records.job}" placeholder="Nghề nghiệp">
+                                    <input type="text" class="form-control hei" name="job" value="${records.job}" placeholder="Nghề nghiệp" oninput="CheckMaxLength200(this);">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Địa chỉ Email</label>
-                                    <input type="email" class="form-control hei" name="email" oninvalid="CheckEmail(this);" oninput="CheckEmail(this);" value="${records.email}" placeholder="Địa chỉ Email">
+                                    <input type="email" class="form-control hei" name="email"  oninput="CheckEmail(this);" value="${records.email}" placeholder="Địa chỉ Email">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Dân tộc</label>
-                                    <input type="text" class="form-control hei" name="nation" value="${records.nation}" placeholder="Dân tộc">
+                                    <input type="text" class="form-control hei" name="nation" value="${records.nation}" oninput="CheckMaxLength50(this);" placeholder="Dân tộc" >
                                 </div>
 
                             </div>
@@ -130,7 +130,7 @@
                             <div class="col-md-12">
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Địa chỉ theo CCCD<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control hei" name="address" value="${records.address}" required placeholder="Số nhà/Tên đường/Ấp thôn xóm( bao gồm tỉnh/thành, quận/huyện, phường/xã)">
+                                    <input type="text" class="form-control hei" name="address" value="${records.address}" oninput="CheckMaxLength200(this);" required placeholder="Số nhà/Tên đường/Ấp thôn xóm( bao gồm tỉnh/thành, quận/huyện, phường/xã)">
                                 </div>
                             </div>
                         </div>

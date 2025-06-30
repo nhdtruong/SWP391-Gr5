@@ -214,10 +214,10 @@
                                                             <span class="text-body" style="font-weight:600">Tiền khám</span>
                                                             <c:if test="${sessionScope.isBHYT == '0'}"><c:set var="feePay" value="${sessionScope.serviceBooking.fee}"/><span style="color:#11a2f3"> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</span></c:if>
                                                             <c:if test="${sessionScope.isBHYT == '1'}">
-                                                                <c:set var="feePay" value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount}"/>
+                                                                <c:set var="feePay" value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount * sessionScope.serviceBooking.fee}"/>
                                                                 <span style="color:#11a2f3">
 
-                                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount}" pattern="#,##0"/> đ
+                                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount * sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
                                                                 </span>
                                                             </c:if>
                                                         </div>

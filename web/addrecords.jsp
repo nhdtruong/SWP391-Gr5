@@ -46,24 +46,24 @@
                                 <input type="hidden" name="typeAddRecords" value="${typeAddRecords}" >
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Họ và tên (có dấu)<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control hei" name="patientName" value="${patientName}" oninvalid="CheckFullName(this);"  oninput="CheckFullName(this);" required placeholder="Ví dụ: Dư Văn Huy">
+                                    <input type="text" class="form-control hei" name="patientName" value="${patientName}"  oninput="CheckFullName(this);" required placeholder="Ví dụ: Dư Văn Huy">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Số điện thoại<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control hei" name="phone" oninvalid="CheckPhone(this);" oninput="CheckPhone(this);" value="${phone}" required placeholder="Vui lòng nhập số điện thoại...">
+                                    <input type="text" class="form-control hei" name="phone" " oninput="CheckPhone(this);" value="${phone}" required placeholder="Vui lòng nhập số điện thoại...">
                                 </div>
 
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Nghề nghiệp</label>
-                                    <input type="text" class="form-control hei" name="job" value="${job}" placeholder="Nghề nghiệp">
+                                    <input type="text" class="form-control hei" name="job" oninput="CheckMaxLength(this);" value="${job}" placeholder="Nghề nghiệp">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Địa chỉ Email</label>
-                                    <input type="email" class="form-control hei" name="email" oninvalid="CheckEmail(this);" oninput="CheckEmail(this);" value="${email}" placeholder="Địa chỉ Email">
+                                    <input type="email" class="form-control hei" name="email"  oninput="CheckEmail(this);" value="${email}" placeholder="Địa chỉ Email">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Dân tộc</label>
-                                    <input type="text" class="form-control hei" name="nation" value="${nation}" placeholder="Dân tộc">
+                                    <input type="text" class="form-control hei" name="nation" oninput="CheckMaxLength50(this);" value="${nation}" placeholder="Dân tộc">
                                 </div>
 
                             </div>
@@ -117,17 +117,17 @@
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label fw-bold">Mã định danh/CCCD/Passport<span class="text-danger">*</span> <span style="color: red; align-content: center;">${errorCCCD}</span></label>
-                                    <input type="text" class="form-control hei" name="cccd" oninput="CheckCCCD(this);" oninvalid="CheckCCCD(this);" value="${cccd}" required placeholder="Vui lòng nhập Mã định danh/CCCD/Passport">
+                                    <input type="text" class="form-control hei" name="cccd" oninput="CheckCCCD(this);"  value="${cccd}" required placeholder="Vui lòng nhập Mã định danh/CCCD/Passport">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Mã BHYT <span style="color: red; align-content: center;">${errorBHYT}</span></label>
-                                    <input type="text" class="form-control hei" name="bhyt" oninput="CheckBHYT(this);" oninvalid="CheckBHYT(this);" value="${bhyt}" placeholder="Mã bảo hiểm y tế">
+                                    <input type="text" class="form-control hei" name="bhyt" oninput="CheckBHYT(this);" value="${bhyt}" placeholder="Mã bảo hiểm y tế">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-4">
                                     <label class="form-label fw-bold">Địa chỉ theo CCCD<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control hei" name="address" value="${address}" required placeholder="Số nhà/Tên đường/Ấp thôn xóm( bao gồm tỉnh/thành, quận/huyện, phường/xã)">
+                                    <input type="text" class="form-control hei" name="address" oninput="CheckMaxLength200(this);" value="${address}" required placeholder="Số nhà/Tên đường/Ấp thôn xóm( bao gồm tỉnh/thành, quận/huyện, phường/xã)">
                                 </div>
                             </div>
                         </div>

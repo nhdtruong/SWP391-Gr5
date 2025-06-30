@@ -95,10 +95,11 @@ public class UpdateDoctorSchedule extends HttpServlet {
             }
             else if(action.equals("deleteSchedule")){
                 String doctorId = request.getParameter("doctorId");
+                System.out.println("xoas cai nay:"+doctorId);
                 DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-                DSD.deleteDoctorScheduleByDoctorId(Integer.parseInt(doctorId));
+               int x = DSD.deleteDoctorScheduleByDoctorId(Integer.parseInt(doctorId));
                 response.sendRedirect("doctorschedule?action=all");
-                return;
+                
             } 
            
             

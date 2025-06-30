@@ -280,7 +280,7 @@
                                                                    document.getElementById('serviceDescription').innerHTML = description?.trim() || 'Đang cập nhật';
                                                                    document.getElementById('serviceInsurance').innerText = bhyt;
                                                                    document.getElementById('serviceFee').innerText = parseFloat(fee).toLocaleString('vi-VN') + " VNĐ";
-                                                                   document.getElementById('serviceDiscount').innerText = parseFloat(discount).toLocaleString('vi-VN') + " VNĐ";
+                                                                   document.getElementById('serviceDiscount').innerText = (parseFloat(discount) * 100).toLocaleString('vi-VN') + "%";
                                                                    document.getElementById('servicePayment').innerText = payment;
 
                                                                    document.getElementById('serviceImage').src = img && img !== 'default'

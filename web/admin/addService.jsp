@@ -17,15 +17,14 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Tên dịch vụ<span class="text-danger">*</span></label>
-                                        <input type="text" name="service_name" class="form-control" required>
+                                        <input type="text" name="service_name"  oninput="CheckMaxLength200(this);" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Áp dụng BHYT<span class="text-danger">*</span></label>
-                                        <select name="is_bhyt" class="form-select">
+                                        <select name="is_bhyt" class="form-select" id="bhytSelect" onchange="toggleDiscountInput()">
                                             <option value="0">Không</option>
                                             <option value="1">Có</option>
-                                            
                                         </select>
                                     </div>
 
@@ -54,14 +53,22 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Phí (VND)<span class="text-danger">*</span></label>
-                                        <input type="text" id="feeInput" name="fee" value="0" class="form-control" oninput="CheckFee(this); CheckDiscount(document.getElementById('feeDiscount'))">
+                                        <input type="text" id="feeInput" name="fee" class="form-control" oninput="CheckFee(this);" placeholder="Nhập số tiền, ví dụ:100,000" required>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Giảm giá (VND)</label>
-                                        <input type="text" id ="feeDiscount" name="discount" class="form-control" value="0" oninput="CheckDiscount(this)">
+                                    <div class="col-md-1 mb-3">
+                                        <label class="form-label">Giảm giá (%)</label>
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" class="form-control me-1"
+                                                   id="feeDiscount" name="discount"
+                                                   min="0" max="100" step="1"
+                                                   oninput="CheckDiscountPercent(this)"
+                                                   placeholder="0 - 100" required disabled>
+                                            <span>%</span>
+                                        </div>
                                     </div>
-
+                                    <!-- hidden input để lưu tỷ lệ 0.x gửi về server -->
+                                    <input type="hidden" id="discount" name="discount" value="0" />
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Phương thức thanh toán<span class="text-danger">*</span></label>
                                         <select name="payment_type_id" class="form-select">
@@ -89,59 +96,106 @@
         <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
 
         <script>
-            // Format tiền khi nhập vào (giống 100000 → 100.000)
-            function formatMoneyInput(input) {
-                input.addEventListener('input', function () {
-                    let value = this.value.replace(/\D/g, ''); // chỉ giữ số
-                    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // thêm dấu chấm
-                });
-            }
-            const feeInput = document.getElementById('feeInput');
-            formatMoneyInput(feeInput);
+                                            // Format tiền khi nhập vào (giống 100000 → 100.000)
+                                            function formatMoneyInput(input) {
+                                                input.addEventListener('input', function () {
+                                                    let value = this.value.replace(/\D/g, ''); // chỉ giữ số
+                                                    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // thêm dấu chấm
+                                                });
+                                            }
+                                            const feeInput = document.getElementById('feeInput');
+                                            formatMoneyInput(feeInput);
 
-            // Format discount
-            const feeDiscount = document.getElementById('feeDiscount');
-            formatMoneyInput(feeDiscount);
+                                            // Format discount
+                                            const feeDiscount = document.getElementById('feeDiscount');
+                                            formatMoneyInput(feeDiscount);
 
-            $(document).ready(function () {
-                $('#editors').trumbowyg();
-            });
+                                            $(document).ready(function () {
+                                                $('#editors').trumbowyg();
+                                            });
 
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
+                                            function readURL(input) {
+                                                if (input.files && input.files[0]) {
+                                                    var reader = new FileReader();
 
-                    reader.onload = function (e) {
-                        const preview = document.getElementById('previewImage');
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            function CheckFee(text) {
-                const feeValue = text.value.replace(/,/g, ''); // bỏ dấu phẩy
-                const digitsOnly = feeValue.replace(/\D/g, ''); // chỉ lấy số
+                                                    reader.onload = function (e) {
+                                                        const preview = document.getElementById('previewImage');
+                                                        preview.src = e.target.result;
+                                                        preview.style.display = 'block';
+                                                    };
+                                                    reader.readAsDataURL(input.files[0]);
+                                                }
+                                            }
 
-                if (digitsOnly.length < 4) {
-                    text.setCustomValidity('Giá không hợp lệ!');
-                } else {
-                    text.setCustomValidity('');
-                }
-                return true;
-            }
-            function CheckDiscount(text) {
-                const discountValue = parseFloat(text.value.replace(/,/g, ''));
-                const feeInput = document.getElementById('feeInput');
-                const feeValue = parseFloat(feeInput.value.replace(/,/g, ''));
 
-                if (!isNaN(discountValue) && !isNaN(feeValue) && discountValue > feeValue) {
-                    text.setCustomValidity('Giảm giá không được lớn hơn phí!');
-                } else {
-                    text.setCustomValidity('');
-                }
-                return true;
-            }
+                                            function CheckFee(text) {
+
+                                                const feeValue = text.value.replace(/,/g, ''); // Xoá dấu phẩy ngăn cách số
+                                                const digitsOnly = feeValue.replace(/\D/g, ''); // Lấy phần chỉ chứa số
+
+                                                const feeNumber = parseInt(digitsOnly, 10);
+
+                                                if (digitsOnly.length < 4) {
+                                                    text.setCustomValidity('Giá không hợp lệ! Phải có ít nhất 4 chữ số.');
+                                                } else if (feeNumber > 999999999) {
+                                                    text.setCustomValidity('Số quá lớn.');
+                                                } else {
+                                                    text.setCustomValidity('');
+                                                }
+
+                                                return true;
+
+                                            }
+
+
+                                            function CheckDiscountPercent(percentInput) {
+                                                const value = percentInput.value.trim();
+                                                const percent = parseInt(value, 10);
+
+                                                if (!isNaN(percent) && percent >= 0 && percent <= 100) {
+                                                    percentInput.setCustomValidity('');
+                                                } else {
+                                                    percentInput.setCustomValidity('Giảm giá phải từ 0 đến 100 (%)');
+                                                }
+                                            }
+
+
+
+                                            function CheckMaxLength200(text) {
+                                                const value = text.value;
+
+                                                // Kiểm tra khoảng trắng ở đầu
+                                                if (/^\s/.test(value)) {
+                                                    text.setCustomValidity('Không được có khoảng trắng ở đầu.');
+                                                }
+                                                // Kiểm tra độ dài tối đa
+                                                else if (value.length > 200) {
+                                                    text.setCustomValidity("Vui lòng nhập không quá 200 ký tự.");
+                                                } else {
+                                                    text.setCustomValidity('');
+                                                }
+
+                                                text.reportValidity();
+                                                return true;
+                                            }
+
+                                            function toggleDiscountInput() {
+                                                const bhytSelect = document.getElementById("bhytSelect");
+                                                const discountInput = document.getElementById("feeDiscount");
+
+                                                if (bhytSelect.value === "1") {
+                                                    discountInput.disabled = false;
+                                                } else {
+                                                    discountInput.disabled = true;
+                                                    discountInput.value = ""; // Xóa giá trị nếu không áp dụng BHYT
+                                                }
+                                            }
+
+                                            // Nếu cần kích hoạt sẵn theo dữ liệu đã có
+                                            window.addEventListener("DOMContentLoaded", function () {
+                                                toggleDiscountInput();
+                                            });
+
 
         </script>
     </body>

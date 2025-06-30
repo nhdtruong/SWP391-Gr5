@@ -81,7 +81,12 @@ public class AddServiceController extends HttpServlet {
         String categoryServiceId = request.getParameter("category_service_id");
         String derpartmentId = request.getParameter("department_id");
         String fee = request.getParameter("fee").replace(",", "");
-        String discount = request.getParameter("discount").replace(",", "");
+        String discount_ = request.getParameter("discount");
+        double discount = 0;
+        if(discount_ != null){
+           discount =  Double.parseDouble(discount_)/100;
+        }
+        
         String paymentTypeId = request.getParameter("payment_type_id");
         String img = "default";
 
@@ -89,7 +94,7 @@ public class AddServiceController extends HttpServlet {
                 description,
                 Integer.parseInt(categoryServiceId),
                 Integer.parseInt(derpartmentId),
-                Double.parseDouble(fee), Double.parseDouble(discount),
+                Double.parseDouble(fee), discount,
                 Integer.parseInt(paymentTypeId), img);
 
         request.setAttribute("success", "success");

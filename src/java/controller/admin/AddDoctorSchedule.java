@@ -96,7 +96,7 @@ public class AddDoctorSchedule extends HttpServlet {
             int doctorId = dDAO.getDoctorIdByDoctorUsername(doctorUsername);
             
             if(DSD.checkDoctorHasSchedule(doctorId)){
-                request.setAttribute("error","Bác sĩ này đã có lịch làm việc!");
+                request.setAttribute("error","Bác sĩ "+  doctorUsername + " đã có lịch làm việc!");
                 request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
                 return;
             }

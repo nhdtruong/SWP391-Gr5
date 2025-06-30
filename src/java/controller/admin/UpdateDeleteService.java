@@ -70,15 +70,18 @@ public class UpdateDeleteService extends HttpServlet {
             String categoryServiceId = request.getParameter("category_service_id");
             String derpartmentId = request.getParameter("department_id");
             String fee = request.getParameter("fee").replace(",", "");
-            String discount = request.getParameter("discount").replace(",", "");
+            String discount_ = request.getParameter("discount");
             String paymentTypeId = request.getParameter("payment_type_id");
             String img = "default";
-
+            double discount = 0;
+            if (discount_ != null) {
+                discount = Double.parseDouble(discount_) / 100;
+            }
             serviceDAO.updateService(Integer.parseInt(serviceId), serviceName,
                     (Integer.parseInt(bhyt) == 1) ? true : false, description,
                     Integer.parseInt(categoryServiceId), Integer.parseInt(derpartmentId),
                     Double.parseDouble(fee),
-                    Double.parseDouble(discount), Integer.parseInt(paymentTypeId),
+                    discount, Integer.parseInt(paymentTypeId),
                     img);
 
             request.setAttribute("success", "success");

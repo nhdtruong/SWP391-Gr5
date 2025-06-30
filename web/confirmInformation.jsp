@@ -84,7 +84,7 @@
                                                         <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
                                                     </del>
                                                     &nbsp;
-                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount}" pattern="#,##0"/> đ
+                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount * sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
                                                 </td>
                                             </c:if>
 

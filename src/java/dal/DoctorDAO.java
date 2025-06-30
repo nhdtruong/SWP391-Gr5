@@ -697,9 +697,9 @@ public class DoctorDAO extends DBContext {
     }
 
     public void updateDoctor(int doctorId, String doctorName, String gender, String phone, String dob,
-            String description, int departmentId, int status, String specialized, String EducationHistory, int positionId, int academicDegreeId, int academicTitleId) {
+            String description, int departmentId, int status, String specialized, String EducationHistory, int positionId, int academicDegreeId, int academicTitleId,String img) {
         String sql = "UPDATE doctors SET doctor_name = ?, gender = ?, phone = ?, dob = ?, "
-                + "description = ?, deparment_id = ?,  status = ? ,specialized =?, EducationHistory =? ,position_id= ?,AcademicDegree_id=? ,AcademicTitle_id= ? WHERE doctor_id = ?";
+                + "description = ?, deparment_id = ?,  status = ? ,specialized =?, EducationHistory =? ,position_id= ?,AcademicDegree_id=? ,AcademicTitle_id= ? ,img = ? WHERE doctor_id = ?";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -716,7 +716,8 @@ public class DoctorDAO extends DBContext {
             ps.setInt(10, positionId);
             ps.setInt(11, academicDegreeId);
             ps.setInt(12, academicTitleId);
-            ps.setInt(13, doctorId);
+            ps.setString(13, img);
+            ps.setInt(14, doctorId);
             int rows = ps.executeUpdate();
 
         } catch (Exception e) {
