@@ -202,8 +202,9 @@
                                                     <thead class="">
                                                         <tr>
                                                             <th>#</th>
-                                                            <th style="width: 55%">Tên dịch vụ</th>
+                                                            <th style="width: 53%">Tên dịch vụ</th>
                                                             <th style="width: 17%">Giá tiền</th>
+                                                            <th style="width: 30%">Phương thức thanh toán</th>
                                                             <th style=""></th>
                                                         </tr>
                                                     </thead>
@@ -216,7 +217,12 @@
                                                                     <b>${s.service_name}</b>
                                                                     ${s.description}
                                                                 </td>
+                                                                
                                                                 <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
+                                                                <td>
+                                                                    <c:if test="${s.payment_type_id == 2}">Thanh toán online</c:if>
+                                                                    <c:if test="${s.payment_type_id == 1}">Thanh toán tại bệnh viện</c:if>
+                                                                </td>
                                                                 <td>
                                                                     <button 
                                                                         type="button"
@@ -230,7 +236,7 @@
 
                                                             <tr id="bhyt-row-${s.service_id}" class="bhyt-row d-none">
                                                                 <td></td>
-                                                                <td colspan="3">
+                                                                <td colspan="4">
                                                                     <div class="alert alert-info d-flex justify-content-between align-items-center">
                                                                         <strong>Dịch vụ có áp dụng BHYT. Bạn có đăng ký khám BHYT?</strong>
                                                                         <div>

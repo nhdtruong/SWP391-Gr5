@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import model.Slot;
 import model.WorkingDateSchedule;
 
@@ -30,22 +32,21 @@ public class DoctorScheduleDAO extends DBContext {
 
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
-       public boolean checkDoctorHasSchedule(int doctorId) {
+
+    public boolean checkDoctorHasSchedule(int doctorId) {
         String sql = "SELECT 1 FROM doctor_schedule WHERE doctor_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); 
+                return rs.next();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return false; 
+        return false;
     }
-
 
     public int insertDoctorSchedule(int doctorId, Date date, int status) {
         String sql = "INSERT INTO doctor_schedule(doctor_id,working_date,status) VALUES (?, ?, ?)";
@@ -199,6 +200,83 @@ public class DoctorScheduleDAO extends DBContext {
         return new ArrayList<>(workingMap.values());
     }
 
+    public List<List<WorkingDateSchedule>> getWorkingScheduleByWeek(int doctorId) {
+        String sql = "SELECT ds.working_date, ds.status, dss.slot_start, dss.slot_end "
+                + "FROM doctor_schedule ds "
+                + "JOIN doctor_schedule_slot dss ON ds.schedule_id = dss.schedule_id "
+                + "WHERE ds.doctor_id = ? "
+                + "ORDER BY ds.working_date, dss.slot_start";
+
+        Map<LocalDate, WorkingDateSchedule> dayMap = new TreeMap<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                LocalDate date = rs.getDate("working_date").toLocalDate();
+                int status = rs.getInt("status");
+                Time start = rs.getTime("slot_start");
+                Time end = rs.getTime("slot_end");
+
+                WorkingDateSchedule day = dayMap.get(date);
+                if (day == null) {
+                    day = new WorkingDateSchedule();
+                    day.setWorkingDate(Date.valueOf(date));
+                    day.setStatus(status);
+                    dayMap.put(date, day);
+                }
+
+                Slot slot = new Slot();
+                slot.setSlotStart(start);
+                slot.setSlotEnd(end);
+                day.getSlots().add(slot);
+            }
+
+            //  thêm ngày ko có lịch trong các tuần
+            if (!dayMap.isEmpty()) {
+                LocalDate first = dayMap.keySet().iterator().next();
+                LocalDate last = ((TreeMap<LocalDate, WorkingDateSchedule>) dayMap).lastKey();
+
+                // sủa về đầu tuần  và cuối tuần
+                first = first.with(DayOfWeek.MONDAY);
+                last = last.with(DayOfWeek.SUNDAY);
+               // thêm vào ngày trống 
+                for (LocalDate d = first; !d.isAfter(last); d = d.plusDays(1)) {
+                    dayMap.computeIfAbsent(d, date -> {
+                        WorkingDateSchedule empty = new WorkingDateSchedule();
+                        empty.setWorkingDate(Date.valueOf(date));
+                        empty.setStatus(-1); // không có lịch
+                        return empty;
+                    });
+                }
+            }
+
+            // nhóm theo tuần
+            List<List<WorkingDateSchedule>> result = new ArrayList<>();
+            List<WorkingDateSchedule> currentWeek = new ArrayList<>();
+
+            for (Map.Entry<LocalDate, WorkingDateSchedule> entry : dayMap.entrySet()) {
+                currentWeek.add(entry.getValue());
+                if (currentWeek.size() == 7) {
+                    result.add(currentWeek);
+                    currentWeek = new ArrayList<>();
+                }
+            }
+
+            // đề phòng thiếu nhưung mà khả năng là k 
+            if (!currentWeek.isEmpty()) {
+                result.add(currentWeek);
+            }
+
+            return result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public List<Date> getAllDaysWorkingInscheduleOfDoctor(int doctorId) {
         String sql = "SELECT DISTINCT working_date FROM doctor_schedule WHERE doctor_id = ? ORDER BY working_date";
         List<Date> dates = new ArrayList<>();
@@ -349,7 +427,7 @@ public class DoctorScheduleDAO extends DBContext {
             System.out.println(); // dòng trống giữa các ngày
         }
          */
-        System.out.println(d.getWorkingScheduleOfDoctor10Day(1));
+        System.out.println(d.getWorkingScheduleByWeek(1));
 
     }
 

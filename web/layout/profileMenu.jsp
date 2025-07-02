@@ -31,8 +31,8 @@
                 </c:if>
                 <c:if test="${sessionScope.user.getRole() == 5}">
                 <li class="navbar-item"><a href="records" class="navbar-link"><i class="ri-calendar-check-line align-middle navbar-icon"></i> Hồ sơ khám bệnh</a></li>
-                <li class="navbar-item"><a href="user?action=history&type=appointment" class="navbar-link"><i class="ri-calendar-check-line align-middle navbar-icon"></i> Lịch sử đặt lịch</a></li>
-                <li class="navbar-item"><a href="user?action=history&type=reservation" class="navbar-link"><i class="ri-calendar-check-line align-middle navbar-icon"></i> Lịch sử dịch vụ</a></li>
+                <li class="navbar-item"><a href="bills" class="navbar-link"><i class="ri-calendar-check-line align-middle navbar-icon"></i>Phiếu khám bệnh</a></li>
+               
                 </c:if>
         </ul>
     </div>

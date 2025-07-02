@@ -18,6 +18,16 @@
             <section class="bg-dashboard">
                 <div class="container" style="width: 1250px">
                     <div class="row justify-content-center">
+                        <div class="col-12" style="height: 80px;margin-right: -30px">
+                            <nav aria-label="breadcrumb" class="d-inline-block mt-3">
+                                <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
+                                    <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
+
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Hồ sơ khám bệnh</a></li>
+
+                                </ul>
+                            </nav>
+                        </div>
                         <jsp:include page="layout/profileMenu.jsp"/>
 
                         <div class="col-xl-8 col-lg-8 col-md-7 mt-4 pt-2 mt-sm-0 pt-sm-0" style="padding: 0 30px">
@@ -267,6 +277,17 @@
 
                                                                         var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
                                                                         myModal.show();
+                                                                    }
+
+                                                                    function openDeleteModal(name, id) {
+                                                                     
+                                                                        document.getElementById('deleteName').textContent = name;
+
+                                                                     
+                                                                        document.getElementById('deleteId').value = id;
+
+                                                                        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                                                                        deleteModal.show();
                                                                     }
     </script>
 

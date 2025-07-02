@@ -63,7 +63,7 @@ public class VnpayReturn extends HttpServlet {
             String signValue = Config.hashAllFields(fields);
             if (signValue.equals(vnp_SecureHash)) {
 
-                String txnRef = request.getParameter("vnp_TxnRef");           // mã đơn hàng bạn đã sinh
+                String txnRef = request.getParameter("vnp_TxnRef");           // mã đơn hàng  đã sinh
                 String amountStr = request.getParameter("vnp_Amount");        // số tiền * 100 (VNPay quy định)
                 double amount = Double.parseDouble(amountStr) / 100.0;
                 String vnp_TransactionNo = request.getParameter("vnp_TransactionNo");

@@ -36,7 +36,6 @@ public class AppointmentManager extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         String url = null;
         AppointmentDAO  appointmentDao = new AppointmentDAO();
@@ -55,11 +54,11 @@ public class AppointmentManager extends HttpServlet {
                 url = "appointmentManager?action=search&text="+text;
             }else if (action.equals("filter")){
                  String status = request.getParameter("status");
-
+                 String paymentStatus = request.getParameter("paymentStatus");
                 request.setAttribute("status", status);
-
-                listAppointment = appointmentDao.getAllAppointmentsFilterStatus(status);
-                url = "appointmentManager?action=filter&status="+status;
+                request.setAttribute("paymentStatus", paymentStatus);
+                listAppointment = appointmentDao.getAppointmentsByFilter(status, paymentStatus);
+                url = "appointmentManager?action=filter&status="+status+"&paymentStatus="+paymentStatus;
             }
             
             if (listAppointment!= null) {

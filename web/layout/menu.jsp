@@ -147,6 +147,7 @@
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 5}">
                                             <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user me-1"></i> Tài khoản của tôi</a>
+                                             <a class="dropdown-item text-dark" href="bills"><i class="uil uil-user me-1"></i> Phiếu khám bệnh</a>
                                         </c:when>
                                     </c:choose>
 
@@ -178,10 +179,10 @@
                                 <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
                                 <li><a href="#" class="sub-menu-item">Gọi video với bác sĩ</a></li>
                                 <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
-                                <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
+<!--                                <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
                                 <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
                                 <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
-                                <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>
+                                <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>-->
 
                             </ul>
                         </li>

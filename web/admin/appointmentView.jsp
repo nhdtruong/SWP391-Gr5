@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-3 row">
                                 <div class="col-md-4">
-                                    <h5 class="mb-0">Doctor</h5>
+                                    <h5 class="mb-0">Appointment</h5>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="search-bar p-0 d-lg-block ms-2">                                                        
@@ -43,50 +43,63 @@
                                     <div class=" justify-content-md-end row">
 
 
-                                        <div class="col-md-3 row align-items-center">
+                                        <div class="col-md-5 row align-items-center">
                                             <div class="col-md-5" style="text-align: end">
                                                 <label  class="form-label">Trạng thái</label>
                                             </div>
                                             <div class="col-md-7">
                                                 <select name="status" class="form-select">
                                                     <option <c:if test="${status == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                    <option <c:if test="${status == '1'}"> selected </c:if> value="1">Đã đặt</option>
-                                                    <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã xác nhận</option>
-                                                    <option <c:if test="${status == '3'}"> selected </c:if> value="3">Đang chờ</option>
-                                                    <option <c:if test="${status == '4'}"> selected </c:if> value="4">Đã hoàn tất</option>
-                                                    <option <c:if test="${status == '5'}"> selected </c:if> value="5">Đã hủy</option>
-                                                    <option <c:if test="${status == '0'}"> selected </c:if> value="0">Hủy</option>
+                                                    <option <c:if test="${status == '1'}"> selected </c:if> value="1">Đã đặt lịch</option>                                       
+                                                    <option <c:if test="${status == '0'}"> selected </c:if> value="0">Đã hủy lịch</option>
+                                                    <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã khám</option>
+                                                    <option <c:if test="${status == '3'}"> selected </c:if> value="3">Yêu cầu hủy lịch</option>
                                                     </select>  
                                                 </div>
                                             </div>
-                                        <div class="col-md-1 md-0">
-                                            <button type="submit" class="btn btn-primary">Lọc</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-1">
-                                <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
-                            </div>                         
-                        </div>
+                                            <div class="col-md-5 row align-items-center">
+                                                <div class="col-md-5" style="text-align: end">
+                                                    <label  class="form-label">Trạng thái thanh toán</label>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <select name="paymentStatus" class="form-select">
+                                                        <option <c:if test="${paymentStatus == 'all'}"> selected </c:if> value="all">Tất cả</option>
+                                                    <option <c:if test="${paymentStatus == 'success'}"> selected </c:if> value="success">Đã thanh toán</option>
+                                                    <option <c:if test="${paymentStatus == 'pending'}"> selected </c:if> value="pending">Chưa thanh toán</option>
+                                                    <option <c:if test="${paymentStatus == 'refunded'}"> selected </c:if> value="refunded">Đã hoàn tiền</option>
 
-                        <div class="row">
-                            <div class="col-12 mt-4">
-                                <div class="table-responsive bg-white shadow rounded">
-                                    <table class="table mb-0 table-center" style="text-align: center">
-                                        <thead>
-                                            <tr>                          
-                                                <th class="border-bottom p-3" >STT</th>
-                                                <th class="border-bottom p-3" >Bác sĩ</th>                                        
-                                                <th class="border-bottom p-3" >Bệnh nhân</th>
-                                                <th class="border-bottom p-3" >Dịch vụ</th>
-                                                <th class="border-bottom p-3" >Ngày hẹn</th>
-                                                <th class="border-bottom p-3" >Giờ hẹn</th>
-                                                <th class="border-bottom p-3" >Trạng thái</th>
-                                                <th class="border-bottom p-3" >Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                                    </select>  
+                                                </div>
+                                            </div>      
+                                            <div class="col-md-1 md-0">
+                                                <button type="submit" class="btn btn-primary">Lọc</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-1">
+                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
+                                </div>                         
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mt-4">
+                                    <div class="table-responsive bg-white shadow rounded">
+                                        <table class="table mb-0 table-center" style="text-align: center">
+                                            <thead>
+                                                <tr>                          
+                                                    <th class="border-bottom p-3" >STT</th>
+                                                    <th class="border-bottom p-3" >Bác sĩ</th>                                        
+                                                    <th class="border-bottom p-3" >Bệnh nhân</th>
+                                                    <th class="border-bottom p-3" >Dịch vụ</th>
+                                                    <th class="border-bottom p-3" >Ngày hẹn</th>
+                                                    <th class="border-bottom p-3" >Giờ hẹn</th>
+                                                    <th class="border-bottom p-3" >Trạng thái</th>
+                                                    <th class="border-bottom p-3" >Trạng thái thanh toán</th>
+                                                    <th class="border-bottom p-3" >Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                             <c:if test="${empty Appointment}">
                                                 <tr>
                                                     <td colspan="6" class="text-center text-danger p-3">
@@ -103,23 +116,54 @@
                                                     <td class="p-3">${a.serviceName}</td>
                                                     <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/></td>
                                                     <td class="p-3"><fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> </td>
-                                                    <c:if test="${a.getStatus() == 1}">
-                                                        <td class="p-3" style="color: green">Active</td>
-                                                    </c:if>
-                                                    <c:if test="${d.getStatus() == 0}">
-                                                        <td class="p-3" style="color: red">Disable</td>
-                                                    </c:if>
-                                                    <c:if test="${d.getStatus() ==  2}">
-                                                        <td class="p-3" style="color: yellow">Wait</td>
-                                                    </c:if>   
                                                     <td class="p-3">
-                                                        
+                                                        <c:choose>
+                                                            <c:when test="${a.status == 1}">
+                                                                <span style="color: green;">Đã đặt</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 0}">
+                                                                <span style="color: red;">Đã hủy</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 2}">
+                                                                <span style="color: goldenrod;">Đã khám</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 3}">
+                                                                <span style="color: orange;">Yêu cầu hủy lịch</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span style="color: gray;">Không xác định</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>   
+                                                    <td class="p-3">
+                                                        <c:choose>
+                                                            <c:when test="${a.paymentStatus == 'pending'}">
+                                                                <span style="color: gray;">Chưa thanh toán</span>
+                                                            </c:when>
+                                                            <c:when test="${a.paymentStatus == 'success'}">
+                                                                <span style="color: green;">Đã thanh toán</span>
+                                                            </c:when>
+                                                            <c:when test="${a.paymentStatus == 'refunded'}">
+                                                                <span style="color: blue;">Đã hoàn tiền</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span style="color: darkred;">Không rõ</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
 
-                                                        <a href="updatedoctor?action=updateDoc&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
+                                                    <td class="p-3">
 
-                                                        <a href="#" class="btn btn-danger"
-                                                           onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
-                                                            Delete
+
+                                                        <a href="updateAppoitment?action=updateAppointment&appointmentId=${a.appointmentId}" class="btn btn-primary" title="Sửa bác sĩ">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </a>
+
+                                                        <!-- Nút xóa -->
+                                                        <a href="#" class="btn btn-danger" 
+                                                           onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')" 
+                                                           title="Xóa bác sĩ">
+                                                            <i class="fa-solid fa-trash"></i>
                                                         </a>
                                                     </td>
 
@@ -187,6 +231,8 @@
                 <jsp:include page="../admin/layout/footer.jsp"/>
             </main>
         </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
