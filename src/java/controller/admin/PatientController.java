@@ -81,6 +81,7 @@ public class PatientController extends HttpServlet {
         Patient patient = patientDAO.getPatientById(id);
         request.setAttribute("patient", patient);
         patient.setImg(patientDAO.getImgByPatientid(patient.getPatientId()));
+        
         request.getRequestDispatcher("admin/patientdetail.jsp").forward(request, response);
     }
 
