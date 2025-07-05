@@ -23,17 +23,17 @@
                 <div class="container-fluid">
                     <div class="layout-specing">
 
-                        <div class="row">
+                        <div class="row" style="justify-content: space-between">
                             <div class="col-md-12 mb-4" style="text-align: center">
                                 <label for="doctor" class="form-label ">Tạo lịch làm việc </label>
 
                             </div>
 
 
-                            <div class="col-md-5 mb-4 row">
+                            <div class="col-md-5  row">
 
 
-                                <div class="col-md-4 mb-4" style="text-align: center">
+                                <div class="col-md-4 " style="text-align: center">
                                     <label for="doctor" class="form-label ">Nhập mã Bác sĩ:</label>
 
                                 </div>
@@ -46,6 +46,32 @@
                                                     <input type="text" class="form-control border rounded-pill" name="doctorUsername" id="s" placeholder="Nhập mã bác sĩ để tìm kiếm">
                                                     <input type="submit" id="searchsubmit" value="Search">
                                                 </div>
+                                            </form>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4 row">
+
+
+                                <div class="col-md-4 mb-4" style="text-align: center">
+                                    <label for="doctor" class="form-label ">Bác sĩ chưa có lịch:</label>
+                                </div>
+
+                                <div class="col-md-8">
+                                    <div class="search-bar p-0 d-lg-block ms-2">                                                        
+                                        <div id="search" class="menu-search mb-0">
+                                            <form action="adddoctorschedule?actionform=selectDoctor" method="POST" id="searchform" >
+                                                <select name="doctorId" class="form-select" onchange="this.form.submit()">
+                                                    <option value="">-- Chọn bác sĩ --</option>
+
+                                                    <c:forEach var="d" items="${listD}">
+                                                        <option value="${d.doctor_id}" ${d.doctor_id == selectedDoctorId ? 'selected' : ''}>
+                                                            ${d.doctor_name}
+                                                        </option>
+                                                    </c:forEach>
+
+                                                </select>
                                             </form>
                                         </div>
                                     </div> 
@@ -130,7 +156,7 @@
                                                 <div><strong>Slot Tối</strong></div>
                                                 <div class="row mb-2">
 
-                                                    <c:forEach var="h" begin="18" end="21">
+                                                    <c:forEach var="h" begin="19" end="22">
                                                         <div class="col-md-3">
                                                             <div class="form-check">
                                                                 <input class="form-check-input slot-" type="checkbox"
@@ -147,7 +173,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Mỗi 2 thẻ thì xuống dòng -->
+
                                     <c:if test="${loop.index % 2 == 1}">
                                     </div><div class="row">
                                     </c:if>
@@ -155,20 +181,12 @@
                             </div>
 
                             <div class="row mt-4 justify-content-center text-center">
-                                <!--                                
-                                                                <div class="col-12 mb-3">
-                                                                    <button type="submit" name="action" value="saveTemplate" class="btn btn-secondary px-4 py-2">Lưu mẫu</button>
-                                                                </div>
-                                
-                                                               
-                                                                <div class="col-12 mb-3 fw-bold">
-                                                                    <span>HOẶC</span>
-                                                                </div>-->
+
 
 
                                 <div class="col-md-8">
                                     <div class="mb-3">
-                                        <button type="submit" name="action" value="saveAndApply" class="btn btn-primary px-4 py-2">Lưu và áp dụng ngay</button>
+                                        <button type="submit" class="btn btn-primary px-4 py-2">Lưu và áp dụng ngay</button>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
@@ -218,37 +236,84 @@
                                                             }
                                                         });
 
+                                                        let allowSubmit = false;
+                                                        let clickedButton = null;
+
+                                                     
+                                                        document.querySelectorAll('#scheduleForm button[type="submit"]').forEach(button => {
+                                                            button.addEventListener('click', function () {
+                                                                clickedButton = this;
+                                                            });
+                                                        });
+
                                                         document.getElementById('scheduleForm').addEventListener('submit', function (e) {
-                                                            const action = e.submitter?.value;
+                                                            if (allowSubmit)
+                                                                return; // Nếu đã xác nhận thì cho phép gửi luôn
+
+                                                            const action = clickedButton?.textContent?.trim(); // lấy nội dung nút
                                                             const startDateInput = document.getElementById('startDate');
                                                             const endDateInput = document.getElementById('endDate');
 
                                                             const startDate = startDateInput.value;
                                                             const endDate = endDateInput.value;
 
-                                                            if (action === 'saveAndApply') {
-                                                                if (!startDate || !endDate) {
-                                                                    e.preventDefault();
-                                                                    alert("Vui lòng chọn cả 'Từ ngày' và 'Đến ngày'.");
-                                                                    return;
-                                                                }
+                                                   
+                                                            if (!startDate || !endDate) {
+                                                                e.preventDefault();
+                                                                alert("Vui lòng chọn cả 'Từ ngày' và 'Đến ngày'.");
+                                                                return;
+                                                            }
 
-                                                                const start = new Date(startDate);
-                                                                const end = new Date(endDate);
+                                                            const start = new Date(startDate);
+                                                            const end = new Date(endDate);
 
-                                                                if (end < start) {
-                                                                    e.preventDefault();
-                                                                    alert("'Đến ngày' phải lớn hơn hoặc bằng 'Từ ngày'.");
-                                                                }
+                                                   
+                                                            if (end < start) {
+                                                                e.preventDefault();
+                                                                alert("'Đến ngày' phải lớn hơn hoặc bằng 'Từ ngày'.");
+                                                                return;
+                                                            }
+
+                                                            //  số giờ đã chọn
+                                                            const checkboxes = document.querySelectorAll('input[type="checkbox"][name^="day_"]:checked');
+                                                            const totalHours = checkboxes.length;
+
+                                                            if (totalHours > 48) {
+                                                                e.preventDefault(); // Dừng gửi tạm thời
+
+                                                                const warning = document.getElementById('hourWarning');
+                                                                warning.textContent = "Tổng số giờ làm việc bạn đã chọn là " + totalHours + " giờ, vượt quá giới hạn 48 giờ/tuần. Bạn có chắc chắn muốn tiếp tục không?";
+
+                                                                const modal = document.getElementById('confirmModal');
+                                                                modal.style.display = 'block';
+
+                                                                document.getElementById('confirmYes').onclick = function () {
+                                                                    modal.style.display = 'none';
+                                                                    allowSubmit = true;
+                                                                    document.getElementById('scheduleForm').submit(); // Gửi lại form
+                                                                };
+
+                                                                document.getElementById('confirmNo').onclick = function () {
+                                                                    modal.style.display = 'none';
+                                                                    allowSubmit = false;
+                                                                };
+
+                                                                return;
                                                             }
                                                         });
+
+
         </script>
 
 
 
         <style>
             /* Tông màu chủ đạo: xanh dương nhẹ và trắng */
-
+            .modal button {
+                margin: 10px;
+                padding: 8px 16px;
+                font-weight: bold;
+            }
             .card {
                 border: 1px solid #cce5ff;
                 border-radius: 12px;
@@ -300,7 +365,15 @@
             }
         </style>
 
-
+        <div id="confirmModal" style="display: none; position: fixed; top: 0; left: 0;
+             width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
+            <div style="background: white; padding: 20px; border-radius: 10px; width: 400px;
+                 margin: 150px auto; text-align: center;">
+                <p id="hourWarning" class="mb-3"></p>
+                <button id="confirmYes" class="btn btn-success me-2">Tiếp tục</button>
+                <button id="confirmNo" class="btn btn-danger">Hủy</button>
+            </div>
+        </div>
     </body>
 
 </html>

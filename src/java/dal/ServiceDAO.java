@@ -2,6 +2,7 @@ package dal;
 
 import context.DBContext;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class ServiceDAO extends DBContext {
         }
     }
 
+    
+    
     public CategoryServices getCategoryServiceByCategorySrvicId(int id) {
 
         String sql = "select c.category_service_id,c.name ,c.img from category_service c where c.category_service_id = ?";
@@ -248,34 +251,41 @@ public class ServiceDAO extends DBContext {
         return null;
     }
 
-    public void addService(String service_name, boolean bhyt, String description, int category_service_id, int department_id, double fee, double discount, int payment_type_id, String img) {
-        String sql = "INSERT INTO [service] ( service_name, is_bhyt, description, category_service_id, "
-                + "department_id, fee, discount, payment_type_id ,img) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(sql);
+    public int addService(String service_name, boolean bhyt, String description, int category_service_id,
+            int department_id, double fee, double discount, int payment_type_id, String img) {
+        String sql = "INSERT INTO [service] (service_name, is_bhyt, description, category_service_id, "
+                + "department_id, fee, discount, payment_type_id, img) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, service_name);
             ps.setBoolean(2, bhyt);
             ps.setString(3, description);
             ps.setInt(4, category_service_id);
-            ps.setInt(5, department_id);
+
+            if (department_id == 0) {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(5, department_id);
+            }
+
             ps.setDouble(6, fee);
             ps.setDouble(7, discount);
             ps.setInt(8, payment_type_id);
             ps.setString(9, img);
-            ps.executeUpdate();
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
+        return -1;
     }
 
     public void updateService(int serviceId, String service_name, boolean bhyt, String description, int category_service_id, int department_id, double fee, double discount, int payment_type_id, String img) {
@@ -289,7 +299,12 @@ public class ServiceDAO extends DBContext {
             ps.setBoolean(2, bhyt);
             ps.setString(3, description);
             ps.setInt(4, category_service_id);
-            ps.setInt(5, department_id);
+            if (department_id == 0) {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(5, department_id);
+            }
+
             ps.setDouble(6, fee);
             ps.setDouble(7, discount);
             ps.setInt(8, payment_type_id);
@@ -400,7 +415,7 @@ public class ServiceDAO extends DBContext {
 
     public static void main(String[] args) {
         ServiceDAO sdao = new ServiceDAO();
-    
+
         System.out.println(sdao.getAllServices());
         System.out.println(sdao.getAllCategories());
         System.out.println(sdao.getAllDepartments());

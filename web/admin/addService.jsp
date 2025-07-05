@@ -35,7 +35,7 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Thể loại<span class="text-danger">*</span></label>
-                                        <select name="category_service_id" class="form-select">
+                                        <select name="category_service_id" class="form-select" id="categoryServiceSelect">
                                             <c:forEach items="${category}" var="cat">
                                                 <option value="${cat.id}">${cat.name}</option>
                                             </c:forEach>
@@ -43,10 +43,25 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Khoa<span class="text-danger">*</span></label>
+                                        <label class="form-label">Chuyên khoa<span class="text-danger">*</span></label>
                                         <select class="form-select" name="department_id" id="department">
+                                            <!-- Option mặc định -->
+                                            <option value="0">Không</option>
+
                                             <c:forEach var="d" items="${department}">
-                                                <option  value="${d.id}">${d.department_name}</option>
+                                                <option value="${d.id}">${d.department_name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <div id="doctorListDiv" style="display: none;" class="col-md-12 mt-3">
+                                        <label class="form-label">Chọn bác sĩ thực hiện dịch vụ Gọi video:</label>
+                                        <select name="doctorId" class="form-select">
+                                            <option value="">-- Chọn bác sĩ --</option>
+                                            <c:forEach var="doc" items="${listDoc}">
+                                                <option value="${doc.doctor_id}">
+                                                    ${doc.doctor_name} - (${doc.department.department_name})
+                                                </option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -135,8 +150,8 @@
 
                                                 const feeNumber = parseInt(digitsOnly, 10);
 
-                                                if (digitsOnly.length < 4) {
-                                                    text.setCustomValidity('Giá không hợp lệ! Phải có ít nhất 4 chữ số.');
+                                                if (digitsOnly < 0) {
+                                                    text.setCustomValidity('Giá không hợp lệ! Phải lớn hơn 0.');
                                                 } else if (feeNumber > 999999999) {
                                                     text.setCustomValidity('Số quá lớn.');
                                                 } else {
@@ -187,15 +202,28 @@
                                                     discountInput.disabled = false;
                                                 } else {
                                                     discountInput.disabled = true;
-                                                    discountInput.value = ""; // Xóa giá trị nếu không áp dụng BHYT
+                                                    discountInput.value = ""; // nếu không áp dụng BHYT
                                                 }
                                             }
 
-                                            // Nếu cần kích hoạt sẵn theo dữ liệu đã có
+
                                             window.addEventListener("DOMContentLoaded", function () {
                                                 toggleDiscountInput();
                                             });
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                const categorySelect = document.getElementById('categoryServiceSelect');
+                                                const doctorListDiv = document.getElementById('doctorListDiv');
 
+                                                categorySelect.addEventListener('change', function () {
+                                                    if (this.value === '2') {
+                                                        doctorListDiv.style.display = 'block';
+                                                    } else {
+                                                        doctorListDiv.style.display = 'none';
+
+                                                        doctorListDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                                                    }
+                                                });
+                                            });
 
         </script>
     </body>

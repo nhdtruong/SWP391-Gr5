@@ -9,7 +9,7 @@
     <body>
         <jsp:include page="layout/menu_white.jsp"/>
          
-        <section class="bg-half-180 d-table w-100" style="background: url('assets/images/bg/banner2.png') center;">
+        <section class="bg-half-150 d-table w-100" style="background: url('assets/images/bg/banner2.png') center;">
             
             <div class="container">
                 <div class="row mt-5 mt-lg-0">
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </section>
-        <section class="bg-half-50 bg-light d-table w-100" >
+        <section class=" bg-light d-table w-100" >
             <div class="container">
                 <div class="row mt-5 justify-content-center">
                     <div class="col-12">

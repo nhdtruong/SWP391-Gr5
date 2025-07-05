@@ -6,6 +6,8 @@ package controller.admin;
 
 import dal.CategoryServiceDAO;
 import dal.DepartmentDAO;
+import dal.DoctorDAO;
+import dal.DoctorServiceDAO;
 import dal.QualificationDAO;
 import dal.ServiceDAO;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import model.AcademicDegree;
 import model.AcademicTitle;
 import model.CategoryServices;
 import model.Deparment;
+import model.Doctor;
 import model.Position;
 
 /**
@@ -40,13 +43,16 @@ public class AddServiceController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         DepartmentDAO deDao = new DepartmentDAO();
+        DoctorDAO doctorDAO = new DoctorDAO();
         CategoryServiceDAO caDao = new CategoryServiceDAO();
         List<Deparment> listDe = deDao.getAllDeparment();
         List<CategoryServices> listCa = caDao.getAllCategoryServiceses();
+        List<Doctor> listDoc = doctorDAO.getDoctorsNotInCategory(2);
+        request.setAttribute("listDoc", listDoc);
         request.setAttribute("category", listCa);
         request.setAttribute("department", listDe);
         request.getRequestDispatcher("admin/addService.jsp").forward(request, response);
@@ -82,21 +88,27 @@ public class AddServiceController extends HttpServlet {
         String derpartmentId = request.getParameter("department_id");
         String fee = request.getParameter("fee").replace(",", "");
         String discount_ = request.getParameter("discount");
-        double discount = 0;
-        if(discount_ != null){
-           discount =  Double.parseDouble(discount_)/100;
-        }
-        
         String paymentTypeId = request.getParameter("payment_type_id");
         String img = "default";
+        
+         double discount = 0;
+        if (discount_ != null) {
+            discount = Double.parseDouble(discount_) / 100;
+        }
 
-        serviceDAO.addService(serviceName, (Integer.parseInt(bhyt) == 1) ? true : false,
+       int serviceId =  serviceDAO.addService(serviceName, (Integer.parseInt(bhyt) == 1) ? true : false,
                 description,
                 Integer.parseInt(categoryServiceId),
                 Integer.parseInt(derpartmentId),
                 Double.parseDouble(fee), discount,
                 Integer.parseInt(paymentTypeId), img);
-
+        if(categoryServiceId.equals("2")){
+            
+            String doctorId = request.getParameter("doctorId");
+            DoctorServiceDAO doctorServiceDAO = new DoctorServiceDAO();
+            doctorServiceDAO.addDoctorToService(Integer.parseInt(doctorId),serviceId);
+            
+        }
         request.setAttribute("success", "success");
         request.getRequestDispatcher("servicemanager?action=all").forward(request, response);
     }

@@ -106,7 +106,7 @@
                     <ul class="dropdown-menu1"> 
                         <li><a href="specialty" class="sub-menu-item">Đặt khám chuyên khoa</a></li>
                         <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
-                        <li><a href="#" class="sub-menu-item">Gọi video với bác sĩ</a></li>
+                        <li><a href="callVideoWithDoctor" class="sub-menu-item">Gọi video với bác sĩ</a></li>
                         <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
 <!--                        <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
                         <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>

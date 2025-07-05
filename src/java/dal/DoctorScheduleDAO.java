@@ -413,8 +413,8 @@ public class DoctorScheduleDAO extends DBContext {
             
         }
          */
- /*
-        List<WorkingDateSchedule> schedules = d.getWorkingScheduleOfDoctor10Day(6);
+
+        List<WorkingDateSchedule> schedules = d.getWorkingScheduleOfDoctor10Day(5);
         for (WorkingDateSchedule day : schedules) {
             System.out.println("Ngày: " + day.getWorkingDate() + " | Trạng thái: " + day.getStatus());
 
@@ -426,8 +426,8 @@ public class DoctorScheduleDAO extends DBContext {
 
             System.out.println(); // dòng trống giữa các ngày
         }
-         */
-        System.out.println(d.getWorkingScheduleByWeek(1));
+        
+       // System.out.println(d.getWorkingScheduleByWeek(1));
 
     }
 

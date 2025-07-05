@@ -86,18 +86,18 @@ public class AddRecords extends HttpServlet {
             return;
         }
         String typeAddRecords = request.getParameter("typeAddRecords");
-        String patientName = request.getParameter("patientName");
+        String patientName = request.getParameter("patientName").trim();
         String gender = request.getParameter("gender");
         String year = request.getParameter("year");
         String month = request.getParameter("month");
         String day = request.getParameter("day");
-        String job = request.getParameter("job");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String bhyt = request.getParameter("bhyt");
-        String nation = request.getParameter("nation");
-        String cccd = request.getParameter("cccd");
-        String address = request.getParameter("address");
+        String job = request.getParameter("job").trim();
+        String phone = request.getParameter("phone").trim();
+        String email = request.getParameter("email").trim();
+        String bhyt = request.getParameter("bhyt").trim();
+        String nation = request.getParameter("nation").trim();
+        String cccd = request.getParameter("cccd").trim();
+        String address = request.getParameter("address").trim();
         String dobStr = year + "-" + month + "-" + day;
         Date dob = Date.valueOf(dobStr);
         request.setAttribute("patientName", patientName);
@@ -114,26 +114,26 @@ public class AddRecords extends HttpServlet {
         request.setAttribute("address", address);
         request.setAttribute("typeAddRecords", typeAddRecords);
 
-        if (bhyt.trim().isEmpty()) {
+        if (bhyt.trim().isEmpty()) { // nếu mà không có bhyt thì kiểm tra có cccd ko
             Boolean isCCCD = pDAO.isCCCDExists(cccd);
             if (isCCCD) {
                 request.setAttribute("errorCCCD", "Mã định danh đã tồn tại trên hệ thống.");
                 request.getRequestDispatcher("addrecords.jsp").forward(request, response);
                 return;
             }
-        } else {
+        } else { // có bhyt và cccd
             Boolean isCCCD = pDAO.isCCCDExists(cccd);
             Boolean isBHYT = pDAO.isBHYTExists(bhyt);
-            if (isCCCD && isBHYT) {
+            if (isCCCD && isBHYT) { // kiểm tra cả hai có hay chưa
                 request.setAttribute("errorCCCD", "Mã đinh danh đã tồn tại trên hệ thống.");
                 request.setAttribute("errorBHYT", "Mã BHYT đã tồn tại trên hệ thống");
                 request.getRequestDispatcher("addrecords.jsp").forward(request, response);
                 return;
-            } else if (isCCCD) {
+            } else if (isCCCD) { // trường hợp cccd đã có
                 request.setAttribute("errorCCCD", "Mã đinh danh đã tồn tại trên hệ thống.");
                 request.getRequestDispatcher("addrecords.jsp").forward(request, response);
                 return;
-            } else if (isBHYT) {
+            } else if (isBHYT) { // bhyt đã có
                 request.setAttribute("errorBHYT", "Mã BHYT đã tồn tại trên hệ thống");
                 request.getRequestDispatcher("addrecords.jsp").forward(request, response);
                 return;

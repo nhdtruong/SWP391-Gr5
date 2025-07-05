@@ -6,6 +6,7 @@ package controller.admin;
 
 import dal.CategoryServiceDAO;
 import dal.DepartmentDAO;
+import dal.DoctorServiceDAO;
 import dal.ServiceDAO;
 import dal.UserDAO;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.CategoryServices;
 import model.Deparment;
+import model.Doctor;
 import model.Service;
 
 /**
@@ -52,6 +54,9 @@ public class UpdateDeleteService extends HttpServlet {
             CategoryServiceDAO caDao = new CategoryServiceDAO();
             List<Deparment> listDe = deDao.getAllDeparment();
             List<CategoryServices> listCa = caDao.getAllCategoryServiceses();
+            DoctorServiceDAO doctorServiceDAO =  new DoctorServiceDAO();
+            Doctor doctor = doctorServiceDAO.getDoctorByService(Integer.parseInt(serviceId));
+            request.setAttribute("doctor", doctor);
             request.setAttribute("category", listCa);
             request.setAttribute("department", listDe);
             request.setAttribute("service", s);
@@ -72,6 +77,7 @@ public class UpdateDeleteService extends HttpServlet {
             String fee = request.getParameter("fee").replace(",", "");
             String discount_ = request.getParameter("discount");
             String paymentTypeId = request.getParameter("payment_type_id");
+            System.out.println("fee" + fee +"serciid" +serviceId);
             String img = "default";
             double discount = 0;
             if (discount_ != null) {
@@ -90,12 +96,20 @@ public class UpdateDeleteService extends HttpServlet {
         }
 
         if (action.equals("delete")) {
+            DoctorServiceDAO doctorServiceDAO = new DoctorServiceDAO();
             String service_id = request.getParameter("service_id");
+            String returnUrl = request.getParameter("returnUrl"); 
 
+            doctorServiceDAO.removeDoctorServiceByServiceId(Integer.parseInt(service_id));
             ServiceDAO serviceDAO = new ServiceDAO();
             serviceDAO.deleteService(Integer.parseInt(service_id));
-            request.setAttribute("deleteServiceSuccess", "deleteServiceSuccess");
-            request.getRequestDispatcher("servicemanager?action=all").forward(request, response);
+
+           
+            if (returnUrl != null && !returnUrl.isEmpty()) {
+                response.sendRedirect(returnUrl);
+            } else {
+                response.sendRedirect("servicemanager?action=all"); // fallback
+            }
 
         }
     }

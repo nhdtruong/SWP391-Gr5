@@ -6,6 +6,7 @@ package controller.uer;
 
 import config.EmailSender;
 import config.EncodeData;
+import config.PasswordUtils;
 import dal.UserDAO;
 import jakarta.mail.MessagingException;
 import java.io.IOException;
@@ -82,20 +83,20 @@ public class UpdateProfile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String action = request.getParameter("action");
         if (action.equals("updateInfor")) {
-            
+
             String username = request.getParameter("username");
             String email = request.getParameter("email");
-            
+
             request.setAttribute("username", username);
             request.setAttribute("email", email);
             UserDAO uDao = new UserDAO();
             HttpSession session = request.getSession();
-            
+
             AccountUser acc = (AccountUser) session.getAttribute("user");
-            
+
             if (acc == null) {
                 response.sendRedirect("login");
                 return;
@@ -140,47 +141,68 @@ public class UpdateProfile extends HttpServlet {
                 Logger.getLogger(RegisterServerlet.class.getName()).log(Level.SEVERE, null, ex);
             }
             response.sendRedirect("accepcode");
-            
+
         }
         if (action.equals("changePassword")) {
             HttpSession session = request.getSession();
             UserDAO uDao = new UserDAO();
             AccountUser acc = (AccountUser) session.getAttribute("user");
-           if (acc == null) {
+
+            if (acc == null) {
                 response.sendRedirect("login");
                 return;
             }
-           
+
+         
             String inputOldPassword = request.getParameter("inputOldPassword");
-            String enOldPassword = EncodeData.enCode(inputOldPassword);
             String newPassword = request.getParameter("newPassword");
             String reNewPassword = request.getParameter("reNewPassword");
-            String enNewPassword = EncodeData.enCode(newPassword);
+
+        
             request.setAttribute("inputOldPassword", inputOldPassword);
             request.setAttribute("newPassword", newPassword);
             request.setAttribute("reNewPassword", reNewPassword);
             request.setAttribute("username", acc.getUsername());
             request.setAttribute("email", acc.getEmail());
-            if (uDao.checkPasswordByUsername(acc.getUsername(), enOldPassword)) {
-               session.setAttribute("usernameChangePass", acc.getUsername());
-               session.setAttribute("enNewPassword", enNewPassword);
+
+           
+            if (!newPassword.equals(reNewPassword)) {
+                request.setAttribute("errorMK", "Mật khẩu mới và xác nhận không khớp!");
+                request.getRequestDispatcher("profile.jsp").forward(request, response);
+                return;
+            }
+
+        
+            AccountUser accFromDB = uDao.getAccountByUsername(acc.getUsername());
+            boolean isMatch = PasswordUtils.checkPassword(inputOldPassword, accFromDB.getPassword());
+
+            if (isMatch) {
+           
+                session.setAttribute("usernameChangePass", acc.getUsername());
+
+        
+                String newHashedPassword = PasswordUtils.hashPassword(newPassword);
+                session.setAttribute("enNewPassword", newHashedPassword);
+
+      
                 long expiryTime = System.currentTimeMillis() + 5 * 60 * 1000;
                 String otp = OTPutil.generateOTP();
                 OTPdata otpData = new OTPdata(otp, expiryTime);
                 session.setAttribute("currentOTP", otpData);
-            try {
-                EmailSender.sendOTP(otp, acc.getEmail());
-            } catch (MessagingException ex) {
-                Logger.getLogger(RegisterServerlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            response.sendRedirect("accepcodeChangePass");
+
+                try {
+                    EmailSender.sendOTP(otp, acc.getEmail());
+                } catch (MessagingException ex) {
+                    Logger.getLogger(RegisterServerlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                response.sendRedirect("accepcodeChangePass"); // sang trang xác nhận OTP
             } else {
-                request.setAttribute("errorMK", "Mật khẩu không đúng!");
+                request.setAttribute("errorMK", "Mật khẩu cũ không đúng!");
                 request.getRequestDispatcher("profile.jsp").forward(request, response);
             }
-            
         }
-        
+
     }
 
     /**

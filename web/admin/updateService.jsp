@@ -37,7 +37,7 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Thể loại<span class="text-danger">*</span></label>
-                                        <select name="category_service_id" class="form-select">
+                                        <select name="category_service_id" class="form-select" id="categoryServiceSelect">
                                             <c:forEach items="${category}" var="cat">
                                                 <option value="${cat.id}" <c:if test="${service.category_service.id == cat.id}">selected</c:if>>${cat.name}</option>
                                             </c:forEach>
@@ -45,13 +45,28 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Khoa<span class="text-danger">*</span></label>
+                                        <label class="form-label">Chuyên khoa<span class="text-danger">*</span></label>
                                         <select class="form-select" name="department_id" id="department">
+                                            <option value="0" <c:if test="${empty service.department.id }">selected</c:if>>Không </option>
+
                                             <c:forEach var="d" items="${department}">
-                                                <option value="${d.id}"<c:if test="${d.id==service.department.id}">selected</c:if>>${d.department_name}</option>
+                                                <option value="${d.id}" <c:if test="${d.id == service.department.id}">selected</c:if>>${d.department_name}</option>
                                             </c:forEach>
                                         </select>
+
                                     </div>
+                                    <div class="col-md-12 mt-3" id="doctorInfoDiv" style="display: none;">
+                                        <label class="form-label">Bác sĩ đang thực hiện dịch vụ gọi video:</label>
+                                        <c:if test="${not empty doctor}">
+                                            <div class="alert alert-info">
+                                                ${doctor.doctor_name} - (${doctor.department.department_name})
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${empty doctor}">
+                                            <div class="text-muted fst-italic">Chưa có bác sĩ nào thực hiện dịch vụ này.</div>
+                                        </c:if>
+                                    </div>
+
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Phí(VNĐ)<span class="text-danger">*</span></label>
@@ -107,15 +122,15 @@
 
 
 
-                                            function CheckFee(text) {
+                                           function CheckFee(text) {
 
                                                 const feeValue = text.value.replace(/,/g, ''); // Xoá dấu phẩy ngăn cách số
                                                 const digitsOnly = feeValue.replace(/\D/g, ''); // Lấy phần chỉ chứa số
 
                                                 const feeNumber = parseInt(digitsOnly, 10);
 
-                                                if (digitsOnly.length < 4) {
-                                                    text.setCustomValidity('Giá không hợp lệ! Phải có ít nhất 4 chữ số.');
+                                                if (digitsOnly < 0) {
+                                                    text.setCustomValidity('Giá không hợp lệ! Phải lớn hơn 0.');
                                                 } else if (feeNumber > 999999999) {
                                                     text.setCustomValidity('Số quá lớn.');
                                                 } else {
@@ -125,6 +140,7 @@
                                                 return true;
 
                                             }
+                                            
                                             function toggleDiscountInput() {
                                                 const bhytSelect = document.getElementById("bhytSelect");
                                                 const feeDiscount = document.getElementById("feeDiscount");
@@ -143,7 +159,7 @@
                                                 }
                                             }
 
-// Gọi khi load form
+
                                             window.addEventListener("DOMContentLoaded", toggleDiscountInput);
 
                                             // Gọi tự động khi trang vừa load để xử lý mặc định từ server
@@ -182,7 +198,24 @@
                                                     reader.readAsDataURL(input.files[0]);
                                                 }
                                             }
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                const categorySelect = document.getElementById('categoryServiceSelect');
+                                                const doctorInfoDiv = document.getElementById('doctorInfoDiv');
 
+                                                function toggleDoctorInfoDiv() {
+                                                    if (categorySelect.value === '2') {
+                                                        doctorInfoDiv.style.display = 'block';
+                                                    } else {
+                                                        doctorInfoDiv.style.display = 'none';
+                                                    }
+                                                }
+
+                                                // Gọi khi người dùng thay đổi
+                                                categorySelect.addEventListener('change', toggleDoctorInfoDiv);
+
+                                                // Gọi khi trang vừa load xong
+                                                toggleDoctorInfoDiv();
+                                            });
 
 
         </script>

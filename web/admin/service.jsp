@@ -88,11 +88,12 @@
                                                 <th class="border-bottom p-3">Thể loại</th>
                                                 <th class="border-bottom p-3">Chuyên khoa</th>
                                                 <th class="border-bottom p-3">Phí</th>
+                                                <th class="border-bottom p-3">Bác sĩ đảm nhiệm</th>
                                                 <th class="border-bottom p-3">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody >
-                                             <c:if test="${empty service}">
+                                            <c:if test="${empty service}">
                                                 <tr>
                                                     <td colspan="6" class="text-center text-danger p-3">
                                                         Không có dịch vụ nào được tìm thấy.
@@ -106,13 +107,21 @@
                                                     <td class="p-3">${st}</td>
                                                     <td class="p-3">${s.service_name}</td>
                                                     <td class="p-3">${s.category_service.name}</td>
-                                                    <td class="p-3">${s.department.department_name}</td>
-                                                    <td class="p-3"><fmt:formatNumber value="${s.fee}" pattern="#,##0"/> đ</td>
+                                                    <c:if test="${empty s.department.department_name }"><td class="p-3">Không xác định</td></c:if>
+                                                    <c:if test="${not empty s.department.department_name }"><td class="p-3">${s.department.department_name}</td></c:if>
+
+
+                                                    <c:if test="${s.fee == 0 }"><td class="p-3">Miễn phí</td></c:if>
+                                                    <c:if test="${not empty s.fee && s.fee !=0 }"><td class="p-3"><fmt:formatNumber value="${s.fee}" pattern="#,##0"/> đ</td></c:if>
+                                                        <td class="p-3">
+                                                        <c:if test="${s.category_service.id == 2}"></c:if>
+                                                            <a href="doctorService?serviceId=${s.service_id}&departmentId=${s.department.id}" class="btn btn-secondary">Xem</a>
+                                                    </td>
                                                     <td class="p-3">
                                                         <a href="#" class="btn btn-info" onclick="openServiceDetailModal('${fn:escapeXml(s.getService_name())}', '${fn:escapeXml(s.getCategory_service().getName())}', '${fn:escapeXml(s.getDepartment().getDepartment_name())}', '${fn:escapeXml(s.getDescription())}', '${s.isIs_bhyt() ? "Có" : "Không"}', '${s.getFee()}', '${s.getDiscount()}', '${fn:escapeXml(s.getPayment_type_id()) == 1 ? "Thanh toán tại bệnh viện" : "Thanh toán online"}', '${s.getImg()}')">Chi tiết</a>
                                                         <a href="updateservice?action=updateService&serviceId=${s.service_id}" class="btn btn-primary">Sửa</a>
                                                         <a href="#" class="btn btn-danger"
-                                                           onclick="openDeleteModal('${s.getService_id()}' )">Xóa</a>
+                                                           onclick="openDeleteModal('${s.getService_id()}')">Xóa</a>
 
                                                     </td>
                                                 </tr>
@@ -247,6 +256,8 @@
                                 <div class="modal-body">
                                     <p>Bạn có chắc chắn muốn xóa dịch vụ này không?</p>
                                     <input type="hidden" name="service_id" id="deleteServiceId">
+                                    <input type="hidden" name="returnUrl" value="${pageContext.request.requestURI}?${pageContext.request.queryString}" />
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -261,7 +272,7 @@
 
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-         <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/simplebar.min.js"></script>
         <script src="assets/js/select2.min.js"></script>
@@ -291,7 +302,7 @@
                                                                }
 
                                                                function openDeleteModal(serviceId) {
-                                                                   
+
                                                                    document.getElementById('deleteServiceId').value = serviceId;
                                                                    new bootstrap.Modal(document.getElementById('deleteModal')).show();
                                                                }
