@@ -55,6 +55,26 @@ public class UserDAO extends DBContext {
         return null;
     }
 
+      public List<String> getEmailsByRole12() {
+        List<String> emails = new ArrayList<>();
+        String sql = "SELECT email FROM users WHERE role_id IN (1, 2)";
+
+        try ( PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                String email = rs.getString("email");
+                emails.add(email);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        }
+
+        return emails;
+    }
+
+    
     public AccountUser CheckAccByUsername(String username) {
         String sql = "select u.username  from users u where u.username = ? ";
         try {
@@ -377,7 +397,10 @@ public class UserDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        new UserDAO().updateAll();
+      //  new UserDAO().updateAll();
+         UserDAO u =  new UserDAO();
+         System.out.println(u.getEmailsByRole12());
+        
     }
 
     public void updateAll() {

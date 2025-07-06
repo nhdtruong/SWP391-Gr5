@@ -64,7 +64,7 @@ public class DoctorManager extends HttpServlet {
             }
             if (action.equals("filter")) {
                 
-                String gender = request.getParameter("status");
+                String gender = request.getParameter("gender");
                 String position = request.getParameter("position_id");
                 String department = request.getParameter("department_id");
 
@@ -92,7 +92,7 @@ public class DoctorManager extends HttpServlet {
                 int numPageDisplay = 7;
                 List<Doctor> listDoctorDisplay = getListDoctorDisplay(listDoctor, start, end);
                 request.setAttribute("position", listPosition);
-                 request.setAttribute("department", listDeparment);
+                request.setAttribute("department", listDeparment);
                 request.setAttribute("doctor", listDoctorDisplay);
                 request.setAttribute("url", url);
                 request.setAttribute("page", page);

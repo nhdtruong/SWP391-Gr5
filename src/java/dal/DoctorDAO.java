@@ -11,9 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -392,7 +389,7 @@ public class DoctorDAO extends DBContext {
         return list;
     }
 
-    public List<Doctor> getDoctorsByServiceCategory(String categoryServiceName) {
+    public List<Doctor> getDoctorsByServiceCategory(int categoryServiceId) {
         List<Doctor> list = new ArrayList<>();
         String sql = "SELECT DISTINCT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
                 + "d.deparment_id, d.img, d.position_id, d.AcademicTitle_id, "
@@ -401,10 +398,10 @@ public class DoctorDAO extends DBContext {
                 + "JOIN doctor_service ds ON d.doctor_id = ds.doctor_id "
                 + "JOIN service s ON ds.service_id = s.service_id "
                 + "JOIN category_service cs ON s.category_service_id = cs.category_service_id "
-                + "WHERE cs.name = ?";
+                + "WHERE cs.category_service_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, categoryServiceName);
+            ps.setInt(1, categoryServiceId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -435,6 +432,68 @@ public class DoctorDAO extends DBContext {
 
         return list;
     }
+    
+    public List<Doctor> getDoctorsByServiceCategoryFilter(int categoryServiceId, String gender, String departmentId) {
+    List<Doctor> list = new ArrayList<>();
+    StringBuilder sql = new StringBuilder("SELECT DISTINCT d.doctor_id, d.username, d.doctor_name, d.gender, d.dob, d.phone, "
+            + "d.deparment_id, d.img, d.position_id, d.AcademicTitle_id, "
+            + "d.AcademicDegree_id, d.specialized, d.EducationHistory, s.fee "
+            + "FROM doctors d "
+            + "JOIN doctor_service ds ON d.doctor_id = ds.doctor_id "
+            + "JOIN service s ON ds.service_id = s.service_id "
+            + "JOIN category_service cs ON s.category_service_id = cs.category_service_id "
+            + "WHERE cs.category_service_id = ?");
+
+    if (!"all".equalsIgnoreCase(gender)) {
+        sql.append(" AND d.gender = ?");
+    }
+
+    if (!"all".equalsIgnoreCase(departmentId)) {
+        sql.append(" AND d.deparment_id = ?");
+    }
+
+    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+        int index = 1;
+        ps.setInt(index++, categoryServiceId);
+
+        if (!"all".equalsIgnoreCase(gender)) {
+            ps.setString(index++, gender);
+        }
+
+        if (!"all".equalsIgnoreCase(departmentId)) {
+            ps.setInt(index++, Integer.parseInt(departmentId));
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Doctor d = new Doctor();
+
+                d.setDoctor_id(rs.getInt("doctor_id"));
+                d.setUsername(rs.getString("username"));
+                d.setDoctor_name(rs.getString("doctor_name"));
+                d.setGender(rs.getString("gender"));
+                d.setDOB(rs.getDate("dob"));
+                d.setPhone(rs.getString("phone"));
+                d.setDepartment(getDepartmentByDoctor_department_id(rs.getInt("deparment_id")));
+                d.setImg(rs.getString("img"));
+                d.setPosition(getPositionByDoctor_position_id(rs.getInt("position_id")));
+                d.setAcademicTitle(getAcademictitleByDoctor_Academictile_id(rs.getInt("AcademicTitle_id")));
+                d.setAcademicDegree(getAcademicDegreeByDoctor_AcademicDegre_id(rs.getInt("AcademicDegree_id")));
+                d.setSpecialized(rs.getString("specialized"));
+                d.setEducationHistory(rs.getString("EducationHistory"));
+                d.setEmail(getEmailDotorByUsernae(rs.getString("username")));
+                d.setFee(rs.getDouble("fee")); 
+
+                list.add(d);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
 
     public List<Doctor> getAllDoctorByAdmin() {
         List<Doctor> list = new ArrayList<>();
@@ -1118,7 +1177,9 @@ public class DoctorDAO extends DBContext {
 
     public static void main(String[] args) {
         DoctorDAO d = new DoctorDAO();
-        System.out.println(d.getDoctorsByServiceCategory("Gọi video Bác sĩ"));
+       System.out.println(d.getDoctorsByServiceCategoryFilter(2,"Nam","all"));
+        
+        System.out.println(d.getDoctorsByServiceCategory(2));
 //        List<Doctor> l = d.getAllDoctorInDepartmanentHaveSchedule(1);
 //        for (Doctor doctor : l) {
 //            System.out.println(doctor.getWorkingWeekdays().size());

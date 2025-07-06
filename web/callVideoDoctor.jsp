@@ -59,9 +59,10 @@
             <div class="container">
                 <div class="row"> 
                     <div class="col-lg-10 col-md-10 row align-items-center">
-                        <c:if test="${numberPage== 0}">
-                            <div class="alert alert-warning text-center" style="width: 100%;">
-                                Không có bác sĩ nào phù hợp với bộ lọc của bạn.
+                        <c:if test="${empty listD}">
+                            <div class=" text-center">
+                                <h5 class="mt-3 text-muted">Không tìm thấy kết quả</h5>
+                                <img src="assets/images/norecords/norecords.png" alt="Không có dữ liệu" style="width: 200px; height:200px;">
                             </div>
                         </c:if>
 
@@ -73,8 +74,8 @@
                                         <!-- Hình bác sĩ -->
                                         <div class="text-center me-3 position-relative">
                                             <img src="${d.img}" class="rounded-circle" style="width: 120px; height: 120px;" alt="Bác sĩ">
-                                            <div class="position-absolute top-100 start-50 translate-middle bg-white px-3 py-1 rounded shadow-sm fw-bold" style="margin-top: 8px;">
-                                                Xem chi tiết
+                                            <div class="position-absolute top-100 start-50 translate-middle bg-white px-3 py-1 rounded shadow-sm " style="margin-top: -80px; width: 130px">
+                                                <a href="#">Xem chi tiết</a>
                                             </div>
                                             <!-- Rating -->
                                             <div class="mt-5 d-flex justify-content-center align-items-center border rounded-pill px-3 py-1 text-primary fw-bold" style="gap: 10px; border-color: #00bfff;">
@@ -106,38 +107,45 @@
                                             </h5>
                                             <ul class="list-unstyled mb-4" style="color: #06293a;">
                                                 <li class="d-flex align-items-start mb-2">
-                                                    <span style="min-width: 24px; opacity: 0.7;">🩺</span>
+                                                    <i class="fas fa-stethoscope" style="min-width: 24px; opacity: 0.7;"></i>
                                                     <span class="ms-2">Chuyên khoa: ${d.department.department_name}</span>
                                                 </li>
                                                 <li class="d-flex align-items-start mb-2">
-                                                    <span style="min-width: 24px; opacity: 0.7;">📋</span>
+                                                    <i class="fas fa-notes-medical" style="min-width: 24px; opacity: 0.7;"></i>
                                                     <span class="ms-2">Chuyên trị: ${d.specialized}</span>
                                                 </li>
                                                 <li class="d-flex align-items-start mb-2">
-                                                    <span style="min-width: 24px; opacity: 0.7;">🗓</span>
+                                                    <i class="fas fa-calendar-check" style="min-width: 24px; opacity: 0.7;"></i>
                                                     <span class="ms-2">Lịch khám: Hẹn khám</span>
                                                 </li>
                                                 <li class="d-flex align-items-start mb-2">
-                                                    <span style="min-width: 24px; opacity: 0.7;">💼</span>
-                                                    <span class="ms-2">Giá khám: ${d.fee}</span>
-                                                </li>
-                                            </ul>
-                                            <a href="booking" class="btn btn-info text-white fw-bold px-4 py-2 rounded-pill">Đặt khám ngay</a>
-                                        </div>
-                                    </div>  
+                                                    <i class="fas fa-briefcase-medical" style="min-width: 24px; opacity: 0.7;"></i>
+                                                    <span class="ms-2">Giá khám: 
+                                                        <c:if test="${d.fee == 0 }">Miễn phí</c:if>
+                                                        <c:if test="${not empty d.fee && d.fee !=0 }"><span><fmt:formatNumber value="${d.fee}" pattern="#,##0"/> đ</span></c:if>
+                                                        </span>
+
+                                                    </li>
+                                                </ul>
+                                                <a href="booking.VideoCall?stepName=service&categoryService_id=${categoryService_id}&doctorId=${d.doctor_id}&doctorName=${d.doctor_name}&departmentName=${d.department.department_name}" class="btn btn-info text-white fw-bold px-4 py-2 rounded-pill">Đặt khám ngay</a>
+                                            </div>
+                                        </div>  
 
 
+                                    </div>
                                 </div>
-                            </div>
 
                         </c:forEach>
 
                     </div>
 
+
                     <div class="col-lg-2 col-md-2 mt-3 pt-2">
                         <div class="card border-0 sidebar sticky-bar rounded shadow">
                             <div class="card-body">
-                                <form action="doctor?action=filter" method="get" onSubmit="document.getElementById('submit').disabled = true;">
+                                <form action="callVideoWithDoctor" method="get">
+                                    <input type="hidden" name="action" value="filter">
+                                    <input type="hidden" name="categoryService_id" value="${categoryService_id}">
                                     <div class="widget mb-4 pb-2">
                                         <h5 class="widget-title">Lọc</h5>
                                         <div class="row align-items-center">
@@ -147,8 +155,9 @@
                                             <div class="col-md-12">
                                                 <select name="gender" class="form-select">
                                                     <option <c:if test="${gender == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                    <option <c:if test="${gender == 'true'}"> selected </c:if> value="true">Nam</option>
-                                                    <option <c:if test="${gender == 'false'}"> selected </c:if> value="false">Nữ</option>
+                                                    <option <c:if test="${gender == 'Nam'}"> selected </c:if> value="Nam">Nam</option>
+                                                    <option <c:if test="${gender == 'Nữ'}"> selected </c:if> value="Nữ">Nữ</option>
+                                                    <option <c:if test="${gender == 'Khác'}"> selected </c:if> value="Nữ">Khác</option>
                                                     </select>  
                                                 </div>
                                             </div>
@@ -158,12 +167,13 @@
                                                     <label class="form-label">Chuyên môn</label>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <select name="speciality" class="form-select">
-                                                        <option <c:if test="${speciality == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                    <c:forEach items="${listDepartment}" var="s">
-                                                        <option <c:if test="${speciality == s.id}"> selected </c:if> value="${s.id}">${s.department_name}</option>
+                                                    <select name="department_id" class="form-select">
+                                                        <option <c:if test="${department_id == 'all'}"> selected </c:if> value="all">Tất cả</option>
+                                                    <c:forEach items="${department}" var="de">
+                                                        <option <c:if test="${de.getId().toString() == department_id}"> selected </c:if> value="${de.getId()}">${de.getDepartment_name()}</option>
                                                     </c:forEach>
                                                 </select>  
+
                                             </div>
                                         </div>
                                         <br>
@@ -171,7 +181,7 @@
                                             <h5 class="widget-title">Sắp xếp</h5>
                                             <div class="row align-items-center">
                                                 <div class="col-md-12">
-                                                    <select name="SortType" onchange="Sort(this.value)" class="form-select">
+                                                    <select name="SortType" class="form-select">
                                                         <option <c:if test="${sort == 'all'}"> selected </c:if> value="all">Tất cả</option>
                                                         <option <c:if test="${sort == 'star'}"> selected </c:if> value="star">Star</option>
                                                         <option <c:if test="${sort == 'latest'}"> selected </c:if> value="latest">Mới nhất</option>
@@ -186,17 +196,67 @@
                                 </div>
                             </div>
                         </div>
+
+                    <c:set var="page" value="${page}"/>
+                    <div class="row text-center">
+                        <div class="col-12 mt-4">
+                            <div class="d-md-flex align-items-center text-center" style="justify-content: center">
+                                <ul class="pagination justify-content-center mb-0 mt-3 mt-sm-0">
+                                    <c:choose>
+                                        <c:when test="${page < numPageDisplay  && num < numPageDisplay  }">
+                                            <c:forEach begin="${1}" end="${num}" var="i">
+                                                <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                </c:forEach>
+
+                                        </c:when>
+
+                                        <c:when test="${page < numPageDisplay  && num > numPageDisplay  }">
+                                            <c:forEach begin="${1}" end="${numPageDisplay}" var="i">
+                                                <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                </c:forEach>
+
+                                        </c:when>
+
+
+                                        <c:when test="${(num - page + 1 ) <= numPageDisplay && num >= numPageDisplay}">
+                                            <li class="page-item"><a class="page-link" href="${url}&page=${page-1}">Prev</a></li>
+                                                <c:forEach begin="${num - (numPageDisplay-1)}" end="${num}" var="i">
+                                                <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                </c:forEach>
+
+                                        </c:when>   
+
+
+                                        <c:otherwise >
+                                            <li class="page-item"><a class="page-link" href="${url}&page=${page-1}">Prev</a></li>
+                                                <c:forEach begin="${page-(numPageDisplay/2)+1}" end="${page+(numPageDisplay/2)}" var="i">
+                                                <li class="page-item ${i==page?"active":""}"><a class="page-link" href="${url}&page=${i}">${i}</a></li>
+                                                </c:forEach>
+                                            <li class="page-item"><a class="page-link" href="${url}&page=${page+1}">Next</a></li>  
+                                            </c:otherwise>      
+
+                                    </c:choose>
+
+
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
+            </div>
 
 
-            </section>
+        </section>
+
+
         <jsp:include page="layout/footer.jsp"/>
 
 
 
         <jsp:include page="layout/search.jsp"/>
         <jsp:include page="layout/facebookchat.jsp"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/feather.min.js"></script>

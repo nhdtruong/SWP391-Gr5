@@ -77,12 +77,13 @@ public class VnpayReturn extends HttpServlet {
 
                     Patient p = (Patient) session.getAttribute("patient");
                     Service s = (Service) session.getAttribute("serviceBooking");
-
+                    
                     AppointmentDAO appointmentDAO = new AppointmentDAO();
                     String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
                     int appointmentId = appointmentDAO.insertAppointment(
                             appointmentCode,
                             p.getPatientId(),
+                             Integer.parseInt((String) session.getAttribute("doctorId")),
                             Integer.parseInt((String) session.getAttribute("slotId")),
                             s.getService_id(),
                            ""

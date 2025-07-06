@@ -59,7 +59,7 @@
                                                             <c:if test="${not empty error && r.patientId == pId }"> <b style="display: inline-block;text-align: center;color: red">${requestScope.error}</b><br>
                                                                 <span style="margin-left: 15px">Vui lòng "Cập nhật" thông tin để được áp dụng mức phí hỗ trợ theo quy định.</span><br>
                                                                 <span style="margin-left: 15px">Nếu bạn không có BHYT vui lòng chọn "Tôi không có thẻ BHYT" để tiếp tục.</span>
-                                                                
+
                                                             </c:if>
                                                             <div class="card-body">
 
@@ -96,7 +96,7 @@
                                                                         <c:if test="${empty r.getNation()}">
                                                                             <strong>Chưa cập nhật</strong>
                                                                         </c:if>
-                                                                            
+
                                                                         <strong>${r.getNation()}</strong>
                                                                     </li>
                                                                 </ul>
@@ -114,19 +114,19 @@
 
                                                                     </div>
 
-                                                                     <c:if test="${ empty error || r.patientId != pId }">
-                                                                       <a href="confirmInformation?patientId=${r.patientId}" class="btn btn-primary">
-                                                                        Tiếp tục <i class="fa-solid fa-arrow-right ms-1"></i>
-                                                                    </a>
+                                                                    <c:if test="${ empty error || r.patientId != pId }">
+                                                                        <a href="confirmInformation?patientId=${r.patientId}" class="btn btn-primary">
+                                                                            Tiếp tục <i class="fa-solid fa-arrow-right ms-1"></i>
+                                                                        </a>
                                                                     </c:if>
-                                                                     <c:if test="${not empty error && r.patientId == pId }"> 
-                                                                       <a href="confirmInformation?patientId=${r.patientId}&isBHYT=1" class="btn btn-primary">
-                                                                        Tôi không có thẻ BHYT <i class="fa-solid fa-arrow-right ms-1"></i>
-                                                                    </a>
+                                                                    <c:if test="${not empty error && r.patientId == pId }"> 
+                                                                        <a href="confirmInformation?patientId=${r.patientId}&isBHYT=1" class="btn btn-primary">
+                                                                            Tôi không có thẻ BHYT <i class="fa-solid fa-arrow-right ms-1"></i>
+                                                                        </a>
                                                                     </c:if>      
-                                                                    
+
                                                                 </div>
-                                                                            
+
                                                             </div>
                                                         </div>
                                                     </li>
@@ -140,10 +140,17 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
+                                <c:if test="${sessionScope.token == 'online'}">
+                                    <a href="booking.VideoCall?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}&departmentName=${sessionScope.departmentName}&categoryService_id=${sessionScope.categoryService_id}" class="btn btn-outline-secondary">
+                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                    </a>
+                                </c:if>
+                                <c:if test="${  sessionScope.token == 'chuyenkhoa'}">
+                                    <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${sessionScope.serviceBooking.service_id}" class="btn btn-outline-secondary">
+                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                    </a>
+                                </c:if>
 
-                                <a href="booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=${sessionScope.serviceBooking.service_id}" class="btn btn-outline-secondary">
-                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                </a>
 
 
                                 <a href="addrecords?typeAddRecords=unormal" class="btn btn-info">

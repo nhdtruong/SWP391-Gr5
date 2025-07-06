@@ -193,6 +193,53 @@
 
                     </div>
 
+                    <c:if test="${not empty error}">
+                        <div class="position-fixed top-50 start-50 translate-middle w-100" style="z-index: 1050;">
+                            <div class="alert alert-warning alert-dismissible fade show mx-auto shadow-lg text-center"
+                                 role="alert"
+                                 style="width: 90%; max-width: 700px; font-size: 16px; border-radius: 1rem; padding: 2rem 1.5rem;">
+
+                                <div class="d-flex flex-column align-items-center">
+                                    <h5 class="text-danger fw-bold mb-3">
+                                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                                        Phiếu khám <span class="text-uppercase">"${appointmentCode}"</span> đã được thanh toán!
+                                    </h5>
+
+                                    <p class="text-dark mb-3" style="line-height: 1.7;">
+                                        Phiếu này <strong>không thể hủy trực tiếp</strong> do đã hoàn tất thanh toán.<br>
+                                        Tuy nhiên, bạn có thể <strong>gửi yêu cầu hoàn tiền</strong> để được quản trị viên xem xét.<br>
+                                        Thời gian xử lý dự kiến: <strong>3 – 5 tiếng</strong>.
+                                    </p>
+
+                                    <!-- Form gửi yêu cầu hoàn tiền -->
+                                    <form method="post" action="bills?action=requestRefund" class="w-100" style="max-width: 600px;">
+                                        <input type="hidden" name="appointmentId" value="${appoinmentId}">
+                                        <input type="hidden" name="appointmentCode" value="${appointmentCode}">
+                                        <input type="hidden" name="departmentName" value="${bills.departmentName}"> 
+
+                                        <div class="mb-3 text-start">
+                                            <label for="refundReason" class="form-label fw-bold">Lý do yêu cầu hoàn tiền (không bắt buộc):</label>
+                                            <textarea class="form-control" id="refundReason" name="refundReason" rows="3"
+                                                      placeholder="Nhập lý do nếu có..."></textarea>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center gap-2 mt-3">
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa-solid fa-paper-plane me-1"></i> Gửi yêu cầu hoàn tiền
+                                            </button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="alert">
+                                                <i class="fa-solid fa-xmark me-1"></i> Đóng
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Nút đóng ở góc trên -->
+                                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="alert" aria-label="Đóng"></button>
+                            </div>
+                        </div>
+                    </c:if>           
+
             </section>
 
             <div class="mt-auto">
@@ -217,43 +264,7 @@
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
 
-        <c:if test="${not empty error}">
-            <div class="position-fixed top-50 start-50 translate-middle w-100" style="z-index: 1050;">
-                <div class="alert alert-warning alert-dismissible fade show mx-auto shadow-lg text-center"
-                     role="alert"
-                     style="width: 90%; max-width: 800px; font-size: 18px; border-radius: 1rem; padding: 1.5rem;">
 
-                    <strong class="text-danger" style="font-size: 20px;">
-                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                        Phiếu khám <span class="text-uppercase">"${appointmentCode}"</span> đã được thanh toán!
-                    </strong>
-
-                    <hr class="my-3">
-
-                    <div class="text-dark" style="line-height: 1.8;">
-                        Phiếu này <strong>không thể hủy ngay</strong> do đã thanh toán. <br>
-                        Nếu bạn vẫn muốn hủy, hệ thống sẽ <strong>gửi yêu cầu hoàn tiền</strong> đến quản trị viên. <br>
-                        <span class="text-danger fw-bold">Bạn có chắc chắn muốn tiếp tục?</span> <br>
-                        Thời gian xử lý dự kiến: <strong>8 – 12 tiếng</strong>.
-                    </div>
-
-                    <!-- Form ẩn gửi yêu cầu hoàn tiền nếu người dùng xác nhận -->
-                    <form method="post" action="bills?action=requestRefund" class="mt-3">
-                        <input type="hidden" name="appointmentId" value="${appoinmentId}">
-                        <input type="hidden" name="appointmentCode" value="${appointmentCode}">
-                        <button type="submit" class="btn btn-danger">
-                            Gửi yêu cầu hoàn tiền
-                        </button>
-                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="alert">
-                            Đóng
-                        </button>
-                    </form>
-
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
-                            data-bs-dismiss="alert" aria-label="Đóng"></button>
-                </div>
-            </div>
-        </c:if>
 
     </body>
 

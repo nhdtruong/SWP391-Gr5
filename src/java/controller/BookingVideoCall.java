@@ -4,6 +4,9 @@
  */
 package controller;
 
+import dal.DoctorDAO;
+import dal.DoctorScheduleDAO;
+import dal.ServiceDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,18 +14,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import dal.AppointmentDAO;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
-import model.Patient;
 import java.sql.Time;
+import java.util.List;
+import model.Doctor;
+import model.Service;
+import model.WorkingDateSchedule;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name = "ConfirmFinalInformation", urlPatterns = {"/confirmFinalInformation"})
-public class ConfirmFinalInformation extends HttpServlet {
+@WebServlet(name = "BookingVideoCall", urlPatterns = {"/booking.VideoCall"})
+public class BookingVideoCall extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +46,10 @@ public class ConfirmFinalInformation extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ConfirmFinalInformation</title>");
+            out.println("<title>Servlet BookingVideoCall</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ConfirmFinalInformation at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet BookingVideoCall at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,28 +68,40 @@ public class ConfirmFinalInformation extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String token = (String) session.getAttribute("token");
-        if (token.equals("online")) {
-            response.sendRedirect("payment");
-        } else if (token.equals("chuyenkhoa")) {
-            AppointmentDAO appointmentDAO = new AppointmentDAO();
-            Patient patient = (Patient) session.getAttribute("patient");
-            int departmentId = Integer.parseInt((String) session.getAttribute("departmentId"));
-            Date dateBooking = (Date) session.getAttribute("dateBooking");
-            Time slotStart = (Time) session.getAttribute("slotStart");
-            Time slotEnd = (Time) session.getAttribute("slotEnd");
-            int check = appointmentDAO.checkPatientBookingConflictDetailed(patient.getPatientId(), departmentId, dateBooking, slotStart, slotEnd);
-            if (check == 1) {
-                request.setAttribute("error", "Bạn đã đặt khám chuyên khoa này trong ngày rồi. Vui lòng xem lại phiếu khám!");
-                request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
-            } else if (check == 2) {
-                request.setAttribute("error", "Bạn đã đặt khám trùng giờ với chuyên khoa khác trong ngày rồi. Vui lòng xem lại phiếu khám!");
-                request.getRequestDispatcher("confirmInformation.jsp").forward(request, response);
-            } else if (check == 0) {
-                response.sendRedirect("payment");
-            }
-        }
+        String stepName = request.getParameter("stepName");
+        request.setAttribute("stepName", stepName);
+        session.setAttribute("isBHYT", "0");
+        session.setAttribute("token", "online");
+        if (stepName.equals("service")) {
+            session.removeAttribute("departmentId");
+            session.removeAttribute("patient");
+            session.removeAttribute("dateBooking");
+            session.removeAttribute("slotStart");
+            session.removeAttribute("slotEnd");
+            ServiceDAO serviceDao = new ServiceDAO();
+            String doctorId = request.getParameter("doctorId");
+            String doctorName = request.getParameter("doctorName");
+            String departmentName = request.getParameter("departmentName");
+            String categoryService_id = request.getParameter("categoryService_id");
+            session.setAttribute("categoryService_id", categoryService_id);
+            session.setAttribute("doctorId", doctorId);
+            session.setAttribute("doctorName", doctorName);
+            session.setAttribute("departmentName", departmentName);
+            session.removeAttribute("serviceBooking");
+            List<Service> listService = serviceDao.getServicesByDoctorAndCategory(Integer.parseInt(doctorId), Integer.parseInt(categoryService_id));
+            request.setAttribute("listService", listService);
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
 
+        } else if (stepName.equals("chooseRecords")) {
+
+            String serviceId = request.getParameter("serviceId");
+            ServiceDAO serviceDao = new ServiceDAO();
+            Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
+            session.setAttribute("serviceBooking", serviceBooking);
+
+            response.sendRedirect("chooseRecords");
+
+        }
     }
 
     /**
@@ -99,7 +116,6 @@ public class ConfirmFinalInformation extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
     }
 
     /**

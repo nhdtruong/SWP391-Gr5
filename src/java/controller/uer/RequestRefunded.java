@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.uer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author DELL
  */
-@WebServlet(name="DetailServiceController", urlPatterns={"/detailservice"})
-public class DetailServiceController extends HttpServlet {
+@WebServlet(name="RequestRefunded", urlPatterns={"/requestRefunded"})
+public class RequestRefunded extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,23 +30,18 @@ public class DetailServiceController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
-         String categoryService_id = request.getParameter("id");
-          int id = Integer.parseInt(categoryService_id);
-         
-         if(id == 1){
-              response.sendRedirect("specialty");
-         }else if (id == 2){
-             response.sendRedirect("callVideoWithDoctor?action=all&categoryService_Id="+categoryService_id);
-         }else if(id == 3){
-             response.sendRedirect("home");
-         }
-        
-         
-        }catch (Exception e) {
-            System.out.println(e);
-        } 
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet RequestRefunded</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet RequestRefunded at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

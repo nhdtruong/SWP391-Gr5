@@ -54,8 +54,6 @@ public class ServiceDAO extends DBContext {
         }
     }
 
-    
-    
     public CategoryServices getCategoryServiceByCategorySrvicId(int id) {
 
         String sql = "select c.category_service_id,c.name ,c.img from category_service c where c.category_service_id = ?";
@@ -91,6 +89,40 @@ public class ServiceDAO extends DBContext {
         }
 
         return null;
+    }
+
+    public List<Service> getServicesByDoctorAndCategory(int doctorId, int categoryId) {
+        List<Service> list = new ArrayList<>();
+        String sql = "SELECT s.* "
+                + "FROM service s "
+                + "JOIN doctor_service ds ON s.service_id = ds.service_id "
+                + "WHERE ds.doctor_id = ? AND s.category_service_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ps.setInt(2, categoryId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Service s = new Service();
+                    s.setService_id(rs.getInt("service_id"));
+                    s.setService_name(rs.getString("service_name"));
+                    s.setIs_bhyt(rs.getBoolean("is_bhyt"));
+                    s.setDescription(rs.getString("description"));
+                    s.setCategory_service_id(rs.getInt("category_service_id"));
+                    s.setDepartment_id(rs.getInt("department_id"));
+                    s.setFee(rs.getDouble("fee"));
+                    s.setDiscount(rs.getDouble("discount"));
+                    s.setPayment_type_id(rs.getInt("payment_type_id"));
+
+                    list.add(s);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
     public List<Service> getAllServicesByDepartmentId(int department_id) {
@@ -133,6 +165,40 @@ public class ServiceDAO extends DBContext {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<Service> getServicesByDoctorAndDepartment(int doctorId, int departmentId) {
+        List<Service> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT s.service_id, s.service_name, s.is_bhyt, s.description, "
+                + "s.category_service_id, s.department_id, s.fee, s.discount, s.payment_type_id "
+                + "FROM [service] s "
+                + "JOIN doctor_service ds ON s.service_id = ds.service_id "
+                + "WHERE s.department_id = ? AND ds.doctor_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, departmentId);
+            ps.setInt(2, doctorId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Service service = new Service(
+                            rs.getInt("service_id"),
+                            rs.getString("service_name"),
+                            rs.getBoolean("is_bhyt"),
+                            rs.getString("description"),
+                            getCategoryServiceByCategorySrvicId(rs.getInt("category_service_id")),
+                            getDepartmentByDepartment_id(rs.getInt("department_id")),
+                            rs.getDouble("fee"),
+                            rs.getDouble("discount"),
+                            rs.getInt("payment_type_id")
+                    );
+                    list.add(service);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
     public List<Service> getAllServiceBySearchName(String search) {
@@ -416,10 +482,11 @@ public class ServiceDAO extends DBContext {
     public static void main(String[] args) {
         ServiceDAO sdao = new ServiceDAO();
 
-        System.out.println(sdao.getAllServices());
-        System.out.println(sdao.getAllCategories());
-        System.out.println(sdao.getAllDepartments());
+      //  System.out.println(sdao.getAllServices());
+     //   System.out.println(sdao.getAllCategories());
+      //  System.out.println(sdao.getAllDepartments());
         //   sdao.updateService(17, "ok", true, "ok", 1, 2, 34000, 200, 1, "default");
-        System.out.println(sdao.getAllServicesByDepartmentId(6));
+      //  System.out.println(sdao.getAllServicesByDepartmentId(6));
+        System.out.println(sdao.getServicesByDoctorAndDepartment(70, 6));
     }
 }

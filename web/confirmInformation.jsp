@@ -76,7 +76,9 @@
                                             <td>${sessionScope.departmentName}</td>
                                             <td>${sessionScope.serviceBooking.service_name}</td>
                                             <td>${sessionScope.doctorName}</td>
-                                            <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
+                                            <c:if test="${sessionScope.token == 'online'}"> <td>Chờ cập nhật</td></c:if>
+                                            <c:if test="${sessionScope.token == 'chuyenkhoa'}"> <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td></c:if>
+                                           
                                             <c:if test="${sessionScope.isBHYT == '0'}"><td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td></c:if>
                                             <c:if test="${sessionScope.isBHYT == '1' && empty sessionScope.changeY}">
                                                 <td>

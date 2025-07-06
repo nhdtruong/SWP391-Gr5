@@ -130,7 +130,7 @@
 
                                                 </div>
                                             </c:if>
-                                            
+
                                             <div class="doctor-list-scroll">
                                                 <c:forEach var="doctor" items="${listDoctor}">
                                                     <a href="booking?stepName=service&doctorId=${doctor.doctor_id}&doctorName=${doctor.doctor_name}&departmentName=${sessionScope.departmentName}&departmentId=${sessionScope.departmentId}" class="doctor-link">
@@ -217,17 +217,17 @@
                                                                     <b>${s.service_name}</b>
                                                                     ${s.description}
                                                                 </td>
-                                                                
+
                                                                 <td><fmt:formatNumber value="${s.fee}" type="number" pattern="#,##0"/> đ</td>
                                                                 <td>
                                                                     <c:if test="${s.payment_type_id == 2}">Thanh toán online</c:if>
                                                                     <c:if test="${s.payment_type_id == 1}">Thanh toán tại bệnh viện</c:if>
-                                                                </td>
-                                                                <td>
-                                                                    <button 
-                                                                        type="button"
-                                                                        class="btn btn-primary btn-sm dkn"
-                                                                        data-service-id="${s.service_id}"
+                                                                    </td>
+                                                                    <td>
+                                                                        <button 
+                                                                            type="button"
+                                                                            class="btn btn-primary btn-sm dkn"
+                                                                            data-service-id="${s.service_id}"
                                                                         data-has-bhyt="${s.is_bhyt}">
                                                                         Đặt khám ngay 
                                                                     </button>
@@ -261,9 +261,18 @@
 
 
                                             <div class="card-footer text-start">
-                                                <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
-                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                </a>
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                    <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${sessionScope.token == 'online'}">
+                                                    <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -457,14 +466,19 @@
                         btn.addEventListener("click", function () {
                             const serviceId = this.getAttribute("data-service-id");
                             const hasBH = this.getAttribute("data-has-bhyt") === "true";
-
+                            const token = '${sessionScope.token}';
                             document.querySelectorAll(".bhyt-row").forEach(row => row.classList.add("d-none"));
 
                             if (hasBH) {
                                 document.getElementById("bhyt-row-" + serviceId).classList.remove("d-none");
                             } else {
+                                if (token === 'online') {
+                                    window.location.href = "booking.VideoCall?stepName=chooseRecords&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
+                                } else if (token === 'chuyenkhoa') {
+                                    window.location.href = "booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
+                                }
 
-                                window.location.href = "booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
+
                             }
                         });
                     });

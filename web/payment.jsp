@@ -195,20 +195,22 @@
                                                             </span>
                                                             <span>${sessionScope.serviceBooking.service_name}</span>
                                                         </div>
+                                                        <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                            <div class="d-flex justify-content-between align-items-center border-bottom mb-4">
+                                                                <span class="text-body d-flex align-items-center opaxity1" style="font-weight:600">
+                                                                    <i class="bi bi-calendar-event me-2 "></i>Ngày khám
+                                                                </span>
+                                                                <span><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></span>
+                                                            </div>
 
-                                                        <div class="d-flex justify-content-between align-items-center border-bottom mb-4">
-                                                            <span class="text-body d-flex align-items-center opaxity1" style="font-weight:600">
-                                                                <i class="bi bi-calendar-event me-2 "></i>Ngày khám
-                                                            </span>
-                                                            <span><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></span>
-                                                        </div>
+                                                            <div class="d-flex justify-content-between align-items-center border-bottom mb-4">
+                                                                <span class="text-body d-flex align-items-center opaxity1" style="font-weight:600">
+                                                                    <i class="bi bi-clock me-2 "></i>Giờ khám
+                                                                </span>
+                                                                <span><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/></span>
+                                                            </div>
+                                                        </c:if>
 
-                                                        <div class="d-flex justify-content-between align-items-center border-bottom mb-4">
-                                                            <span class="text-body d-flex align-items-center opaxity1" style="font-weight:600">
-                                                                <i class="bi bi-clock me-2 "></i>Giờ khám
-                                                            </span>
-                                                            <span><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/></span>
-                                                        </div>
 
                                                         <div class="d-flex justify-content-between align-items-center mt-3 pt-2 fs-5 fw-bold">
                                                             <span class="text-body" style="font-weight:600">Tiền khám</span>

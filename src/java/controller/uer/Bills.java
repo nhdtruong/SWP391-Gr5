@@ -5,6 +5,7 @@
 package controller.uer;
 
 import dal.AppointmentDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -143,7 +144,7 @@ public class Bills extends HttpServlet {
             List<AppointmentView> filteredBills = new ArrayList<>();
             for (AppointmentView b : list) {
 
-                if ("success".equals(b.getPaymentStatus()) && (b.getStatus() == 1 || b.getStatus() ==3) ) {
+                if ("success".equals(b.getPaymentStatus()) && (b.getStatus() == 1 || b.getStatus() == 3) ) {
                     filteredBills.add(b);
                 }
 
@@ -156,14 +157,24 @@ public class Bills extends HttpServlet {
             request.getRequestDispatcher("medicalExaminationForm.jsp").forward(request, response);
             return;
         }else if(action.equals("requestRefund")){
+           
+            String refundReason = request.getParameter("refundReason");
+            System.out.println(appoinmentId +" " +appointmentCode);
             AppointmentDAO apoiAppointmentDAO = new AppointmentDAO();
-            apoiAppointmentDAO.requestRefoundAppointmentById(Integer.parseInt(appoinmentId));
+             String departmentName = request.getParameter("departmentName");
+             System.out.println("wwwwE: "+ departmentName);
+             
+             
+           // UserDAO userDAO = new UserDAO();
+           // List<String> listEm = userDAO.getEmailsByRole12();
+            
+           // apoiAppointmentDAO.requestRefoundAppointmentById(Integer.parseInt(appoinmentId));
             response.sendRedirect("bills");
             return;
         }
-        AppointmentDAO appointmentDAO = new AppointmentDAO();
-        // appointmentDAO.cancelAppointmentById(Integer.parseInt(appoinmentId));
-        response.sendRedirect("bills");
+       
+     
+       
     }
 
     /**

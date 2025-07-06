@@ -4,8 +4,10 @@
  */
 package controller;
 
+import dal.DepartmentDAO;
 import dal.DoctorDAO;
-import dal.DoctorServiceDAO;
+
+import dal.PositionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,8 +15,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
+import model.Deparment;
 import model.Doctor;
+
 
 /**
  *
@@ -62,11 +67,73 @@ public class CallVideoWithDoctor extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        DoctorDAO doctorDAO = new DoctorDAO();
-        List<Doctor> listDoctorCall = doctorDAO.getDoctorsByServiceCategory("Gọi video Bác sĩ");
-        request.setAttribute("listD", listDoctorCall);
-        request.getRequestDispatcher("callVideoDoctor.jsp").forward(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        String categoryService_id = request.getParameter("categoryService_id");
 
+        String url = null;
+        DoctorDAO dDao = new DoctorDAO();
+        DepartmentDAO deDao = new DepartmentDAO();
+        List<Doctor> listDoctorCall  = null;
+        List<Deparment> listDeparment = deDao.getAllDeparment();
+
+
+        try (PrintWriter out = response.getWriter()) {
+            if (action.equals("all")) {
+                listDoctorCall = dDao.getDoctorsByServiceCategory(Integer.parseInt(categoryService_id));
+                url = "callVideoWithDoctor?action=all&categoryService_id="+categoryService_id;
+            }
+           
+            if (action.equals("filter")) {
+
+                String gender = request.getParameter("gender");
+                String department_id = request.getParameter("department_id");
+
+                request.setAttribute("gender", gender);
+                request.setAttribute("department_id", department_id);
+
+                listDoctorCall = dDao.getDoctorsByServiceCategoryFilter(Integer.parseInt(categoryService_id),gender, department_id);
+                url = "callVideoWithDoctor?action=filter&categoryService_id="+categoryService_id+"&gender="+gender+"&department_id="+department_id;
+
+            }
+
+            if (listDoctorCall != null) {
+                int page, numberPerPage = 6;
+                int size = listDoctorCall.size();
+                int numberPage = (size % numberPerPage == 0) ? (size / numberPerPage) : ((size / numberPerPage) + 1);
+                String xPage = request.getParameter("page");
+                if (xPage == null) {
+                    page = 1;
+                } else {
+                    page = Integer.parseInt(xPage);
+                }
+                int start = (page - 1) * numberPerPage;
+                int end = Math.min(page * numberPerPage, size);
+                int numPageDisplay = 4;
+                List<Doctor> listDoctorDisplay = getListDoctorDisplay(listDoctorCall, start, end);
+                request.setAttribute("categoryService_id",categoryService_id);
+                request.setAttribute("department", listDeparment);
+                request.setAttribute("listD", listDoctorDisplay);
+                request.setAttribute("url", url);
+                request.setAttribute("page", page);
+                request.setAttribute("num", numberPage);
+                request.setAttribute("numPageDisplay", numPageDisplay);
+                request.getRequestDispatcher("callVideoDoctor.jsp").forward(request, response);
+            }
+
+        }
+
+
+    }
+    
+    
+     private List<Doctor> getListDoctorDisplay(List<Doctor> listDoctor, int start, int end) {
+        List<Doctor> listDoctorDisplay = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            listDoctorDisplay.add(listDoctor.get(i));
+        }
+        return listDoctorDisplay;
     }
 
     /**
