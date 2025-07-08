@@ -19,8 +19,9 @@
             <main class="page-content bg-light">
                 <jsp:include page="../admin/layout/headmenu.jsp"/>
                 <div class="container-fluid">
-                    <div class="layout-specing">
+                    <div class="layout-specing" style="">
                         <div class="row">
+                            
                             <div class="col-md-3 row">
                                 <div class="col-md-4">
                                     <h5 class="mb-0">Appointment</h5>
@@ -225,8 +226,29 @@
                 </div>
 
 
+                <c:if test="${not empty refundRequest}">
+                    <div class="refund-alert position-fixed top-50 start-50 translate-middle text-center shadow-lg border border-warning bg-light"
+                         role="alert"
+                         style="z-index: 1055; width: 90%; max-width: 700px; border-radius: 1rem; font-size: 18px; padding: 2rem;">
 
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fa-solid fa-circle-exclamation text-warning" style="font-size: 3rem;"></i>
 
+                            <h4 class="fw-bold text-dark mt-3 mb-4">
+                                Có <span class="text-danger">${refundRequest}</span> phiếu khám yêu cầu hủy cần xử lý!
+                            </h4>
+
+                            <div class="d-flex justify-content-center gap-3">
+                                <form method="post" action="appointmentManager">
+                                    <input type="hidden" name="stopNotify" value="stopNotifyRefund" />
+                                    <button type="submit" class="btn btn-outline-dark px-4">Xác nhận</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </c:if>
 
                 <jsp:include page="../admin/layout/footer.jsp"/>
             </main>
@@ -245,6 +267,8 @@
         <script src="assets/js/timepicker.init.js"></script> 
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
+
+      
 
     </body>
 

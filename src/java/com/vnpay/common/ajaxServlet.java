@@ -62,12 +62,14 @@ public class ajaxServlet extends HttpServlet {
             resp.sendRedirect("home");
             return;
         }
+        
         if (paymentMethod.equals("taiPhongKham")) {
-
-            int appointmentId = appointmentDao.insertAppointment(GenerateAppoinmentCode.generateAppoinmentCode(), p.getPatientId(), Integer.parseInt((String) session.getAttribute("doctorId")),Integer.parseInt((String) session.getAttribute("slotId")), s.getService_id(), "");
+            
+            String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
+            int appointmentId = appointmentDao.insertAppointment(appointmentCode, p.getPatientId(), Integer.parseInt((String) session.getAttribute("doctorId")),Integer.parseInt((String) session.getAttribute("slotId")), s.getService_id(), (String)session.getAttribute("reason"));
             payDAO.insertPayment(appointmentId, amountDouble, "CASH", "pending", "", "", "");
             req.setAttribute("result", "true");
-            req.getRequestDispatcher("bookingResult.jsp").forward(req, resp);
+            resp.sendRedirect("billsDetail?appointment_code=" + appointmentCode);
             
         } else if (paymentMethod.equals("vnPay")) {
 

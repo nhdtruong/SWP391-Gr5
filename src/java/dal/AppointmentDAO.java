@@ -22,7 +22,7 @@ import java.sql.Statement;
  */
 public class AppointmentDAO extends DBContext {
 
-    public int insertAppointment(String appointmentCode, int patientId,int doctorId, int slotId, int serviceId, String note) {
+    public int insertAppointment(String appointmentCode, int patientId, int doctorId, int slotId, int serviceId, String note) {
         String sql = "INSERT INTO appointment (appointment_code, patient_id,doctor_id, slot_id, service_id, note) VALUES (?, ?,?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -242,6 +242,22 @@ public class AppointmentDAO extends DBContext {
         return list;
     }
 
+    public int countRefundRequestedAppointments() {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM appointment WHERE status = 3";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
     public List<AppointmentView> getAllAppointments() {
         List<AppointmentView> list = new ArrayList<>();
 
@@ -305,6 +321,70 @@ public class AppointmentDAO extends DBContext {
         }
 
         return list;
+    }
+
+
+    
+    public AppointmentView getBillstByCode(String appointmentCode) {
+        String sql = "SELECT \n"
+                + "    a.appointment_id,\n"
+                + "    a.appointment_code,\n"
+                + "    a.slot_id,\n"
+                + "    p.patient_name,\n"
+                + "    d.doctor_name,\n"
+                + "    s.service_name,\n"
+                + "    dpt.department_name,\n"
+                + "    ds.working_date,\n"
+                + "    a.created_at,\n"
+                + "    a.is_refunded,\n"
+                + "    sl.slot_start,\n"
+                + "    sl.slot_end,\n"
+                + "    a.status,\n"
+                + "    a.note,\n"
+                + "    ISNULL(pm.amount, 0) AS amount,\n"
+                + "    ISNULL(pm.status, 'Chưa thanh toán') AS payment_status\n"
+                + "FROM appointment a\n"
+                + "JOIN patients p ON a.patient_id = p.patient_id\n"
+                + "JOIN doctors d ON a.doctor_id = d.doctor_id\n"
+                + "JOIN service s ON a.service_id = s.service_id\n"
+                + "JOIN department dpt ON s.department_id = dpt.department_id\n"
+                + "JOIN doctor_schedule_slot sl ON a.slot_id = sl.slot_id\n"
+                + "JOIN doctor_schedule ds ON sl.schedule_id = ds.schedule_id\n"
+                + "LEFT JOIN payment pm ON pm.payment_id = (\n"
+                + "    SELECT TOP 1 payment_id FROM payment\n"
+                + "    WHERE appointment_id = a.appointment_id\n"
+                + "    ORDER BY pay_date DESC\n"
+                + ")\n"
+                + "WHERE a.appointment_code = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, appointmentCode);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new AppointmentView(
+                            rs.getInt("appointment_id"),
+                            rs.getString("appointment_code"),
+                            rs.getInt("slot_id"),
+                            rs.getString("patient_name"),
+                            rs.getString("doctor_name"),
+                            rs.getString("service_name"),
+                            rs.getString("department_name"),
+                            rs.getDate("working_date"),
+                            rs.getDate("created_at"),
+                            rs.getBoolean("is_refunded"),
+                            rs.getTime("slot_start"),
+                            rs.getTime("slot_end"),
+                            rs.getInt("status"),
+                            rs.getString("note"),
+                            rs.getDouble("amount"),
+                            rs.getString("payment_status")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public AppointmentView getAppointmentsByAppointmentId(int appointmentID) {
@@ -371,10 +451,49 @@ public class AppointmentDAO extends DBContext {
         return null;
     }
 
-    public boolean cancelAppointmentById(int appointmentId) {
-        String sql = "UPDATE appointment SET status = 0 WHERE appointment_id = ?";
+    public List<AppointmentView> getAppointmentsByDoctorId(int doctorId) {
+        List<AppointmentView> list = new ArrayList<>();
+
+        String sql = "SELECT a.appointment_id,p.patient_id, p.patient_name, s.service_name, "
+                + "a.status, a.note, dss.slot_start, dss.slot_end, ds.working_date "
+                + "FROM appointment a "
+                + "JOIN patients p ON a.patient_id = p.patient_id "
+                + "JOIN service s ON a.service_id = s.service_id "
+                + "JOIN doctor_schedule_slot dss ON a.slot_id = dss.slot_id "
+                + "JOIN doctor_schedule ds ON dss.schedule_id = ds.schedule_id "
+                + "WHERE a.doctor_id = ?";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, appointmentId);
+            ps.setInt(1, doctorId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                AppointmentView a = new AppointmentView();
+                a.setPatient_id(rs.getInt("patient_id"));
+                a.setAppointmentId(rs.getInt("appointment_id"));
+                a.setPatientName(rs.getString("patient_name"));
+                a.setServiceName(rs.getString("service_name"));
+                a.setStatus(rs.getInt("status"));
+                a.setNote(rs.getString("note"));
+                a.setSlotStart(rs.getTime("slot_start"));
+                a.setSlotEnd(rs.getTime("slot_end"));
+                a.setWorkingDate(rs.getDate("working_date"));
+
+                list.add(a);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
+    
+
+    public boolean cancelAppointmentById(String appointment_code) {
+        String sql = "UPDATE appointment SET status = 0 WHERE appointment_code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, appointment_code);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception e) {
@@ -383,10 +502,10 @@ public class AppointmentDAO extends DBContext {
         }
     }
 
-    public boolean requestRefoundAppointmentById(int appointmentId) {
-        String sql = "UPDATE appointment SET status = 3 WHERE appointment_id = ?";
+    public boolean requestRefoundAppointmentById(String appointment_code) {
+        String sql = "UPDATE appointment SET status = 3 WHERE appointment_code = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, appointmentId);
+            ps.setString(1, appointment_code);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception e) {
@@ -451,10 +570,11 @@ public class AppointmentDAO extends DBContext {
 
     public static void main(String[] args) {
         AppointmentDAO a = new AppointmentDAO();
-        System.out.println(a.getAllAppointments());
+        System.out.println(a.getBillstByCode("T2507061WWT83"));
+        //   System.out.println(a.getAllAppointments());
         //  System.out.println(a.getAppointmentsByUsername("user10"));
         //System.out.println(a.getAllAppointments());
-        System.out.println(a.getAppointmentsByAppointmentId(19));
+        //   System.out.println(a.getAppointmentsByAppointmentId(19));
     }
 
 }

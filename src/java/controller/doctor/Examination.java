@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.uer;
+package controller.doctor;
 
-import config.EmailSender;
-import dal.AppointmentDAO;
+import dal.MedicalRecordDAO;
+import dal.MedicineDAO;
+import dal.PatientDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,17 +16,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import model.AccountUser;
-import model.AppointmentView;
+import model.Medicine;
+import model.Patient;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name = "Bills", urlPatterns = {"/bills"})
-public class Bills extends HttpServlet {
+@WebServlet(name = "Examination", urlPatterns = {"/examination"})
+public class Examination extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +45,10 @@ public class Bills extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Bills</title>");
+            out.println("<title>Servlet Examination</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Bills at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Examination at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,53 +66,26 @@ public class Bills extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession();
-        AppointmentDAO apoiAppointmentDAO = new AppointmentDAO();
-       
         AccountUser acc = (AccountUser) session.getAttribute("user");
         if (acc == null) {
-            response.sendRedirect("login");
+            response.sendRedirect("home");
             return;
         }
+        UserDAO userDAO = new UserDAO();
 
-       
-        
-        String filter = request.getParameter("filter");
+        MedicineDAO medicineDAO = new MedicineDAO();
+        List<Medicine> medicineList = medicineDAO.getAllMedicines();
+        request.setAttribute("medicineList", medicineList);
+        int doctorId = userDAO.getDoctorIdByUsername(acc.getUsername());
+        request.setAttribute("doctorId", doctorId);
+        String patientId = request.getParameter("patientId");
+        PatientDAO patientDAO = new PatientDAO();
+        Patient patient = patientDAO.getPatientById(Integer.parseInt(patientId));
+        request.setAttribute("patient", patient);
+        request.getRequestDispatcher("medicalRecord.jsp").forward(request, response);
 
-        if (filter == null || filter.isEmpty()) {
-            filter = "pending";
-        }
-        
-        List<AppointmentView> list = apoiAppointmentDAO.getAppointmentsByUsername(acc.getUsername());
-        List<AppointmentView> filteredBills = new ArrayList<>();
-        for (AppointmentView b : list) {
-            switch (filter) {
-                case "pending": // trươgf hơpj chưa thanh toán , đã đặt 
-                    if ("pending".equals(b.getPaymentStatus()) && b.getStatus() == 1) {
-                        filteredBills.add(b);
-                    }
-                    break;
-                case "success": //trường hợp đã thanh toán , đã đặt , , muốn hủy vì đã thanh toán
-                    if ("success".equals(b.getPaymentStatus()) && (b.getStatus() == 1 || b.getStatus() == 3)) {
-                        filteredBills.add(b);
-                    }
-                    break;
-                case "done":
-                    if (b.getStatus() == 2) {
-                        filteredBills.add(b);
-                    }
-                    break;
-                case "canceled":
-                    if (b.getStatus() == 0) {
-                        filteredBills.add(b);
-                    }
-                    break;
-            }
-        }
-        
-        request.setAttribute("bills", filteredBills);
-        request.setAttribute("filter", filter);
-        request.getRequestDispatcher("medicalExaminationForm.jsp").forward(request, response);
     }
 
     /**
@@ -125,19 +99,53 @@ public class Bills extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
         
-            () {
-        return "Short description";
-        }// </editor-fold>
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        int patientId = Integer.parseInt(request.getParameter("patientId"));
+        int doctorId = Integer.parseInt(request.getParameter("doctorId"));
 
+
+        String symptoms = request.getParameter("symptoms");
+        String diagnosis = request.getParameter("diagnosis");
+        String conclusion = request.getParameter("conclusion");
+
+
+        String instruction = request.getParameter("instruction");
+        String note = request.getParameter("note");
+
+        String[] selectedMedicineIds = request.getParameterValues("medicineIds");
+
+        
+     
+        MedicalRecordDAO dao = new MedicalRecordDAO();
+        boolean success = dao.insertMedicalRecord(
+                patientId,
+                doctorId,
+                symptoms,
+                diagnosis,
+                conclusion,
+                instruction,
+                note,
+                selectedMedicineIds
+        );
+
+        if (success) {
+              response.sendRedirect("myPatient");
+        } else {
+            request.setAttribute("error", "Lưu bệnh án thất bại.");
+            request.getRequestDispatcher("recordForm.jsp").forward(request, response);
+        }
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

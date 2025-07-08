@@ -98,12 +98,12 @@ public class LoginServerlet extends HttpServlet {
                 }
                 if (account.getRole() == 1) {
                     response.sendRedirect("dashboard");
-                } else if (account.getRole() == 3) {
-                    response.sendRedirect("dashboard");
                 } else if (account.getRole() == 2) {
                     response.sendRedirect("dashboard");
-                } else if (account.getRole() == 4) {
+                } else if (account.getRole() == 3) {
                     response.sendRedirect("dashboard");
+                } else if (account.getRole() == 4) {
+                    response.sendRedirect("home");
                 } else if (account.getRole() == 5) {
                     response.sendRedirect("home");
                 } else {

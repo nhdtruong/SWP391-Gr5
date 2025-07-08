@@ -17,6 +17,7 @@ public class AppointmentView {
     private String appointment_code;
     private int slotId;
     private String patientName;
+    private int patient_id;
     private String doctorName;
     private double amount;
     private String paymentStatus;
@@ -29,6 +30,14 @@ public class AppointmentView {
     private Time slotEnd;
     private int status;
     private String note;
+
+    public int getPatient_id() {
+        return patient_id;
+    }
+
+    public void setPatient_id(int patient_id) {
+        this.patient_id = patient_id;
+    }
 
     public double getAmount() {
         return amount;

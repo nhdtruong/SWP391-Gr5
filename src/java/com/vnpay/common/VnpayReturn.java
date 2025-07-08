@@ -77,31 +77,33 @@ public class VnpayReturn extends HttpServlet {
 
                     Patient p = (Patient) session.getAttribute("patient");
                     Service s = (Service) session.getAttribute("serviceBooking");
-                    
+                    String reason =(String) session.getAttribute("reason");
+
                     AppointmentDAO appointmentDAO = new AppointmentDAO();
                     String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
                     int appointmentId = appointmentDAO.insertAppointment(
                             appointmentCode,
                             p.getPatientId(),
-                             Integer.parseInt((String) session.getAttribute("doctorId")),
+                            Integer.parseInt((String) session.getAttribute("doctorId")),
                             Integer.parseInt((String) session.getAttribute("slotId")),
                             s.getService_id(),
-                           ""
+                            reason
                     );
 
-                    paymentDAO.updateAppointmentIdForPaymentSuccess(appointmentId,txnRef, vnp_TransactionNo);
-                    request.setAttribute("result", "true");
-                    request.getRequestDispatcher("bookingResult.jsp").forward(request, response);
+                    paymentDAO.updateAppointmentIdForPaymentSuccess(appointmentId, txnRef, vnp_TransactionNo);
+
+                    response.sendRedirect("billsDetail?appointment_code="+appointmentCode);
+                   
                     transSuccess = true;
+                     return;
                 } else {
-                    paymentDAO.updatePaymentStatusFailed(txnRef); 
+                    paymentDAO.updatePaymentStatusFailed(txnRef);
                     request.setAttribute("result", "false");
                     request.getRequestDispatcher("bookingResult.jsp").forward(request, response);
                     return;
                 }
 
-                request.setAttribute("result", transSuccess);
-                request.getRequestDispatcher("paymentResult.jsp").forward(request, response);
+   
             } else {
 
                 System.out.println("GD KO HOP LE (invalid signature)");
@@ -121,7 +123,7 @@ public class VnpayReturn extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-          processRequest(request, response);
+        processRequest(request, response);
     }
 
     /**

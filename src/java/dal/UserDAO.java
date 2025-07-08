@@ -229,6 +229,8 @@ public class UserDAO extends DBContext {
             System.out.println(e);
         }
     }
+    
+    
 
     public void deleteAccountByAdmin(String username) {
         String sql = "DELETE FROM users WHERE username = ?";
@@ -374,6 +376,20 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
+    
+    public int getDoctorIdByUsername(String username) {
+    String sql = "SELECT doctor_id FROM doctors WHERE username = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("doctor_id");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return -1; // Không tìm thấy
+}
 
     public AccountUser getAccountByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";

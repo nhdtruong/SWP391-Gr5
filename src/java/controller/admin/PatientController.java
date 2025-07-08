@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 import java.util.List;
 import model.Patient;
@@ -34,7 +35,8 @@ public class PatientController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        session.setAttribute("stopRemain", false);
         String name = request.getParameter("searchname") == null ? "" : request.getParameter("searchname");
         PatientDAO patientDAO = new PatientDAO();
         int number = patientDAO.searchPatientsByNameWithPagingNumber(name);

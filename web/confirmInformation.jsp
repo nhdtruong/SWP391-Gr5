@@ -53,117 +53,132 @@
 
 
                         <div class="col-12 col-lg-9">
-                            <div class="col-12 col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Xác nhận thông tin khám</h5>
-                                    </div>
-                                    <div class="card-body" style="padding: 0">
-                                        <table class="table  align-middle">
-                                            <thead class="">
-                                                <tr>
-                                                    <th style="width: 5%">#</th>
-                                                    <th style="width: 19%">Chuyên khoa</th>
-                                                    <th style="width: 23%">Dịch vụ</th>
-                                                    <th style="width: 15%" >Bác sĩ</th>
-                                                    <th style="width: 20%">Thời gian khám</th>
-                                                    <th style="width: 20%">Tiền khám</th>
-                                                    <th style="width: 5%"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <td>1</td>
-                                            <td>${sessionScope.departmentName}</td>
-                                            <td>${sessionScope.serviceBooking.service_name}</td>
-                                            <td>${sessionScope.doctorName}</td>
-                                            <c:if test="${sessionScope.token == 'online'}"> <td>Chờ cập nhật</td></c:if>
-                                            <c:if test="${sessionScope.token == 'chuyenkhoa'}"> <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td></c:if>
-                                           
-                                            <c:if test="${sessionScope.isBHYT == '0'}"><td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td></c:if>
-                                            <c:if test="${sessionScope.isBHYT == '1' && empty sessionScope.changeY}">
-                                                <td>
-                                                    <del>
+                            <form action="confirmFinalInformation" method="get">
+                                <div class="col-12 col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Xác nhận thông tin khám</h5>
+                                        </div>
+                                        <div class="card-body" style="padding: 0">
+                                            <table class="table  align-middle">
+                                                <thead class="">
+                                                    <tr>
+                                                        <th style="width: 5%">#</th>
+                                                        <th style="width: 19%">Chuyên khoa</th>
+                                                        <th style="width: 23%">Dịch vụ</th>
+                                                        <th style="width: 15%" >Bác sĩ</th>
+                                                        <th style="width: 20%">Thời gian khám</th>
+                                                        <th style="width: 20%">Tiền khám</th>
+                                                        <th style="width: 5%"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <td>1</td>
+                                                <td>${sessionScope.departmentName}</td>
+                                                <td>${sessionScope.serviceBooking.service_name}</td>
+                                                <td>${sessionScope.doctorName}</td>
+                                                <c:if test="${sessionScope.token == 'online'}"> <td>Chờ cập nhật</td></c:if>
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}"> <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td></c:if>
+
+                                                <c:if test="${sessionScope.isBHYT == '0'}"><td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td></c:if>
+                                                <c:if test="${sessionScope.isBHYT == '1' && empty sessionScope.changeY}">
+                                                    <td>
+                                                        <del>
+                                                            <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
+                                                        </del>
+                                                        &nbsp;
+                                                        <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount * sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
+                                                    </td>
+                                                </c:if>
+
+                                                <c:if test="${sessionScope.isBHYT == '1' && not empty sessionScope.changeY }">
+                                                    <td>
                                                         <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
-                                                    </del>
-                                                    &nbsp;
-                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee - sessionScope.serviceBooking.discount * sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
-                                                </td>
-                                            </c:if>
-
-                                            <c:if test="${sessionScope.isBHYT == '1' && not empty sessionScope.changeY }">
+                                                    </td>
+                                                </c:if>
                                                 <td>
-                                                    <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ
-                                                </td>
-                                            </c:if>
-                                            <td>
-                                                <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" title="Xóa lịch khám" onclick="return confirm('Bạn có chắc muốn xóa thông tin đặt khám này?')">
-                                                    <i class="fa fa-trash" style="color: red;"></i>
-                                                </a>
-                                            <td>
+                                                    <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" title="Xóa lịch khám" onclick="return confirm('Bạn có chắc muốn xóa thông tin đặt khám này?')">
+                                                        <i class="fa fa-trash" style="color: red;"></i>
+                                                    </a>
+                                                <td>
+
+                                                    </tbody>
+                                            </table>
+                                        </div>
 
 
 
-
-                                                </tbody>
-                                        </table>
                                     </div>
-
-
-
                                 </div>
-                            </div>
-                            <div class="col-12 col-lg-12" style="margin-top: 40px">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Thông tin bệnh nhân</h5>
+
+
+                                <div class="col-12 col-lg-12"  style="margin-top: 15px">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Lý do khám</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="reason" name="reason" rows="1" placeholder="Nhập lý do bạn muốn khám..."></textarea>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <c:set var="p" value="${sessionScope.patient}"/>
-                                    <div class="card-body">
-                                        <div class="row mb-2">
-                                            <div class="col-md-6"><i class="bi bi-person-fill me-1"></i> <span class="x">Họ và tên:</span><strong>${p.patientName}</strong></div>
-                                            <div class="col-md-6"><i class="bi bi-gender-ambiguous me-1"></i> <span class="x">Giới tính:</span><strong>${p.gender}</strong></div>
+                                </div>
+                                <div class="col-12 col-lg-12" style="margin-top: 15px">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Thông tin bệnh nhân</h5>
                                         </div>
-                                        <div class="row mb-2">
-                                            <div class="col-md-6"><i class="bi bi-calendar-event me-1"></i> <span class="x">Ngày sinh:</span><strong><fmt:formatDate value="${p.dob}" pattern="dd/ MM/ yyyy"/></strong></div>
-                                            <div class="col-md-6"><i class="bi bi-person-vcard me-1"></i> <span class="x">CMND:</span><strong>${p.cccd}</strong></div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-md-6"><i class="bi bi-envelope-fill me-1"></i> <span class="x">Email:</span>
-                                                <c:if test="${not empty p.email}"><strong>${p.email}</strong></c:if>
-                                                <c:if test="${empty p.email}"><strong>Chưa cập nhật</strong></c:if>
-                                                </div>
-                                                <div class="col-md-6"><i class="bi bi-people-fill me-1"></i> <span class="x">Dân tộc:</span>
-                                                <c:if test="${not empty p.nation}"><strong>${p.nation}</strong></c:if>
-                                                <c:if test="${empty p.nation}"><strong>Chưa cập nhật</strong></c:if>
-                                                </div>
+                                        <c:set var="p" value="${sessionScope.patient}"/>
+                                        <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col-md-6"><i class="bi bi-person-fill me-1"></i> <span class="x">Họ và tên:</span><strong>${p.patientName}</strong></div>
+                                                <div class="col-md-6"><i class="bi bi-gender-ambiguous me-1"></i> <span class="x">Giới tính:</span><strong>${p.gender}</strong></div>
                                             </div>
                                             <div class="row mb-2">
-                                                <div class="col-md-6"><i class="bi bi-credit-card me-1"></i> <span class="x">Mã BHYT:</span>
-                                                <c:if test="${not empty p.bhyt}"><strong>${p.bhyt}</strong></c:if>
-                                                <c:if test="${empty p.bhyt}"><strong>Chưa cập nhật</strong></c:if>
+                                                <div class="col-md-6"><i class="bi bi-calendar-event me-1"></i> <span class="x">Ngày sinh:</span><strong><fmt:formatDate value="${p.dob}" pattern="dd/ MM/ yyyy"/></strong></div>
+                                                <div class="col-md-6"><i class="bi bi-person-vcard me-1"></i> <span class="x">CMND:</span><strong>${p.cccd}</strong></div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-6"><i class="bi bi-envelope-fill me-1"></i> <span class="x">Email:</span>
+                                                    <c:if test="${not empty p.email}"><strong>${p.email}</strong></c:if>
+                                                    <c:if test="${empty p.email}"><strong>Chưa cập nhật</strong></c:if>
+                                                    </div>
+                                                    <div class="col-md-6"><i class="bi bi-people-fill me-1"></i> <span class="x">Dân tộc:</span>
+                                                    <c:if test="${not empty p.nation}"><strong>${p.nation}</strong></c:if>
+                                                    <c:if test="${empty p.nation}"><strong>Chưa cập nhật</strong></c:if>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6"><i class="bi bi-geo-alt-fill me-1"></i> <span class="x">Địa chỉ:</span><strong>${p.address}</strong></div>
+                                                <div class="row mb-2">
+                                                    <div class="col-md-6"><i class="bi bi-credit-card me-1"></i> <span class="x">Mã BHYT:</span>
+                                                    <c:if test="${not empty p.bhyt}"><strong>${p.bhyt}</strong></c:if>
+                                                    <c:if test="${empty p.bhyt}"><strong>Chưa cập nhật</strong></c:if>
+                                                    </div>
+                                                    <div class="col-md-6"><i class="bi bi-geo-alt-fill me-1"></i> <span class="x">Địa chỉ:</span><strong>${p.address}</strong></div>
+                                            </div>
+
+                                            <div class="alert mt-3 mb-0" role="alert"
+                                                 style="background-color: #f8d7da; color: #842029;">
+                                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                                Trong thời gian quy định, nếu quý khách hủy phiếu khám sẽ được hoàn lại tiền khám và các dịch vụ đặt thêm (không bao gồm phí tiện ích).
+                                            </div>
                                         </div>
 
-                                        <div class="alert mt-3 mb-0" role="alert"
-                                             style="background-color: #f8d7da; color: #842029;">
-                                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                                            Trong thời gian quy định, nếu quý khách hủy phiếu khám sẽ được hoàn lại tiền khám và các dịch vụ đặt thêm (không bao gồm phí tiện ích).
-                                        </div>
+
                                     </div>
-
-
+                                    <div class="card-footer d-flex justify-content-between" style="margin-top: 20px">
+                                        <a href="chooseRecords" class="btn btn-outline-secondary">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                        </a>
+                                        <button type="submit" class="btn btn-info">
+                                            <i class="fa-solid fa-check me-1"></i> Xác nhận
+                                        </button>
+                                        <!--                                        <a href="confirmFinalInformation" class="btn btn-info">
+                                                                                    <i class="fa-solid fa-check me-1"></i> Xác nhận
+                                                                                </a>       -->
+                                    </div>
                                 </div>
-                                <div class="card-footer d-flex justify-content-between" style="margin-top: 20px">
-                                    <a href="chooseRecords" class="btn btn-outline-secondary">
-                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                    </a>
-                                    <a href="confirmFinalInformation" class="btn btn-info">
-                                        <i class="fa-solid fa-check me-1"></i> Xác nhận
-                                    </a>       
-                                </div>
-                            </div>
-
+                            </form>
                         </div>
 
 
@@ -185,10 +200,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <c:if test="${not empty error}">
             <script>
-                                                    document.addEventListener("DOMContentLoaded", function () {
-                                                        var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
-                                                        errorModal.show();
-                                                    });
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
+                                                            errorModal.show();
+                                                        });
             </script>
         </c:if>
 

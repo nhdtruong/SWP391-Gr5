@@ -2,27 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.doctor;
 
+import dal.AppointmentDAO;
+import dal.UserDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.AppointmentView;
-import dal.AppointmentDAO;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.List;
+import model.AccountUser;
+import model.AppointmentView;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name = "AppointmentManager", urlPatterns = {"/appointmentManager"})
-public class AppointmentManager extends HttpServlet {
+@WebServlet(name = "MyAppointment", urlPatterns = {"/myAppointment"})
+public class MyAppointment extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,49 +40,38 @@ public class AppointmentManager extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        String stopNotify = request.getParameter("stopNotify");
-
-        AppointmentDAO appointmentDao = new AppointmentDAO();
         HttpSession session = request.getSession();
-
-
-        if ("stopNotifyRefund".equals(stopNotify)) {
-            session.setAttribute("stopRemain", true);
-            response.sendRedirect("appointmentManager?action=all");
+        AccountUser acc = (AccountUser)session.getAttribute("user");
+        if(acc == null){
+            response.sendRedirect("home");
             return;
         }
+        UserDAO userDAO = new UserDAO();
+        
+        int doctorId = userDAO.getDoctorIdByUsername(acc.getUsername());
 
 
-        Boolean stopRemain = (Boolean) session.getAttribute("stopRemain");
-        if (stopRemain == null || !stopRemain) {
-            int cntRefundRequest = appointmentDao.countRefundRequestedAppointments();
-            if (cntRefundRequest > 0) {
-                request.setAttribute("refundRequest", cntRefundRequest);
-            }
-        }
+        AppointmentDAO appointmentDao = new AppointmentDAO();
+
+       
         String url = null;
 
         List<AppointmentView> listAppointment = null;
 
         if (action.equals("all")) {
-            listAppointment = appointmentDao.getAllAppointments();
-            url = "appointmentManager?action=all";
-        } else if (action.equals("search")) {
-            String text = request.getParameter("text");
-            request.setAttribute("text", text);
-            listAppointment = appointmentDao.getAllAppointmentsSearchDoctor(text);
-            url = "appointmentManager?action=search&text=" + text;
+            listAppointment = appointmentDao.getAppointmentsByDoctorId(doctorId);
+            url = "myAppointment?action=all";
         } else if (action.equals("filter")) {
             String status = request.getParameter("status");
-            String paymentStatus = request.getParameter("paymentStatus");
+
             request.setAttribute("status", status);
-            request.setAttribute("paymentStatus", paymentStatus);
-            listAppointment = appointmentDao.getAppointmentsByFilter(status, paymentStatus);
-            url = "appointmentManager?action=filter&status=" + status + "&paymentStatus=" + paymentStatus;
+   
+           // listAppointment = appointmentDao.getAppointmentsByFilter(status);
+            url = "myAppointment?action=filter&status=" + status + "&paymentStatus=";
         }
 
         if (listAppointment != null) {
-            int page, numberPerPage = 9;
+            int page, numberPerPage = 7;
             int size = listAppointment.size();
             int numberPage = (size % numberPerPage == 0) ? (size / numberPerPage) : ((size / numberPerPage) + 1);
             String xPage = request.getParameter("page");
@@ -92,15 +82,17 @@ public class AppointmentManager extends HttpServlet {
             }
             int start = (page - 1) * numberPerPage;
             int end = Math.min(page * numberPerPage, size);
-            int numPageDisplay = 7;
+            int numPageDisplay = 4;
             List<AppointmentView> listAppointmentDisplay = getListAppointmentDisplay(listAppointment, start, end);
             request.setAttribute("Appointment", listAppointmentDisplay);
             request.setAttribute("url", url);
             request.setAttribute("page", page);
             request.setAttribute("num", numberPage);
             request.setAttribute("numPageDisplay", numPageDisplay);
-            request.getRequestDispatcher("admin/appointmentView.jsp").forward(request, response);
+           request.getRequestDispatcher("myAppointment.jsp").forward(request, response);
         }
+
+        
 
     }
 

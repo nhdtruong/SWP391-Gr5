@@ -143,7 +143,7 @@
                                             <a class="dropdown-item text-dark" href="appointmentmanage?action=all"><i class="uil uil-calendar-alt me-1"></i> Quản lý</a>
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 4}">
-                                            <a class="dropdown-item text-dark" href="doctormanage?action=all"><i class="uil uil-user-md me-1"></i> Quản lý</a>
+                                            <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user-md me-1"></i> Quản lý</a>
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 5}">
                                             <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user me-1"></i> Tài khoản của tôi</a>

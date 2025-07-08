@@ -64,6 +64,8 @@ public class ConfirmFinalInformation extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String token = (String) session.getAttribute("token");
+        String reason = request.getParameter("reason");
+        session.setAttribute("reason",reason);
         if (token.equals("online")) {
             response.sendRedirect("payment");
         } else if (token.equals("chuyenkhoa")) {
