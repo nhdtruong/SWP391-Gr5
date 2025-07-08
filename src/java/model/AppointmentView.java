@@ -16,13 +16,11 @@ public class AppointmentView {
     private int appointmentId;
     private String appointment_code;
     private int slotId;
-    private String patientName;
-    private int patient_id;
+    private Patient patient;
     private String doctorName;
+    private int doctorId;
     private double amount;
     private String paymentStatus;
-    private String serviceName;
-    private String departmentName;
     private Date workingDate;
     private Date created_at;
     private boolean is_refunded;
@@ -31,12 +29,44 @@ public class AppointmentView {
     private int status;
     private String note;
 
-    public int getPatient_id() {
-        return patient_id;
+    public AppointmentView() {
     }
 
-    public void setPatient_id(int patient_id) {
-        this.patient_id = patient_id;
+    public AppointmentView(int appointmentId, String appointment_code, int slotId, Patient patient, String doctorName, int doctorId, double amount, String paymentStatus, String patientName, String serviceName, String departmentName, Date workingDate, Date created_at, boolean is_refunded, Time slotStart, Time slotEnd, int status, String note) {
+        this.appointmentId = appointmentId;
+        this.appointment_code = appointment_code;
+        this.slotId = slotId;
+        this.patient = patient;
+        this.doctorName = doctorName;
+        this.doctorId = doctorId;
+        this.amount = amount;
+        this.paymentStatus = paymentStatus;
+        this.patientName = patientName;
+        this.serviceName = serviceName;
+        this.departmentName = departmentName;
+        this.workingDate = workingDate;
+        this.created_at = created_at;
+        this.is_refunded = is_refunded;
+        this.slotStart = slotStart;
+        this.slotEnd = slotEnd;
+        this.status = status;
+        this.note = note;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
     }
 
     public double getAmount() {
@@ -55,44 +85,19 @@ public class AppointmentView {
         this.paymentStatus = paymentStatus;
     }
 
-    public AppointmentView(int appointmentId, String appointment_code, int slotId, String patientName, String doctorName, String serviceName, String departmentName, Date workingDate, Date created_at, boolean is_refunded, Time slotStart, Time slotEnd, int status, String note) {
-        this.appointmentId = appointmentId;
-        this.appointment_code = appointment_code;
-        this.slotId = slotId;
-        this.patientName = patientName;
-        this.doctorName = doctorName;
-        this.serviceName = serviceName;
-        this.departmentName = departmentName;
-        this.workingDate = workingDate;
-        this.created_at = created_at;
-        this.is_refunded = is_refunded;
-        this.slotStart = slotStart;
-        this.slotEnd = slotEnd;
-        this.status = status;
-        this.note = note;
+    public String getPatientName() {
+        return patientName;
     }
 
-    public AppointmentView(int appointmentId, String appointment_code, int slotId, String patientName, String doctorName,
-            String serviceName, String departmentName, Date workingDate, Date created_at, boolean is_refunded,
-            Time slotStart, Time slotEnd, int status, String note,
-            double amount, String paymentStatus) {
-        this.appointmentId = appointmentId;
-        this.appointment_code = appointment_code;
-        this.slotId = slotId;
+    public void setPatientName(String patientName) {
         this.patientName = patientName;
-        this.doctorName = doctorName;
-        this.serviceName = serviceName;
-        this.departmentName = departmentName;
-        this.workingDate = workingDate;
-        this.created_at = created_at;
-        this.is_refunded = is_refunded;
-        this.slotStart = slotStart;
-        this.slotEnd = slotEnd;
-        this.status = status;
-        this.note = note;
-        this.amount = amount;
-        this.paymentStatus = paymentStatus;
     }
+
+    private String patientName;
+    private String serviceName;
+    private String departmentName;
+
+
 
     public String getDepartmentName() {
         return departmentName;
@@ -126,32 +131,20 @@ public class AppointmentView {
         this.is_refunded = is_refunded;
     }
 
-    public AppointmentView() {
-    }
-
-    public AppointmentView(int appointmentId, String appointment_code, int slotId, String patientName, String doctorName, String serviceName, Date workingDate, Date created_at, boolean is_refunded, Time slotStart, Time slotEnd, int status, String note) {
+    public AppointmentView(int appointmentId, String appointment_code, int slotId, Patient patient, String doctorName, int doctorId, double amount, String paymentStatus, String serviceName, String departmentName, Date workingDate, Date created_at, boolean is_refunded, Time slotStart, Time slotEnd, int status, String note) {
         this.appointmentId = appointmentId;
         this.appointment_code = appointment_code;
         this.slotId = slotId;
-        this.patientName = patientName;
+        this.patient = patient;
         this.doctorName = doctorName;
+        this.doctorId = doctorId;
+        this.amount = amount;
+        this.paymentStatus = paymentStatus;
         this.serviceName = serviceName;
+        this.departmentName = departmentName;
         this.workingDate = workingDate;
         this.created_at = created_at;
         this.is_refunded = is_refunded;
-        this.slotStart = slotStart;
-        this.slotEnd = slotEnd;
-        this.status = status;
-        this.note = note;
-    }
-
-    public AppointmentView(int appointmentId, int slotId, String patientName, String doctorName, String serviceName, Date workingDate, Time slotStart, Time slotEnd, int status, String note) {
-        this.appointmentId = appointmentId;
-        this.slotId = slotId;
-        this.patientName = patientName;
-        this.doctorName = doctorName;
-        this.serviceName = serviceName;
-        this.workingDate = workingDate;
         this.slotStart = slotStart;
         this.slotEnd = slotEnd;
         this.status = status;
@@ -172,14 +165,6 @@ public class AppointmentView {
 
     public void setSlotId(int slotId) {
         this.slotId = slotId;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
     }
 
     public String getDoctorName() {

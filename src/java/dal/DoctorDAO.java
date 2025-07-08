@@ -567,6 +567,31 @@ public class DoctorDAO extends DBContext {
         return null;
     }
 
+    public List<Doctor> getAllDoctorInDepartmanent1(int departmentId) {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "SELECT d.doctor_id, d.doctor_name FROM doctors d WHERE d.deparment_id = ?";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, departmentId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Doctor d = new Doctor();
+                d.setDoctor_id(rs.getInt(1));
+                d.setDoctor_name(rs.getString(2));
+                list.add(d);
+            }
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
     public Set<Integer> getWeekdayNumbersOfDoctor(int doctorId) {
         Set<Integer> weekdays = new TreeSet<>();
         String sql = "SELECT TOP 10 working_date FROM doctor_schedule "

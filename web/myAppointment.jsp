@@ -151,7 +151,7 @@
                                                         <tr> 
                                                             <td class="p-3">${i}</td>
 
-                                                            <td class="p-3">${a.patientName}</td>
+                                                            <td class="p-3">${a.patient.patientName}</td>
                                                             <td class="p-3">${a.serviceName}</td>
                                                             <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/><br>
                                                                 <fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> 
@@ -182,7 +182,7 @@
                                                             <td class="p-3">
 
 
-                                                                <a href="examination?patientId=${a.patient_id}" class="btn btn-primary" title="Sửa bác sĩ">
+                                                                <a href="examination?patientId=${a.patient.patientId}" class="btn btn-primary" title="Sửa bác sĩ">
                                                                     <i class="fa-solid fa-pen-to-square"></i>Khám
                                                                 </a>
 

@@ -26,10 +26,10 @@
 
                         <c:set var="a" value="${appointmentView}" />
 
-                        <form action="updateDoctorScheduleDetail?action=update" method="post">
+                        <form action="updateAppoitment" method="post">
                             <div class="card shadow border-0">
                                 <div class="card-body p-4">
-                                    <!-- Mã phiếu -->
+                                  
                                     <div class="text-center mb-4">
                                         <h5 class="mb-0">Mã phiếu khám: 
                                             <span class="text-danger fw-bold">${a.appointment_code}</span>
@@ -37,24 +37,37 @@
                                     </div>
 
                                     <div class="row g-3">
-                                        <!-- Tên bệnh nhân -->
+                                
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Tên bệnh nhân</label>
-                                            <div class="form-control bg-light">${a.patientName}</div>
+                                            <div class="form-control bg-light">${a.patient.patientName}</div>
                                         </div>
 
-                                        <!-- Chuyên khoa -->
+                                       
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-secondary">Bác sĩ khám</label>
+                                            <div class="form-control bg-light">${a.doctorName}</div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-secondary">Ngày sinh</label>
+                                            <div class="form-control bg-light">${a.patient.dob}</div>
+                                        </div>
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Chuyên khoa</label>
                                             <div class="form-control bg-light">${a.departmentName}</div>
                                         </div>
 
                                         <!-- Dịch vụ -->
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-secondary">Số điện thoại</label>
+                                            <div class="form-control bg-light">${a.patient.phone}</div>
+                                        </div>
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Dịch vụ</label>
                                             <div class="form-control bg-light">${a.serviceName}</div>
                                         </div>
-
                                         <!-- Ngày khám -->
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Ngày khám</label>
@@ -67,26 +80,31 @@
                                             <div class="form-control bg-light">${a.slotStart}</div>
                                         </div>
 
-                                        <!-- Ghi chú -->
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold text-secondary">Ghi chú</label>
-                                            <div class="form-control bg-light">${a.note}</div>
-                                        </div>
                                     </div>
-
-                                    <!-- Nút chức năng -->
+                                      <input type="hidden" name="appointmentId" value="${a.appointmentId}" />
+                                    <input type="hidden" name="appointmentCode" value="${a.appointment_code}" />
+                                    <input type="hidden" name="doctorId_reDoctorName" value="${a.doctorId}_${a.doctorName}" />
+                                    <input type="hidden" name="currentDoctorName" value="${a.doctorName}" />
+                                    <input type="hidden" name="patientName" value="${a.patient.patientName}" />
+                                    <input type="hidden" name="slotId" value="${a.slotId}" />
+                                    <input type="hidden" name="workingDate" value="${a.workingDate}" />
+                                    <input type="hidden" name="slotEnd" value="${a.slotEnd}" />
+                                    <input type="hidden" name="slotStart" value="${a.slotStart}" />
+                                    <input type="hidden" name="departmentName" value="${a.departmentName}" />
+                                
+                                    
                                     <div class="mt-5 d-flex justify-content-center gap-4">
-                                        <button type="submit" class="btn btn-primary px-4 py-2">
-                                            <i class="fa-solid fa-calendar-check me-1"></i> Dời lịch hẹn
+                                        <button type="submit" name="action" value="reschedule" class="btn btn-danger px-4 py-2">
+                                            <i class="fa-solid fa-calendar-days me-1"></i> Dời lịch hẹn
                                         </button>
 
-                                        <a href="appointmentManager?action=refund&code=${a.appointment_code}" 
-                                           class="btn btn-danger px-4 py-2">
+                                        <button type="submit" name="action" value="refund" class="btn btn-danger px-4 py-2">
                                             <i class="fa-solid fa-money-bill-wave me-1"></i> Hoàn tiền
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
 
