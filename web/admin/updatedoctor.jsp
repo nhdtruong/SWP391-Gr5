@@ -9,7 +9,7 @@
 <html>
     <jsp:include page="../admin/layout/adminhead.jsp"/>
     <body>
-        
+
         <div class="page-wrapper doctris-theme toggled">
             <jsp:include page="../admin/layout/menu.jsp"/>
             <main class="page-content bg-light">
@@ -20,11 +20,11 @@
                             <h5 class="mb-3">Chỉnh sửa thông tin bác sĩ</h5>
 
                             <!-- Form cập nhật toàn bộ -->
-                            <form action="updatedoctor?action=update" method="POST" >
+                            <form action="updatedoctor?action=update" method="POST"  enctype="multipart/form-data">
                                 <div class="row">
                                     <input type="hidden" name="doctor_id" value="${doctor.getDoctor_id()}"/>
                                     <!-- Ảnh đại diện -->
-                                    <p class="text-muted">Ảnh đại diện</p>
+                                    <p class="text-muted">Ảnh</p>
                                     <div class="mb-3 d-flex align-items-center gap-4">
                                         <div>
                                             <c:if test="${doctor.getImg() == 'default' && doctor.getGender() == 'Nam'}"> 
@@ -43,25 +43,21 @@
                                         </div>
 
                                         <div class="flex-grow-1">
-                                            <input type="hidden" name="oldImage" value="${doctor.img}" />
-                                            <input type="file" name="image" id="uploadfile" class="form-control" onchange="readURL(this);" />
+                                            <input type="hidden" name="oldImage" value="${doctor.img}">
+                                            <input type="file" name="newImage" id="uploadfile" class="form-control" onchange="readURL(this);" />
                                             <small class="text-muted">Chọn ảnh mới để cập nhật (jpg, png...)</small>
                                         </div>
                                     </div>
 
-                                    <div class="mb-3 text-center">
-                                        <img id="previewImage" class="rounded-circle shadow" src="#" alt="Preview" style="display: none; width: 120px;" />
-                                    </div>
 
-                                    <!-- Họ tên -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Họ tên</label>
-                                        <input name="name" type="text" class="form-control" value="${doctor.getDoctor_name()}">
+                                        <label class="form-label">Họ tên<span class="text-danger">*</span></label>
+                                        <input name="name" type="text" class="form-control" value="${doctor.getDoctor_name()}" oninput="CheckFullName(this);" >
                                     </div>
 
                                     <!-- Giới tính -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Giới tính</label><br/>
+                                        <label class="form-label">Giới tính<span class="text-danger">*</span></label><br/>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="gender" value="Nam" ${doctor.getGender()=="Nam"?"checked":""}>
                                             <label class="form-check-label">Nam</label>
@@ -79,7 +75,7 @@
                                     <!-- Số điện thoại -->
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input name="phone" type="text" class="form-control" value="${doctor.getPhone()}">
+                                        <input name="phone" type="text" class="form-control" value="${doctor.getPhone()}" oninput="CheckPhone(this);">
                                     </div>
 
                                     <!-- Ngày sinh -->
@@ -97,7 +93,7 @@
 
                                     <!-- Chuyên môn -->
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Chuyên khoa</label>
+                                        <label class="form-label">Chuyên khoa<span class="text-danger">*</span></label>
                                         <select name="department_id" class="form-select">
                                             <c:forEach items="${department}" var="d">
                                                 <option value="${d.getId()}" ${doctor.getDepartment().getId() == d.getId() ? "selected" : ""}>
@@ -108,73 +104,73 @@
                                     </div>
 
 
-                               
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Chuyên trị</label>
-                                    <input name="specialized" value="${doctor.getSpecialized()}" class="form-control">
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label class="form-label">Quá trình đào tạo</label>
-                                    <textarea name="EducationHistory" id="editorss">${doctor.getEducationHistory()}</textarea>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="position">Chức vụ <span class="text-danger">*</span></label>
-                                    <select class="form-control" id="position" name="positionId" required>
 
-                                        <c:forEach var="p" items="${requestScope.Position}">
-                                            <option value="${p.getId()}" ${doctor.getPosition().getId() == p.getId() ? 'selected' : ''}>
-                                                ${p.getName()}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="academicDegree">Học vị </label>
-                                    <select class="form-control" id="academicDegree" name="academicDegreeId" required>
-
-                                        <c:forEach var="ad" items="${requestScope.AcademicDegree}">
-                                            <option value="${ad.getId()}" ${doctor.getAcademicDegree().getId() == ad.getId() ? 'selected' : ''}>
-                                                ${ad.getName()}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="academicTitle">Học hàm</label>
-                                    <select class="form-control" id="academicTitle" name="academicTitleId" required>
-
-                                        <c:forEach var="at" items="${requestScope.AcademicTitle}">
-                                            <option value="${at.getId()}" ${doctor.getAcademicTitle().getId() == at.getId() ? 'selected' : ''}>
-                                                ${at.getName()}
-                                            </option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <!-- Trạng thái -->
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Trạng thái</label><br/>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status" value="1" ${doctor.getStatus()=="1"?"checked":""}>
-                                        <label class="form-check-label">Hoạt động</label>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Chuyên trị</label>
+                                        <input name="specialized" value="${doctor.getSpecialized()}" class="form-control">
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status" value="0" ${doctor.getStatus()=="0"?"checked":""}>
-                                        <label class="form-check-label">Khóa</label>
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label">Quá trình đào tạo</label>
+                                        <textarea name="EducationHistory" id="editorss">${doctor.getEducationHistory()}</textarea>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status" value="2" ${doctor.getStatus()=="2"?"checked":""}>
-                                        <label class="form-check-label">Đợi</label>
-                                    </div>
-                                </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="position">Chức vụ<span class="text-danger">*</span></label>
+                                        <select class="form-select" id="position" name="positionId" required>
 
-                                <!-- Nút cập nhật -->
-                                <div class="col-12 mt-3 text-center">
-                                    <button type="submit" class="btn btn-success px-4">Cập nhật tất cả</button>
-                                </div>
+                                            <c:forEach var="p" items="${requestScope.Position}">
+                                                <option value="${p.getId()}" ${doctor.getPosition().getId() == p.getId() ? 'selected' : ''}>
+                                                    ${p.getName()}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="academicDegree">Học vị </label>
+                                        <select class="form-select" id="academicDegree" name="academicDegreeId" required>
+
+                                            <c:forEach var="ad" items="${requestScope.AcademicDegree}">
+                                                <option value="${ad.getId()}" ${doctor.getAcademicDegree().getId() == ad.getId() ? 'selected' : ''}>
+                                                    ${ad.getName()}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="academicTitle">Học hàm</label>
+                                        <select class="form-select" id="academicTitle" name="academicTitleId" required>
+
+                                            <c:forEach var="at" items="${requestScope.AcademicTitle}">
+                                                <option value="${at.getId()}" ${doctor.getAcademicTitle().getId() == at.getId() ? 'selected' : ''}>
+                                                    ${at.getName()}
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <!-- Trạng thái -->
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Trạng thái</label><br/>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status" value="1" ${doctor.getStatus()=="1"?"checked":""}>
+                                            <label class="form-check-label">Hoạt động</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status" value="0" ${doctor.getStatus()=="0"?"checked":""}>
+                                            <label class="form-check-label">Khóa</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="status" value="2" ${doctor.getStatus()=="2"?"checked":""}>
+                                            <label class="form-check-label">Đợi</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Nút cập nhật -->
+                                    <div class="col-12 mt-3 text-center">
+                                        <button type="submit" class="btn btn-success px-4">Cập nhật tất cả</button>
+                                    </div>
                                 </div>
                             </form>
 
@@ -191,26 +187,67 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/ui/trumbowyg.min.css">
         <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
-        
-        <script>
-                                                        $(document).ready(function () {
-                                                            $('#editors').trumbowyg();
-                                                        });
-                                                        $(document).ready(function () {
-                                                            $('#editorss').trumbowyg();
-                                                        });
-                                                        function readURL(input) {
-                                                            if (input.files && input.files[0]) {
-                                                                var reader = new FileReader();
 
-                                                                reader.onload = function (e) {
-                                                                    const preview = document.getElementById('previewImage');
-                                                                    preview.src = e.target.result;
-                                                                    preview.style.display = 'block';
-                                                                };
-                                                                reader.readAsDataURL(input.files[0]);
-                                                            }
+        <script>
+                                                $(document).ready(function () {
+                                                    $('#editors').trumbowyg();
+                                                });
+                                                $(document).ready(function () {
+                                                    $('#editorss').trumbowyg();
+                                                });
+                                                function readURL(input) {
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function (e) {
+                                                            const preview = document.getElementById('previewImage');
+                                                            preview.src = e.target.result;
+                                                            preview.style.display = 'block';
+                                                        };
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
+
+                                                function CheckFullName(text) {
+                                                    const value = text.value.trim();
+
+                                                    // Kiểm tra khoảng trắng đầu chuỗi
+                                                    if (/^\s/.test(text.value)) {
+                                                        text.setCustomValidity('Không được bắt đầu bằng khoảng trắng.');
+                                                    } else {
+                                                        // Regex kiểm tra từ 2 đến 30 từ, mỗi từ chỉ chứa chữ, cách nhau đúng 1 dấu cách
+                                                        const fullNameRegex = /^([a-zA-ZÀ-ỹ]+)( [a-zA-ZÀ-ỹ]+){1,29}$/;
+
+                                                        if (!fullNameRegex.test(value)) {
+                                                            text.setCustomValidity('Chỉ chứa chữ cái và cách nhau bằng 1 khoảng trắng.');
+                                                        } else {
+                                                            text.setCustomValidity('');
                                                         }
+                                                    }
+
+                                                    text.reportValidity();
+                                                    return true;
+                                                }
+
+                                                function CheckPhone(text) {
+                                                    const value = text.value;
+
+                                                    if (/^\s/.test(value)) {
+                                                        text.setCustomValidity('Không được bắt đầu bằng khoảng trống.');
+                                                    } else {
+                                                        const phone = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+                                                        if (!phone.test(value.trim())) {
+                                                            text.setCustomValidity('Số điện thoại không hợp lệ');
+                                                        } else {
+                                                            text.setCustomValidity('');
+                                                        }
+                                                    }
+                                                    text.reportValidity();
+                                                    return true;
+                                                }
+
+
+
         </script>
     </body>
 

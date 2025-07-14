@@ -35,8 +35,13 @@ public class Doctor {
     private float averageRateStar;
     private int number_rate_star;
     private String department_name;
+    private double fee;
 
     private Set<Integer> workingWeekdays;
+
+    public Doctor(int doctor_id) {
+        this.doctor_id = doctor_id;
+    }
 
     public Doctor(int doctor_id, String doctor_name, String gender, Deparment department, String description, String img, AcademicDegree academicDegree, AcademicTitle academicTitle, Position position, String EducationHistory, Set<Integer> workingWeekdays) {
         this.doctor_id = doctor_id;
@@ -84,6 +89,14 @@ public class Doctor {
         this.number_rate_star = number_rate_star;
     }
 
+    public double getFee() {
+        return fee;
+    }
+
+    public void setFee(double fee) {
+        this.fee = fee;
+    }
+
     public String getSpecialized() {
         return specialized;
     }
@@ -121,6 +134,12 @@ public class Doctor {
         this.department = department;
     }
 
+    public Doctor(int doctor_id, String doctor_name) {
+        this.doctor_id = doctor_id;
+        this.doctor_name = doctor_name;
+
+    }
+
     public Doctor() {
     }
 
@@ -151,6 +170,26 @@ public class Doctor {
         this.specialized = specialized;
         this.EducationHistory = EducationHistory;
         this.adress = adress;
+    }
+
+    public Doctor(int doctor_id, String username, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status, String specialized, String EducationHistory, String email) {
+        this.doctor_id = doctor_id;
+        this.username = username;
+        this.doctor_name = doctor_name;
+        this.gender = gender;
+        this.department = department;
+        this.DOB = DOB;
+        this.phone = phone;
+        this.email = email;
+        this.status = status;
+        this.img = img;
+        this.academicDegree = academicDegree;
+        this.academicTitle = academicTitle;
+        this.position = position;
+        this.specialized = specialized;
+        this.EducationHistory = EducationHistory;
+        this.adress = adress;
+
     }
 
     public Doctor(int doctor_id, String doctor_name, String gender, Date DOB, String phone, Deparment department, String adress, String img, String description, Position position, AcademicTitle academicTitle, AcademicDegree academicDegree, int status, String specialized, String EducationHistory, String email) {

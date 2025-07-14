@@ -19,6 +19,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import dal.DoctorScheduleDAO;
 import dal.DoctorScheduleSlotsDAO;
+import java.util.List;
 
 /**
  *
@@ -65,6 +66,9 @@ public class AddDoctorSchedule extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        DoctorDAO dDao = new DoctorDAO();
+        List<Doctor> list = dDao.getDoctorsWithoutSchedule();
+        request.setAttribute("listD", list);
         request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
     }
 
@@ -84,42 +88,54 @@ public class AddDoctorSchedule extends HttpServlet {
         if (actionform.equals("serachdoctor")) {
 
             String doctorUsername = request.getParameter("doctorUsername");
-            DoctorDAO dDAO = new DoctorDAO();
-            Doctor doctor = dDAO.getDoctorByDoctorUsername(doctorUsername);
+            DoctorDAO dDao = new DoctorDAO();
+            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+            List<Doctor> list = dDao.getDoctorsWithoutSchedule();
+            request.setAttribute("listD", list);
+            Doctor doctor = dDao.getDoctorByDoctorUsername1(doctorUsername);
+            if (doctor == null) {
+                request.setAttribute("errorBs", "Không tìm thấy bác sĩ!");
+                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                return;
+            }
+            int doctorId = dDao.getDoctorIdByDoctorUsername(doctorUsername);
+
+            if (DSD.checkDoctorHasSchedule(doctorId)) {
+                request.setAttribute("error", "Bác sĩ " + doctorUsername + " đã có lịch làm việc!");
+                request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+                return;
+            }
             request.setAttribute("doctor", doctor);
             request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
-            return;
 
-        }
-        if (actionform.equals("addschedule")) {
+        } else if (actionform.equals("selectDoctor")) {
+
+            DoctorDAO dDao = new DoctorDAO();
+            List<Doctor> list = dDao.getDoctorsWithoutSchedule();
+            request.setAttribute("listD", list);
+            String doctorId = request.getParameter("doctorId");
+            Doctor doctor = dDao.getDoctorByDoctorId1(doctorId);
+
+            request.setAttribute("selectedDoctorId", doctorId);
+            request.setAttribute("doctor", doctor);
+            request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
+
+        } else if (actionform.equals("addschedule")) {
 
             String doctorID = request.getParameter("doctorID");
 
-            String action = request.getParameter("action");
             if (doctorID == null) {
                 request.setAttribute("Hãy chọn bác sĩ để thêm lịch!", this);
                 request.getRequestDispatcher("admin/addDoctorSchedule.jsp").forward(request, response);
                 return;
             }
 
-            if (action.equals("saveTemplate")) {
-                saveTemplate(request, Integer.parseInt(doctorID));
-                response.sendRedirect("doctorschedule?action=all");
+            LocalDate start = LocalDate.parse(request.getParameter("startDate"));
+            LocalDate end = LocalDate.parse(request.getParameter("endDate"));
+            saveTemplate(request, Integer.parseInt(doctorID));
 
-            } else if (action.equals("saveAndApply")) {
-
-                LocalDate start = LocalDate.parse(request.getParameter("startDate"));
-                LocalDate end = LocalDate.parse(request.getParameter("endDate"));
-                saveTemplate(request, Integer.parseInt(doctorID));
-                System.out.println("Action form: " + actionform);
-                System.out.println("Action: " + action);
-                System.out.println("Doctor ID: " + doctorID);
-                System.out.println("Start Date: " + request.getParameter("startDate"));
-                System.out.println("End Date: " + request.getParameter("endDate"));
-
-                applySchedule(request, Integer.parseInt(doctorID), start, end);
-                response.sendRedirect("doctorschedule?action=all");
-            }
+            applySchedule(request, Integer.parseInt(doctorID), start, end);
+            response.sendRedirect("doctorschedule?action=all");
 
         }
 

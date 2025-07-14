@@ -66,6 +66,7 @@ public class ChooseRecords extends HttpServlet {
             response.sendRedirect("login");
             return;
         }
+        session.removeAttribute("changeY");
         PatientDAO pDao = new PatientDAO();
         List<Patient> listPa = pDao.getPatientByUsername(acc.getUsername());
         request.setAttribute("records", listPa);

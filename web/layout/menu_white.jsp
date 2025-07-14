@@ -74,10 +74,11 @@
                                 <a class="dropdown-item text-dark" href="appointmentmanage?action=all"><i class="uil uil-calendar-alt me-1"></i> Quản lý</a>
                             </c:when>
                             <c:when test="${sessionScope.user.role == 4}">
-                                <a class="dropdown-item text-dark" href="doctormanage?action=all"><i class="uil uil-user-md me-1"></i> Quản lý</a>
+                                <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user-md me-1"></i> Quản lý</a>
                             </c:when>
                             <c:when test="${sessionScope.user.role == 5}">
                                 <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user me-1"></i> Tài khoản của tôi</a>
+                                <a class="dropdown-item text-dark" href="bills"><i class="uil uil-user me-1"></i> Phiếu khám bệnh</a>
                             </c:when>
                         </c:choose>
                         <c:if test="${sessionScope.user.role == 1 || sessionScope.user.role == 3}">
@@ -109,8 +110,9 @@
                     <ul class="dropdown-menu1"> 
                         <li><a href="specialty" class="sub-menu-item">Đặt khám chuyên khoa</a></li>
                         <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
-                        <li><a href="#" class="sub-menu-item">Gọi video với bác sĩ</a></li>
+                        <li><a href="callVideoWithDoctor?action=all&categoryService_id=2" class="sub-menu-item">Gọi video với bác sĩ</a></li>
                         <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
+
                         <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
                         <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
                         <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
@@ -118,6 +120,7 @@
                         <li><a href="service?type=1" class="sub-menu-item">Khám tổng quát</a></li>
                         <li><a href="service?type=2" class="sub-menu-item">Chuyên khoa</a></li>
                         <li><a href="service?type=3" class="sub-menu-item">Tư vấn online</a></li>
+
 
                     </ul>
                 </li>

@@ -14,7 +14,17 @@ public class Service {
     private int payment_type_id;
     private int department_id;
     private String img;
+    private Doctor doctor;
 
+ 
+    
+    
+  
+     public Service() {
+    }
+    
+ 
+    
     public Service(int service_id, String service_name, boolean is_bhyt, String description, CategoryServices category_service, Deparment department, double fee, double discount, int payment_type_id, String img) {
         this.service_id = service_id;
         this.service_name = service_name;
@@ -30,10 +40,8 @@ public class Service {
         this.img = img;
     }
 
-    public Service() {
-    }
     
- 
+    
     
 
     public Service(int service_id, String service_name, boolean is_bhyt, String description, int category_service_id, int department_id, double fee, double discount, int payment_type_id) {
@@ -47,6 +55,17 @@ public class Service {
         this.discount = discount;
         this.payment_type_id = payment_type_id;
     }
+    
+       public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    
+   
 
     public int getCategory_service_id() {
         return category_service_id;

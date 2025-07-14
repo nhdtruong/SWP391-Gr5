@@ -60,18 +60,34 @@ public class DoctorScheduleDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      
-            String doctorId = request.getParameter("doctorId");
-            String doctorName = request.getParameter("doctorName");
 
-            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-            List<WorkingDateSchedule> listWorkingDateSchedule = DSD.getWorkingScheduleOfDoctor(Integer.parseInt(doctorId));
-            request.setAttribute("listWorkingDateSchedule", listWorkingDateSchedule);
-            request.setAttribute("doctorName", doctorName);
-            request.setAttribute("doctorId", doctorId);
-            request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response);
+        int doctorId = Integer.parseInt(request.getParameter("doctorId"));
+        String doctorName = request.getParameter("doctorName");
 
-     
+        DoctorScheduleDAO dsd = new DoctorScheduleDAO();
+        List<List<WorkingDateSchedule>> weeklySchedule = dsd.getWorkingScheduleByWeek(doctorId);
+
+        String weekIndexRaw = request.getParameter("weekIndex");
+        int weekIndex = 0;
+        if (weekIndexRaw != null) {
+            try {
+                weekIndex = Integer.parseInt(weekIndexRaw);
+                if (weekIndex < 0 || weekIndex >= weeklySchedule.size()) {
+                    weekIndex = 0;
+                }
+            } catch (NumberFormatException e) {
+                weekIndex = 0;
+            }
+        }
+
+        request.setAttribute("weeklySchedule", weeklySchedule);
+        request.setAttribute("weekIndex", weekIndex);
+        request.setAttribute("doctorId", doctorId);
+        request.setAttribute("doctorName", doctorName);
+
+        request.getRequestDispatcher("admin/weeklyScheduledoctor.jsp").forward(request, response);
+        
+        //   request.getRequestDispatcher("admin/doctorScheduleDetail.jsp").forward(request, response); ban đầu làm theo ngày
 
     }
 

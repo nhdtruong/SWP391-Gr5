@@ -22,7 +22,7 @@
                                 <div class="col-md-8">
                                     <div class="search-bar p-0 d-lg-block ms-2">                                                        
                                         <div id="search" class="menu-search mb-0">
-                                            <form action="doctormanager?action=search" method="POST" id="searchform" class="searchform">
+                                            <form action="doctorschedule?action=search" method="POST" id="searchform" class="searchform">
                                                 <div>
                                                     <input type="text" class="form-control border rounded-pill" name="text" id="s" placeholder="Tìm kiếm bác sĩ...">
                                                     <input type="submit" id="searchsubmit" value="Search">
@@ -72,7 +72,7 @@
                                                 <th class="border-bottom p-3" >Họ tên</th>
                                                 <th class="border-bottom p-3" >Chuyên khoa</th>
                                                 <th class="border-bottom p-3" >Xem lịch chi tiết</th>
-                                                <th class="border-bottom p-3" >Sửa Lịch cố định</th>
+                                                
                                                 <th class="border-bottom p-3" >Xóa Lịch</th>
                                             </tr>
                                         </thead>
@@ -99,6 +99,7 @@
                                                     </td>
 
                                                     <td class="p-3">
+
                                                         <a href="updateDoctorSchedule?action=updateSchedule&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
                                                     </td>
                                                     <c:if test="${sessionScope.user.getRole()== 1}">
@@ -110,6 +111,7 @@
                                                             </a>
                                                         </td>
                                                     </c:if>
+
 
                                                 </tr>
                                                 <c:set var="i" value="${i + 1}"/>

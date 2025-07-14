@@ -5,6 +5,7 @@
 package controller.uer;
 
 import config.EncodeData;
+import config.PasswordUtils;
 import dal.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -59,12 +60,17 @@ public class LoginServerlet extends HttpServlet {
             String remember = request.getParameter("remember");
             request.setAttribute("username", username);
             request.setAttribute("password", password);
-            String enPassWord = EncodeData.enCode(password);
 
-            // AccountUser account = dao.Login(username, enPassWord);
-            AccountUser account = dao.Login(username, password);
-            if (account == null) {
-                request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác");
+            AccountUser account = dao.Login(username);
+
+            if (account == null) {    
+                request.setAttribute("error", "Tài khoản không tồn tại!");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+            boolean isMatch = PasswordUtils.checkPassword(password, account.getPassword());
+            if (!isMatch) {
+                request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else if (account.getStatus() == 0) {
@@ -92,12 +98,12 @@ public class LoginServerlet extends HttpServlet {
                 }
                 if (account.getRole() == 1) {
                     response.sendRedirect("dashboard");
-                } else if (account.getRole() == 3) {
-                    response.sendRedirect("dashboard");
                 } else if (account.getRole() == 2) {
                     response.sendRedirect("dashboard");
-                } else if (account.getRole() == 4) {
+                } else if (account.getRole() == 3) {
                     response.sendRedirect("dashboard");
+                } else if (account.getRole() == 4) {
+                    response.sendRedirect("home");
                 } else if (account.getRole() == 5) {
                     response.sendRedirect("home");
                 } else {
@@ -112,7 +118,7 @@ public class LoginServerlet extends HttpServlet {
 
     public static void main(String[] args) throws SQLException {
         UserDAO dao = new UserDAO();
-        AccountUser account = dao.Login("admin", "admin");
+        AccountUser account = dao.Login("admin");
         System.out.println(account);
     }
 
