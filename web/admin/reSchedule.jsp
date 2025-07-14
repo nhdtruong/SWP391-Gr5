@@ -145,7 +145,7 @@
                                                 <c:if test="${i + 1 < fn:length(listWDS)}">
                                                     <c:set var="day2" value="${listWDS[i + 1]}" />
                                                     <div class="col-md-6">
-                                                        <h5>🗓️ <fmt:formatDate value="${day1.workingDate}" pattern="EEEE - dd/MM/yyyy" /></h5>
+                                                        <h5>🗓️ <fmt:formatDate value="${day2.workingDate}" pattern="EEEE - dd/MM/yyyy" /></h5>
 
 
                                                         <c:if test="${not empty day2.morningSlots}">
