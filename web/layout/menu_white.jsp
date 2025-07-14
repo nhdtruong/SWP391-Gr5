@@ -81,7 +81,11 @@
                                 <a class="dropdown-item text-dark" href="bills"><i class="uil uil-user me-1"></i> Phiếu khám bệnh</a>
                             </c:when>
                         </c:choose>
-
+                        <c:if test="${sessionScope.user.role == 1 || sessionScope.user.role == 3}">
+                            <a class="dropdown-item text-dark" href="dashboard">
+                                <i class="uil uil-sign-out-alt me-1"></i> Quản Lý
+                            </a>
+                        </c:if>
                         <a class="dropdown-item text-dark" href="logout"><i class="uil uil-sign-out-alt me-1"></i> Đăng xuất</a>
                     </c:if>
 
@@ -108,10 +112,14 @@
                         <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
                         <li><a href="callVideoWithDoctor?action=all&categoryService_id=2" class="sub-menu-item">Gọi video với bác sĩ</a></li>
                         <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
-                        <!--                        <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
-                                                <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
-                                                <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
-                                                <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>-->
+
+                        <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
+                        <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
+                        <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
+                        <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>
+                        <li><a href="service?type=1" class="sub-menu-item">Khám tổng quát</a></li>
+                        <li><a href="service?type=2" class="sub-menu-item">Chuyên khoa</a></li>
+                        <li><a href="service?type=3" class="sub-menu-item">Tư vấn online</a></li>
 
 
                     </ul>

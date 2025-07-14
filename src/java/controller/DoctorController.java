@@ -40,12 +40,13 @@ public class DoctorController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         DepartmentDAO ddao = new DepartmentDAO();
-
+        // get all department in database
         List<Deparment> listDepartment = ddao.getAllDeparment();
+        //set bien mang ra Front end
         request.setAttribute("listDepartment", listDepartment);
-
+        // lay gioi tinh search    
         String gender = request.getParameter("gender") == null ? "all" : request.getParameter("gender");
-
+        // ben gender_str check dieu kien di tim kiem
         String gender_str = "";
         if (gender.equals("all")) {
             gender_str = "";
@@ -54,7 +55,7 @@ public class DoctorController extends HttpServlet {
         } else {
             gender_str = "Nữ";
         }
-
+        // "1" ==> 1
         String speciality = request.getParameter("speciality");
         String SortType = request.getParameter("SortType") == null ? "" : request.getParameter("SortType");
         int speciality_id = 0;
@@ -132,6 +133,7 @@ public class DoctorController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        //case doctor list action is null
         action = action == null ? "" : action;
         if (action.equals("detail")) {
             processRequest2(request, response);
