@@ -125,92 +125,100 @@
                         <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit">
                             <div class="card border-0 shadow overflow-hidden">
                                 <div class="tab-content p-4" id="pills-tabContent">
-                                    <form action="patientmanage?action=update_patient&username=${patient.username}" method="POST" class="mt-4" onSubmit="document.getElementById('submit').disabled = true;">
+                                    <form action="patientmanage?action=update_patient&username=${patient.username}" method="POST" class="mt-4" onsubmit="return validateForm();">
                                         <div class="row">
+                                            <!-- Họ tên -->
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Họ tên <span class="text-danger"></span></label>
-                                                    <input name="name" oninvalid="CheckFullName(this);" oninput="CheckFullName(this);" id="name" type="text" class="form-control" value="${patient.patientName}">
-                                                </div>
-                                            </div>
-                                            <input hidden name="patient_id" id="name" type="text" class="form-control" value="${patient.patientId}">
-                                            <input hidden name="username" id="name" type="text" class="form-control" value="${patient.username}">
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Giới tính <span class="text-danger"></span></label>
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td><input id="credit" name="gender" ${patient.gender=='Nam'?"checked":""} value="Nam" type="radio" class="form-check-input"
-                                                                           checked required ></td>
-                                                                <td><label class="form-check-label">Nam</label></td>
-                                                                <td></td>
-                                                                <td><input id="debit" name="gender" ${patient.gender=='Nữ'?"checked":""} value="Nữ" type="radio" class="form-check-input"
-                                                                           required></td>
-                                                                <td><label class="form-check-label">Nữ</label></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                    <label class="form-label">Họ tên</label>
+                                                    <input name="name" id="name" type="text" class="form-control" value="${patient.patientName}" required pattern="^[\p{L} ]+$" title="Chỉ chứa chữ và khoảng trắng">
                                                 </div>
                                             </div>
 
+                                            <!-- Hidden fields -->
+                                            <input hidden name="patient_id" type="text" value="${patient.patientId}">
+                                            <input hidden name="username" type="text" value="${patient.username}">
+
+                                            <!-- Giới tính -->
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Số điện thoại <span class="text-danger"></span></label>
-                                                    <input name="phone" id="name" type="phone" class="form-control" value="${patient.phone}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Email <span class="text-danger"></span></label>
-                                                    <input name="email"  id="name" type="email" class="form-control" value="${patient.email}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">BHYT <span class="text-danger"></span></label>
-                                                    <input name="bhyt"  id="name" type="text" class="form-control" value="${patient.bhyt}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">CCCD <span class="text-danger"></span></label>
-                                                    <input name="cccd"  id="name" type="text" class="form-control" value="${patient.cccd}">
-                                                </div>
-                                            </div>
-                                                
-                                                <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Công việc <span class="text-danger"></span></label>
-                                                    <input name="job"  id="name" type="text" class="form-control" value="${patient.job}">
+                                                    <label class="form-label">Giới tính</label>
+                                                    <div>
+                                                        <label><input name="gender" type="radio" value="Nam" class="form-check-input" ${patient.gender=='Nam'?"checked":""} required> Nam</label>
+                                                        <label class="ms-3"><input name="gender" type="radio" value="Nữ" class="form-check-input" ${patient.gender=='Nữ'?"checked":""}> Nữ</label>
+                                                    </div>
                                                 </div>
                                             </div>
 
+                                            <!-- Số điện thoại -->
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Địa chỉ <span class="text-danger"></span></label>
-                                                    <input name="address" id="name" type="text" class="form-control" value="${patient.address}">
+                                                    <label class="form-label">Số điện thoại</label>
+                                                    <input name="phone" type="tel" class="form-control" value="${patient.phone}" required pattern="^0\d{9}$" title="Số điện thoại phải bắt đầu bằng 0 và đủ 10 chữ số">
                                                 </div>
                                             </div>
 
+                                            <!-- Email -->
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">dân tộc <span class="text-danger"></span></label>
-                                                    <input name="nation" id="name" type="text" class="form-control" value="${patient.nation}">
+                                                    <label class="form-label">Email</label>
+                                                    <input name="email" type="email" class="form-control" value="${patient.email}" required>
                                                 </div>
                                             </div>
+
+                                            <!-- BHYT -->
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Ngày sinh <span class="text-danger"></span></label>
-                                                    <input name="DOB" id="name" type="date" onkeydown="return false" min="1922-01-01" max="2003-01-01" class="form-control" value="${patient.dob}">
+                                                    <label class="form-label">BHYT</label>
+                                                    <input name="bhyt" type="text" class="form-control" value="${patient.bhyt}" pattern="^[A-Z0-9]{10,15}$" title="Mã BHYT gồm 10-15 ký tự chữ hoặc số" required>
                                                 </div>
-                                            </div>                                                 
+                                            </div>
+
+                                            <!-- CCCD -->
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">CCCD</label>
+                                                    <input name="cccd" type="text" class="form-control" value="${patient.cccd}" pattern="^\d{12}$" title="CCCD gồm đúng 12 chữ số" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- Công việc -->
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Công việc</label>
+                                                    <input name="job" type="text" class="form-control normalize-space" value="${patient.job}" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- Địa chỉ -->
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Địa chỉ</label>
+                                                    <input name="address" type="text" class="form-control normalize-space" value="${patient.address}" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- Dân tộc -->
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Dân tộc</label>
+                                                    <input name="nation" type="text" class="form-control normalize-space" value="${patient.nation}" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- Ngày sinh -->
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Ngày sinh</label>
+                                                    <input name="DOB" type="date" class="form-control" value="${patient.dob}" required min="1922-01-01" max="2003-01-01">
+                                                </div>
+                                            </div>
                                         </div>
 
+                                        <!-- Nút submit -->
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <input type="submit" id="submit" name="send" class="btn btn-primary"
-                                                       value="Cập nhật">
+                                                <input type="submit" id="submit" name="send" class="btn btn-primary" value="Cập nhật">
                                             </div>
                                         </div>
                                     </form>
@@ -228,37 +236,69 @@
                     <script src="assets/js/app.js"></script>
                     <script>
 
-                                                        function readURL(input, thumbimage) {
-                                                            if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
-                                                                var reader = new FileReader();
-                                                                reader.onload = function (e) {
-                                                                    $("#thumbimage").attr('src', e.target.result);
-                                                                }
-                                                                reader.readAsDataURL(input.files[0]);
-                                                            } else { // Sử dụng cho IE
-                                                                $("#thumbimage").attr('src', input.value);
+                                        function cleanInputValue(input) {
+                                            input.value = input.value
+                                                    .replace(/^\s+|\s+$/g, '')   // Bỏ khoảng trắng đầu/cuối
+                                                    .replace(/\s{2,}/g, ' ');    // Gộp nhiều dấu cách giữa thành 1
+                                        }
 
-                                                            }
-                                                            $("#thumbimage").show();
-                                                            $('.filename').text($("#uploadfile").val());
-                                                            $(".Choicefile").hide();
-                                                            $(".Update").show();
-                                                            $(".removeimg").show();
-                                                        }
-                                                        $(document).ready(function () {
-                                                            $(".Choicefile").bind('click', function () {
-                                                                $("#uploadfile").click();
+                                        window.addEventListener('DOMContentLoaded', () => {
+                                            document.querySelectorAll('.normalize-space').forEach(input => {
+                                                input.addEventListener('blur', () => cleanInputValue(input)); // ✅ Chỉ xử lý khi rời ô
+                                            });
+                                        });
 
-                                                            });
-                                                            $(".removeimg").click(function () {
-                                                                $("#thumbimage").attr('src', '').hide();
-                                                                $("#myfileupload").html('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
-                                                                $(".removeimg").hide();
-                                                                $(".Choicefile").show();
-                                                                $(".Update").hide();
-                                                                $(".filename").text("");
-                                                            });
-                                                        })
+                                        function validateForm() {
+                                            const nameInput = document.querySelector("input[name='name']");
+                                            let name = nameInput.value;
+
+                                            // ✅ Loại bỏ khoảng trắng đầu/cuối và thay thế nhiều khoảng trắng bằng 1 khoảng trắng
+                                            name = name.trim().replace(/\s+/g, ' ');
+
+                                            // ✅ Cập nhật lại giá trị input đã chuẩn hóa
+                                            nameInput.value = name;
+
+                                            // ✅ Kiểm tra độ dài hợp lệ (nếu cần)
+                                            if (name.length < 2) {
+                                                alert("Họ tên quá ngắn. Vui lòng nhập đầy đủ họ tên.");
+                                                return false;
+                                            }
+
+                                            return true;
+                                        }
+
+
+                                        function readURL(input, thumbimage) {
+                                            if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
+                                                var reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    $("#thumbimage").attr('src', e.target.result);
+                                                }
+                                                reader.readAsDataURL(input.files[0]);
+                                            } else { // Sử dụng cho IE
+                                                $("#thumbimage").attr('src', input.value);
+
+                                            }
+                                            $("#thumbimage").show();
+                                            $('.filename').text($("#uploadfile").val());
+                                            $(".Choicefile").hide();
+                                            $(".Update").show();
+                                            $(".removeimg").show();
+                                        }
+                                        $(document).ready(function () {
+                                            $(".Choicefile").bind('click', function () {
+                                                $("#uploadfile").click();
+
+                                            });
+                                            $(".removeimg").click(function () {
+                                                $("#thumbimage").attr('src', '').hide();
+                                                $("#myfileupload").html('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
+                                                $(".removeimg").hide();
+                                                $(".Choicefile").show();
+                                                $(".Update").hide();
+                                                $(".filename").text("");
+                                            });
+                                        })
                     </script>
                     </body>
 

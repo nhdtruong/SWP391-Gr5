@@ -58,6 +58,7 @@
                                                     </select>  
                                                 </div>
                                             </div>
+
                                             <div class="col-md-5 row align-items-center">
                                                 <div class="col-md-5" style="text-align: end">
                                                     <label  class="form-label">Trạng thái thanh toán</label>
@@ -72,6 +73,7 @@
                                                     </select>  
                                                 </div>
                                             </div>      
+
                                             <div class="col-md-1 md-0">
                                                 <button type="submit" class="btn btn-primary">Lọc</button>
                                             </div>
@@ -96,7 +98,9 @@
                                                     <th class="border-bottom p-3" >Ngày hẹn</th>
                                                     <th class="border-bottom p-3" >Giờ hẹn</th>
                                                     <th class="border-bottom p-3" >Trạng thái</th>
+
                                                     <th class="border-bottom p-3" >Trạng thái thanh toán</th>
+
                                                     <th class="border-bottom p-3" >Hành động</th>
                                                 </tr>
                                             </thead>
@@ -118,6 +122,7 @@
                                                     <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/></td>
                                                     <td class="p-3"><fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> </td>
                                                     <td class="p-3">
+
                                                         <c:choose>
                                                             <c:when test="${a.status == 1}">
                                                                 <span style="color: green;">Đã đặt</span>
@@ -166,6 +171,7 @@
                                                            title="Xóa bác sĩ">
                                                             <i class="fa-solid fa-trash"></i>
                                                         </a>
+
                                                     </td>
 
 
