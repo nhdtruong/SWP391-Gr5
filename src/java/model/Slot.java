@@ -13,7 +13,18 @@ public class Slot {
     private int slotId;
     private Time slotStart;
     private Time slotEnd;
+    private int status;
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    
+    
     public int getSlotId() {
         return slotId;
     }

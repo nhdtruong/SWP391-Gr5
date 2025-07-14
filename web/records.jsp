@@ -18,6 +18,16 @@
             <section class="bg-dashboard">
                 <div class="container" style="width: 1250px">
                     <div class="row justify-content-center">
+                        <div class="col-12" style="height: 80px;margin-right: -30px">
+                            <nav aria-label="breadcrumb" class="d-inline-block mt-3">
+                                <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
+                                    <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
+
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Hồ sơ khám bệnh</a></li>
+
+                                </ul>
+                            </nav>
+                        </div>
                         <jsp:include page="layout/profileMenu.jsp"/>
 
                         <div class="col-xl-8 col-lg-8 col-md-7 mt-4 pt-2 mt-sm-0 pt-sm-0" style="padding: 0 30px">
@@ -76,6 +86,7 @@
                                                         <li class="d-flex align-items-center margin5px">
                                                             <i class="fa-solid fa-people-group text-primary me-2"></i>
                                                             <strong class="me-2 text-secondary">Dân tộc:</strong>
+                                                            <c:if test="${empty r.getNation()}"> <span>Chưa cập nhật</span></c:if>
                                                             <span>${r.getNation()}</span>
                                                         </li>
 
@@ -88,8 +99,11 @@
                                                                                 '${fn:escapeXml(r.getDob())}',
                                                                                 '${fn:escapeXml(r.getPhone())}',
                                                                                 '${fn:escapeXml(fn:escapeXml(r.getGender()))}',
+                                                                                '${fn:escapeXml(fn:escapeXml(r.getCccd()))}',
+                                                                                '${fn:escapeXml(fn:escapeXml(empty r.getEmail() ? "Chưa cập nhật" : r.getEmail()))}',
+                                                                                '${fn:escapeXml(fn:escapeXml(empty r.getJob() ? "Chưa cập nhật" : r.getJob()))}',
                                                                                 '${fn:escapeXml(fn:escapeXml(r.getAddress()))}',
-                                                                                '${fn:escapeXml(fn:escapeXml(r.getNation()))}'
+                                                                                '${fn:escapeXml(fn:escapeXml(empty r.getNation() ? "Chưa cập nhật" : r.getNation()))}'
                                                                                 )">
                                                             <i class="fa-solid fa-circle-info me-1"></i> Chi tiết
                                                         </button>
@@ -97,8 +111,8 @@
                                                             <i class="fa-solid fa-pen-to-square me-1"></i> Sửa hồ sơ
                                                         </a>
                                                         <button type="button" class="btn btn-danger"
-                                                                onclick="openDeleteModal('${fn:escapeXml(fn:escapeXml(r.getPatientName()))}','${r.getPatientId()}')"
->
+                                                                onclick="openDeleteModal('${fn:escapeXml(fn:escapeXml(r.getPatientName()))}', '${r.getPatientId()}')"
+                                                                >
                                                             <i class="fa-solid fa-trash me-1"></i> Xóa hồ sơ
                                                         </button>
                                                     </div>
@@ -133,10 +147,10 @@
                                 <div class="modal-body">
                                     <p>
                                         <i class="fa-solid fa-user text-primary me-2 minwi"></i>
-                                        <strong class="minw" >Họ tên:</strong> <span id="detailName" class="text-primary"></span>
+                                        <strong class="minw">Họ và tên:</strong> <span id="detailName" class="text-primary"></span>
                                     </p>
                                     <p>
-                                        <i class="fa-solid fa-calendar-day text-primary me-2 minwi "></i>
+                                        <i class="fa-solid fa-calendar-day text-primary me-2 minwi"></i>
                                         <strong class="minw">Ngày sinh:</strong> <span id="detailDob"></span>
                                     </p>
                                     <p>
@@ -148,11 +162,24 @@
                                         <strong class="minw">Giới tính:</strong> <span id="detailGender"></span>
                                     </p>
                                     <p>
+                                        <i class="fa-solid fa-id-card text-primary me-2 minwi"></i>
+                                        <strong class="minw">CMND:</strong> <span id="detailCMND"></span>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-envelope text-primary me-2 minwi"></i>
+                                        <strong class="minw">Email:</strong> <span id="detailEmail"></span>
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-briefcase text-primary me-2 minwi"></i>
+                                        <strong class="minw">Nghề nghiệp:</strong> <span id="detailJob"></span>
+                                    </p>
+
+                                    <p>
                                         <i class="fa-solid fa-location-dot text-primary me-2 minwi"></i>
                                         <strong class="minw">Địa chỉ:</strong> <span id="detailAddress"></span>
                                     </p>
                                     <p>
-                                        <i class="fa-solid fa-people-group text-primary me-2 minwi" ></i>
+                                        <i class="fa-solid fa-people-group text-primary me-2 minwi"></i>
                                         <strong class="minw">Dân tộc:</strong> <span id="detailNation"></span>
                                     </p>
                                 </div>
@@ -237,22 +264,30 @@
 
     </style>
     <script>
-                                                                    function openDetailModal(name, dob, phone, gender, address, nation) {
+                                                                    function openDetailModal(name, dob, phone, gender, cmnd, email, job, address, nation) {
                                                                         document.getElementById("detailName").innerText = name;
                                                                         document.getElementById("detailDob").innerText = dob;
                                                                         document.getElementById("detailPhone").innerText = phone;
                                                                         document.getElementById("detailGender").innerText = gender;
+                                                                        document.getElementById("detailCMND").innerText = cmnd;
+                                                                        document.getElementById("detailEmail").innerText = email;
+                                                                        document.getElementById("detailJob").innerText = job;
                                                                         document.getElementById("detailAddress").innerText = address;
                                                                         document.getElementById("detailNation").innerText = nation;
+
                                                                         var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
                                                                         myModal.show();
                                                                     }
 
                                                                     function openDeleteModal(name, id) {
-                                                                        document.getElementById("deleteName").innerText = name;
-                                                                        document.getElementById("deleteId").value = id;
-                                                                        var delModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-                                                                        delModal.show();
+                                                                     
+                                                                        document.getElementById('deleteName').textContent = name;
+
+                                                                     
+                                                                        document.getElementById('deleteId').value = id;
+
+                                                                        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                                                                        deleteModal.show();
                                                                     }
     </script>
 

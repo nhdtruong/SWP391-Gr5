@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.AccountUser;
 import dal.UserDAO;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import model.Role;
 
@@ -38,7 +39,8 @@ public class AccountManager extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-
+        HttpSession session = request.getSession();
+        session.setAttribute("stopRemain", false);
         UserDAO uDao = new UserDAO();
         RoleDao rDao = new RoleDao();
         List<AccountUser> listAcc = null;

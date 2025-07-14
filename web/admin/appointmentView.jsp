@@ -19,11 +19,12 @@
             <main class="page-content bg-light">
                 <jsp:include page="../admin/layout/headmenu.jsp"/>
                 <div class="container-fluid">
-                    <div class="layout-specing">
+                    <div class="layout-specing" style="">
                         <div class="row">
+                            
                             <div class="col-md-3 row">
                                 <div class="col-md-4">
-                                    <h5 class="mb-0">Doctor</h5>
+                                    <h5 class="mb-0">Appointment</h5>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="search-bar p-0 d-lg-block ms-2">                                                        
@@ -43,22 +44,36 @@
                                     <div class=" justify-content-md-end row">
 
 
-                                        <div class="col-md-3 row align-items-center">
+                                        <div class="col-md-5 row align-items-center">
                                             <div class="col-md-5" style="text-align: end">
                                                 <label  class="form-label">Trạng thái</label>
                                             </div>
                                             <div class="col-md-7">
                                                 <select name="status" class="form-select">
                                                     <option <c:if test="${status == 'all'}"> selected </c:if> value="all">Tất cả</option>
-                                                    <option <c:if test="${status == '1'}"> selected </c:if> value="1">Đã đặt</option>
-                                                    <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã xác nhận</option>
-                                                    <option <c:if test="${status == '3'}"> selected </c:if> value="3">Đang chờ</option>
-                                                    <option <c:if test="${status == '4'}"> selected </c:if> value="4">Đã hoàn tất</option>
-                                                    <option <c:if test="${status == '5'}"> selected </c:if> value="5">Đã hủy</option>
-                                                    <option <c:if test="${status == '0'}"> selected </c:if> value="0">Hủy</option>
+                                                    <option <c:if test="${status == '1'}"> selected </c:if> value="1">Đã đặt lịch</option>                                       
+                                                    <option <c:if test="${status == '0'}"> selected </c:if> value="0">Đã hủy lịch</option>
+                                                    <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã khám</option>
+                                                    <option <c:if test="${status == '3'}"> selected </c:if> value="3">Yêu cầu hủy lịch</option>
                                                     </select>  
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-5 row align-items-center">
+                                                <div class="col-md-5" style="text-align: end">
+                                                    <label  class="form-label">Trạng thái thanh toán</label>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <select name="paymentStatus" class="form-select">
+                                                        <option <c:if test="${paymentStatus == 'all'}"> selected </c:if> value="all">Tất cả</option>
+                                                    <option <c:if test="${paymentStatus == 'success'}"> selected </c:if> value="success">Đã thanh toán</option>
+                                                    <option <c:if test="${paymentStatus == 'pending'}"> selected </c:if> value="pending">Chưa thanh toán</option>
+                                                    <option <c:if test="${paymentStatus == 'refunded'}"> selected </c:if> value="refunded">Đã hoàn tiền</option>
+
+                                                    </select>  
+                                                </div>
+                                            </div>      
+
                                             <div class="col-md-1 md-0">
                                                 <button type="submit" class="btn btn-primary">Lọc</button>
                                             </div>
@@ -83,6 +98,9 @@
                                                     <th class="border-bottom p-3" >Ngày hẹn</th>
                                                     <th class="border-bottom p-3" >Giờ hẹn</th>
                                                     <th class="border-bottom p-3" >Trạng thái</th>
+
+                                                    <th class="border-bottom p-3" >Trạng thái thanh toán</th>
+
                                                     <th class="border-bottom p-3" >Hành động</th>
                                                 </tr>
                                             </thead>
@@ -103,25 +121,57 @@
                                                     <td class="p-3">${a.serviceName}</td>
                                                     <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/></td>
                                                     <td class="p-3"><fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> </td>
-                                                    <c:if test="${a.getStatus() == 1}">
-                                                        <td class="p-3" style="color: green">Active</td>
-                                                    </c:if>
-                                                    <c:if test="${d.getStatus() == 0}">
-                                                        <td class="p-3" style="color: red">Disable</td>
-                                                    </c:if>
-                                                    <c:if test="${d.getStatus() ==  2}">
-                                                        <td class="p-3" style="color: yellow">Wait</td>
-                                                    </c:if>   
+                                                    <td class="p-3">
+
+                                                        <c:choose>
+                                                            <c:when test="${a.status == 1}">
+                                                                <span style="color: green;">Đã đặt</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 0}">
+                                                                <span style="color: red;">Đã hủy</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 2}">
+                                                                <span style="color: goldenrod;">Đã khám</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 3}">
+                                                                <span style="color: orange;">Yêu cầu hủy lịch</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span style="color: gray;">Không xác định</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>   
+                                                    <td class="p-3">
+                                                        <c:choose>
+                                                            <c:when test="${a.paymentStatus == 'pending'}">
+                                                                <span style="color: gray;">Chưa thanh toán</span>
+                                                            </c:when>
+                                                            <c:when test="${a.paymentStatus == 'success'}">
+                                                                <span style="color: green;">Đã thanh toán</span>
+                                                            </c:when>
+                                                            <c:when test="${a.paymentStatus == 'refunded'}">
+                                                                <span style="color: blue;">Đã hoàn tiền</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span style="color: darkred;">Không rõ</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+
                                                     <td class="p-3">
 
 
-                                                        <a href="updatedoctor?action=updateDoc&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
-                                                        <c:if test="${sessionScope.user.getRole()== 1}">
-                                                            <a href="#" class="btn btn-danger"
-                                                               onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')">
-                                                                Delete
-                                                            </a>
-                                                        </c:if>
+                                                        <a href="updateAppoitment?action=updateAppointment&appointmentId=${a.appointmentId}" class="btn btn-primary" title="Sửa bác sĩ">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </a>
+
+                                                        <!-- Nút xóa -->
+                                                        <a href="#" class="btn btn-danger" 
+                                                           onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')" 
+                                                           title="Xóa bác sĩ">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </a>
+
                                                     </td>
 
 
@@ -182,12 +232,35 @@
                 </div>
 
 
+                <c:if test="${not empty refundRequest}">
+                    <div class="refund-alert position-fixed top-50 start-50 translate-middle text-center shadow-lg border border-warning bg-light"
+                         role="alert"
+                         style="z-index: 1055; width: 90%; max-width: 700px; border-radius: 1rem; font-size: 18px; padding: 2rem;">
 
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="fa-solid fa-circle-exclamation text-warning" style="font-size: 3rem;"></i>
 
+                            <h4 class="fw-bold text-dark mt-3 mb-4">
+                                Có <span class="text-danger">${refundRequest}</span> phiếu khám yêu cầu hủy cần xử lý!
+                            </h4>
+
+                            <div class="d-flex justify-content-center gap-3">
+                                <form method="post" action="appointmentManager">
+                                    <input type="hidden" name="stopNotify" value="stopNotifyRefund" />
+                                    <button type="submit" class="btn btn-outline-dark px-4">Xác nhận</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </c:if>
 
                 <jsp:include page="../admin/layout/footer.jsp"/>
             </main>
         </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -200,6 +273,8 @@
         <script src="assets/js/timepicker.init.js"></script> 
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
+
+      
 
     </body>
 

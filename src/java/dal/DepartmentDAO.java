@@ -20,6 +20,23 @@ public class DepartmentDAO extends DBContext {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
+    public int getDepartmentIdByDoctorId(int doctorId) {
+    String sql = "SELECT deparment_id FROM doctors WHERE doctor_id = ?";
+    
+    try {
+        ps = connection.prepareStatement(sql);
+        ps.setInt(1, doctorId);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("deparment_id");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return -1;
+}
+    
     public List<Deparment> getAllDeparment() {
         List<Deparment> list = new ArrayList<>();
         String sql = "SELECT de.department_id ,de.department_name ,de.img\n"

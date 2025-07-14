@@ -286,18 +286,22 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 
 
 function CheckFullName(text) {
-    const value = text.value;
+    const value = text.value.trim();
 
-    if (/^\s/.test(value)) {
-        text.setCustomValidity('Không được bắt đầu bằng khoảng trống.');
+    // Kiểm tra khoảng trắng đầu chuỗi
+    if (/^\s/.test(text.value)) {
+        text.setCustomValidity('Không được bắt đầu bằng khoảng trắng.');
     } else {
-        const fullname = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]{4,}(?:[a-zA-ZÀÁÂÃ...]+){0,2}$/;
-        if (!fullname.test(value.trim())) {
-            text.setCustomValidity('Họ tên không hợp lệ.');
+        // Regex kiểm tra từ 2 đến 30 từ, mỗi từ chỉ chứa chữ, cách nhau đúng 1 dấu cách
+        const fullNameRegex = /^([a-zA-ZÀ-ỹ]+)( [a-zA-ZÀ-ỹ]+){1,29}$/;
+
+        if (!fullNameRegex.test(value)) {
+            text.setCustomValidity('Chỉ chứa chữ cái và cách nhau bằng 1 khoảng trắng.');
         } else {
             text.setCustomValidity('');
         }
     }
+
     text.reportValidity();
     return true;
 }
@@ -338,18 +342,57 @@ function CheckCCCD(text) {
     return true;
 }
 
+function CheckMaxLength50(text) {
+    const value = text.value;
+
+    // Kiểm tra khoảng trắng ở đầu
+    if (/^\s/.test(value)) {
+        text.setCustomValidity('Không được có khoảng trắng ở đầu.');
+    }
+    // Kiểm tra độ dài tối đa
+    else if (value.length > 50) {
+        text.setCustomValidity("Vui lòng nhập tối đa 50 ký tự.");
+    }
+    else {
+        text.setCustomValidity('');
+    }
+
+    text.reportValidity();
+    return true;
+}
+
+function CheckMaxLength200(text) {
+    const value = text.value;
+
+    // Kiểm tra khoảng trắng ở đầu
+    if (/^\s/.test(value)) {
+        text.setCustomValidity('Không được có khoảng trắng ở đầu.');
+    }
+    // Kiểm tra độ dài tối đa
+    else if (value.length > 200) {
+        text.setCustomValidity("Vui lòng nhập không quá 200 ký tự.");
+    }
+    else {
+        text.setCustomValidity('');
+    }
+
+    text.reportValidity();
+    return true;
+}
+
+
+
 function CheckBHYT(text) {
     const value = text.value;
 
-    // Nếu không nhập gì => không kiểm tra, hợp lệ
     if (value.trim() === "") {
         text.setCustomValidity('');
     } else if (/^\s/.test(value)) {
         text.setCustomValidity('Không được bắt đầu bằng khoảng trống.');
     } else {
         const bhyt = value.trim();
-        if (!/^[A-Z]{2}\d{13}$/.test(bhyt)) {
-            text.setCustomValidity('Mã BHYT không hợp lệ. Phải gồm 2 chữ cái in hoa và 13 chữ số.');
+        if (!/^\d{10}$/.test(bhyt)) {
+            text.setCustomValidity('Mã BHYT không hợp lệ.');// phải đúng 10 chữ số
         } else {
             text.setCustomValidity('');
         }
@@ -390,7 +433,7 @@ function CheckPrice(text) {
 
 function CheckUserName(text) {
     const value = text.value;
- 
+
     if (/^\s/.test(value)) {
         text.setCustomValidity('Tên đăng nhập không được bắt đầu bằng khoảng trống.');
     } else {
@@ -401,23 +444,27 @@ function CheckUserName(text) {
             text.setCustomValidity('');
         }
     }
-  
-        text.reportValidity();
-  
+
+    text.reportValidity();
+
 
     return true;
 }
 
 function CheckEmail(text) {
     const value = text.value;
-
-    const email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!email.test(value)) {
-        text.setCustomValidity('Email không hợp lệ.');
+    if (/^\s/.test(value)) {
+        text.setCustomValidity('Không được bắt đầu bằng khoảng trắng.');
     } else {
-        text.setCustomValidity('');
-
+        // Biểu thức kiểm tra email hợp lệ
+        const email = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!email.test(value.trim())) {
+            text.setCustomValidity('Email không hợp lệ.');
+        } else {
+            text.setCustomValidity('');
+        }
     }
+
     text.reportValidity();
     return true;
 }
@@ -426,11 +473,11 @@ function CheckPassword(text) {
     const value = text.value;
 
     if (/^\s/.test(value)) {
-        text.setCustomValidity('Mật khẩu không hợp lệ (ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt).');
+        text.setCustomValidity('Mật khẩu chứa ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt.');
     } else {
         const pass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
         if (!pass.test(value)) {
-            text.setCustomValidity('Mật khẩu không hợp lệ (ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt).');
+            text.setCustomValidity('Mật khẩu chứa ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt.');
         } else {
             text.setCustomValidity('');
         }

@@ -5,7 +5,6 @@
 
 package controller;
 
-import dal.DepartmentDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,8 +12,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Deparment;
 
 /**
  *
@@ -35,17 +32,20 @@ public class DetailServiceController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
-         String DeparmentId_ = request.getParameter("id");
-          int id = Integer.parseInt(DeparmentId_);
+         String categoryService_id = request.getParameter("id");
+          int id = Integer.parseInt(categoryService_id);
          
          if(id == 1){
               response.sendRedirect("specialty");
-         }else {
+         }else if (id == 2){
+             response.sendRedirect("callVideoWithDoctor?action=all&categoryService_Id="+categoryService_id);
+         }else if(id == 3){
              response.sendRedirect("home");
          }
         
          
         }catch (Exception e) {
+            System.out.println(e);
         } 
     } 
 

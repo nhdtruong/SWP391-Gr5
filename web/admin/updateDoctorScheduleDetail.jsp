@@ -34,7 +34,7 @@
                                         <div class="card-header d-flex justify-content-between align-items-center bg-light">
                                             <strong>
                                                 <input name="workingDate" value="${day.workingDate}" type="hidden">
-                                                Ngày làm: <fmt:formatDate value="${day.workingDate}" pattern="dd/ MM/ yyyy"/>
+                                                Ngày làm: <fmt:formatDate value="${day.workingDate}" pattern="EEEE - dd/ MM/ yyyy"/>
                                             </strong>
                                             <div>
                                                 <input type="checkbox" id="checkAll" onchange="toggleAllSlots()">

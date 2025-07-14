@@ -5,12 +5,23 @@
 <html lang="en">
     <jsp:include page="layout/head.jsp"/>
     <body>
-       
+
         <jsp:include page="layout/menu_white.jsp"/>
         <section class="bg-dashboard">
             <div class="container">
                 <div class="row justify-content-center">
+                    <div class="col-12" style="height: 80px;margin-right: -30px">
+                        <nav aria-label="breadcrumb" class="d-inline-block mt-3">
+                            <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
+                                <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
+
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Thông tin tài khoản</a></li>
+
+                            </ul>
+                        </nav>
+                    </div>
                     <jsp:include page="layout/profileMenu.jsp"/>
+
                     <div class="col-xl-8 col-lg-8 col-md-7 mt-4 pt-2 mt-sm-0 pt-sm-0" style="padding:0 30px">
                         <h3 class="mb-0"></h3>
                         <div class="rounded shadow " style="margin-top: 0px">
@@ -30,23 +41,23 @@
                             <div class="p-4">
                                 <form action="user?action=update_image" method="POST" enctype="multipart/form-data">
                                     <h5 class="mb-0">Chỉnh sửa thông tin :</h5>
-                                    <div>
-                                        <p class="text-muted">Cập nhật ảnh đại diện.</p>
-                                        <div id="myfileupload">
-                                            <input type="file" name="image" id="uploadfile" name="ImageUpload" onchange="readURL(this);" />
-                                        </div>
-                                        <div id="thumbbox">
-                                            <img class="rounded" height="20%" width="30%" alt="Thumb image" id="thumbimage" style="display: none" />
-                                            <a class="removeimg" href="javascript:"></a>
-                                        </div>
-                                        <div id="boxchoice">
-                                            <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i> Chọn ảnh</a>
-                                            <p style="clear:both"></p>
-                                            <input type="submit" id="submit" style="display: none" name="send" class="Update btn btn-primary"
-                                                   value="Cập nhật">
-                                            <p style="clear:both"></p>
-                                        </div> 
-                                    </div>
+                                    <!--                                    <div>
+                                                                            <p class="text-muted">Cập nhật ảnh đại diện.</p>
+                                                                            <div id="myfileupload">
+                                                                                <input type="file" name="image" id="uploadfile" name="ImageUpload" onchange="readURL(this);" />
+                                                                            </div>
+                                                                            <div id="thumbbox">
+                                                                                <img class="rounded" height="20%" width="30%" alt="Thumb image" id="thumbimage" style="display: none" />
+                                                                                <a class="removeimg" href="javascript:"></a>
+                                                                            </div>
+                                                                            <div id="boxchoice">
+                                                                                <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i> Chọn ảnh</a>
+                                                                                <p style="clear:both"></p>
+                                                                                <input type="submit" id="submit" style="display: none" name="send" class="Update btn btn-primary"
+                                                                                       value="Cập nhật">
+                                                                                <p style="clear:both"></p>
+                                                                            </div> 
+                                                                        </div>-->
                                 </form>
                                 <form action="updateprofile?action=updateInfor" method="POST">
                                     <label class="form-label"><span style="color: red; align-content: center;">${requestScope.error}</span></label>
@@ -65,7 +76,7 @@
                                             </div>
                                         </div>
 
-                                       
+
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -99,7 +110,7 @@
 
                                         <div class="col-lg-12">
                                             <div class="mb-3">
-                                               <label class="form-label">Mật khẩu mới <span class="text-danger">*</span> </label>
+                                                <label class="form-label">Mật khẩu mới <span class="text-danger">*</span> </label>
                                                 <input value="${newPassword}" oninvalid="CheckPassword(this);" oninput="CheckPassword(this);" id="password" type="password" name="newPassword" class="form-control" required="">
                                             </div>
                                         </div><!--end col-->
@@ -130,7 +141,7 @@
         <script src="assets/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
-         <style>
+        <style>
             .Choicefile{
                 display: block;
                 background: #396CF0;

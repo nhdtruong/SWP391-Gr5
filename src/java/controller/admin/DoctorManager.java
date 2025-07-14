@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import model.Deparment;
@@ -41,6 +42,8 @@ public class DoctorManager extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
+        session.setAttribute("stopRemain", false);
         String action = request.getParameter("action");
         String url = null;
         DoctorDAO dDao = new DoctorDAO();
@@ -64,7 +67,7 @@ public class DoctorManager extends HttpServlet {
             }
             if (action.equals("filter")) {
                 
-                String gender = request.getParameter("status");
+                String gender = request.getParameter("gender");
                 String position = request.getParameter("position_id");
                 String department = request.getParameter("department_id");
 
@@ -92,7 +95,7 @@ public class DoctorManager extends HttpServlet {
                 int numPageDisplay = 7;
                 List<Doctor> listDoctorDisplay = getListDoctorDisplay(listDoctor, start, end);
                 request.setAttribute("position", listPosition);
-                 request.setAttribute("department", listDeparment);
+                request.setAttribute("department", listDeparment);
                 request.setAttribute("doctor", listDoctorDisplay);
                 request.setAttribute("url", url);
                 request.setAttribute("page", page);

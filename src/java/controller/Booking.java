@@ -69,10 +69,16 @@ public class Booking extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+        
         String stepName = request.getParameter("stepName");
+        
         request.setAttribute("stepName", stepName);
+        session.setAttribute("token","chuyenkhoa");
+       
         
         if (stepName.equals("doctor")) {
+            session.removeAttribute("serviceBooking");
+            session.removeAttribute("patient");
             DoctorDAO doctDAO = new DoctorDAO();
             String departmentId = request.getParameter("departmentId");
             String departmentName = request.getParameter("departmentName");
@@ -93,8 +99,9 @@ public class Booking extends HttpServlet {
             session.setAttribute("doctorId", doctorId);
             session.setAttribute("doctorName", doctorName);
             session.removeAttribute("serviceBooking");
+            session.removeAttribute("isBHYT");
             String departmentId = (String) session.getAttribute("departmentId");
-            List<Service> listService = serviceDao.getAllServicesByDepartmentId(Integer.parseInt(departmentId));
+            List<Service> listService = serviceDao.getServicesByDoctorAndDepartment(Integer.parseInt(doctorId), Integer.parseInt(departmentId));
             request.setAttribute("listService",listService);
             request.getRequestDispatcher("booking.jsp").forward(request, response);
         }
@@ -105,6 +112,10 @@ public class Booking extends HttpServlet {
             String doctorId = (String) session.getAttribute("doctorId");
             List<WorkingDateSchedule> listWDS =  DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
             String serviceId = request.getParameter("serviceId");
+            String isBHYT = request.getParameter("isBHYT");
+            if(isBHYT != null){
+               session.setAttribute("isBHYT", isBHYT); 
+            }
             Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
             session.setAttribute("serviceBooking", serviceBooking);
             session.removeAttribute("dateBooking");

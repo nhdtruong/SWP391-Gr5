@@ -34,7 +34,7 @@
                                             <strong>
                                                 <input type="date" name="workingDate" class="form-control custom-date-input" />
                                             </strong>
-                                           
+
                                             <span style="color: red; align-content: center;">${requestScope.errorD}</span>
                                             <div>
                                                 <input type="checkbox" id="checkAll" onchange="toggleAllSlots()">
@@ -43,55 +43,55 @@
                                         </div>
                                         <div class="card-body">
                                             <!-- Slot Sáng -->
-                                             <span style="color: red; align-content: center;">${requestScope.error}</span>
+                                            <span style="color: red; align-content: center;">${requestScope.error}</span>
                                             <div><strong>Slot Sáng</strong></div>
                                             <div class="row mb-2">
                                                 <c:forEach var="h" begin="7" end="10">
-                                                        <div class="col-md-3">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input slot" type="checkbox"
-                                                                       name="day" value="${h}:00:00-${h+1}:00:00"
-                                                                       id="slot_${i}_m_${h}">
-                                                                <label class="form-check-label" for="slot_${i}_m_${h}">
-                                                                    ${h}:00 - ${h+1}:00
-                                                                </label>
-                                                            </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input slot" type="checkbox"
+                                                                   name="day" value="${h}:00:00-${h+1}:00:00"
+                                                                   id="slot_${i}_m_${h}">
+                                                            <label class="form-check-label" for="slot_${i}_m_${h}">
+                                                                ${h}:00 - ${h+1}:00
+                                                            </label>
                                                         </div>
-                                                    </c:forEach>
+                                                    </div>
+                                                </c:forEach>
                                             </div>
 
                                             <!-- Slot Chiều -->
                                             <div><strong>Slot Chiều</strong></div>
                                             <div class="row">
-                                               <c:forEach var="h" begin="13" end="16">
-                                                        <div class="col-md-3">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input slot" type="checkbox"
-                                                                       name="day" value="${h}:00:00-${h+1}:00:00"
-                                                                       id="slot_${i}_a_${h}">
-                                                                <label class="form-check-label" for="slot_${i}_a_${h}">
-                                                                    ${h}:00 - ${h+1}:00
-                                                                </label>
-                                                            </div>
+                                                <c:forEach var="h" begin="13" end="16">
+                                                    <div class="col-md-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input slot" type="checkbox"
+                                                                   name="day" value="${h}:00:00-${h+1}:00:00"
+                                                                   id="slot_${i}_a_${h}">
+                                                            <label class="form-check-label" for="slot_${i}_a_${h}">
+                                                                ${h}:00 - ${h+1}:00
+                                                            </label>
                                                         </div>
-                                                    </c:forEach>
+                                                    </div>
+                                                </c:forEach>
                                             </div>
 
                                             <!-- Slot Tối -->
                                             <div><strong>Slot Tối</strong></div>
                                             <div class="row">
                                                 <c:forEach var="h" begin="18" end="21">
-                                                        <div class="col-md-3">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input " type="checkbox"
-                                                                       name="day" value="${h}:00:00-${h+1}:00:00"
-                                                                       id="slot_${i}_m_${h}">
-                                                                <label class="form-check-label" for="slot_${i}_m_${h}">
-                                                                    ${h}:00 - ${h+1}:00
-                                                                </label>
-                                                            </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input " type="checkbox"
+                                                                   name="day" value="${h}:00:00-${h+1}:00:00"
+                                                                   id="slot_${i}_m_${h}">
+                                                            <label class="form-check-label" for="slot_${i}_m_${h}">
+                                                                ${h}:00 - ${h+1}:00
+                                                            </label>
                                                         </div>
-                                                    </c:forEach>
+                                                    </div>
+                                                </c:forEach>
                                             </div>
                                         </div>
                                     </div>
@@ -138,7 +138,7 @@
                                                             const selectedDate = dateInput.value;
                                                             if (existingDates.includes(selectedDate)) {
                                                                 alert("Ngày này đã có lịch. Vui lòng chọn ngày khác.");
-                                                                dateInput.value = ""; 
+                                                                dateInput.value = "";
                                                             }
                                                         });
                                                     });

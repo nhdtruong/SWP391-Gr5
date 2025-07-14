@@ -13,13 +13,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.DoctorScheduleDAO;
 import dal.DoctorScheduleSlotsDAO;
-import dal.WeeklyDoctorScheduleDAO;
-import dal.WeeklyScheduleSlotDAO;
 import java.net.URLEncoder;
 import java.util.List;
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
 
 /**
  *

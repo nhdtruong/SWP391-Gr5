@@ -29,19 +29,19 @@
                                 <form action="addaccount" method="POST" onSubmit="document.getElementById('submit').disabled=true;">
                                     <div class="mb-3">
                                         <label class="form-label">Tên tài khoản <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="username" value="${requestScope.username}" required>
+                                        <input type="text" class="form-control" name="username" value="${requestScope.username}" oninput="CheckUserName(this);" required>
                                         <small class="text-danger">${requestScope.errorTK}</small>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control" name="email" value="${requestScope.email}" required>
+                                        <input type="email" class="form-control" name="email" value="${requestScope.email}"  oninput="CheckEmail(this);" required>
                                         <small class="text-danger">${requestScope.errorEM}</small>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" name="password" value="${requestScope.password}" required>
+                                        <input type="password" class="form-control" name="password" value="${requestScope.password}"  oninput="CheckPassword(this);" required>
                                     </div>
 
                                     
@@ -93,6 +93,65 @@
         margin-top: auto;
     }
 </style>
+
+<script>
+    
+   function CheckPassword(text) {
+    const value = text.value;
+
+    // Nếu chứa bất kỳ dấu cách nào
+    if (/\s/.test(value)) {
+        text.setCustomValidity('Mật khẩu không được chứa dấu cách.');
+    } else {
+        text.setCustomValidity('');
+    }
+
+    text.reportValidity();
+    return true;
+}
+    
+    function CheckUserName(text) {
+    const value = text.value;
+ 
+    if (/^\s/.test(value)) {
+        text.setCustomValidity('Tên đăng nhập không được bắt đầu bằng khoảng trống.');
+    } else {
+        const username = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+        if (!username.test(value)) {
+            text.setCustomValidity('Tên đăng nhập không hợp lệ.');
+        } else {
+            text.setCustomValidity('');
+        }
+    }
+  
+        text.reportValidity();
+  
+
+    return true;
+}
+
+function CheckEmail(text) {
+    const value = text.value;
+    if (/^\s/.test(value)) {
+        text.setCustomValidity('Không được bắt đầu bằng khoảng trắng.');
+    } else {
+        // Biểu thức kiểm tra email hợp lệ
+        const email = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!email.test(value.trim())) {
+            text.setCustomValidity('Email không hợp lệ.');
+        } else {
+            text.setCustomValidity('');
+        }
+    }
+
+    text.reportValidity();
+    return true;
+}
+
+
+
+
+</script>
  
 
     </body>

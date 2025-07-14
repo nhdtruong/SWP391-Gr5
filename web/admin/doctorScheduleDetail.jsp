@@ -41,6 +41,7 @@
                                             <tr>
 
                                                 <td>
+                                                    <fmt:formatDate value="${day.workingDate}" pattern="EEEE" /><br>
                                                     <fmt:formatDate value="${day.workingDate}" pattern="dd / MM / yyyy" />
                                                 </td>
 
