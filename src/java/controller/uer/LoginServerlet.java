@@ -68,11 +68,11 @@ public class LoginServerlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            boolean isMatch=false;
-            //boolean isMatch = PasswordUtils.checkPassword(password, account.getPassword());
-            if(isMatch==false){
-                isMatch = password.equals("1");
-            }
+//            boolean isMatch=false;
+            boolean isMatch = PasswordUtils.checkPassword(password, account.getPassword());
+//            if(isMatch==false){
+//                isMatch = password.equals("1");
+//            }
             if (!isMatch) {
                 request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
