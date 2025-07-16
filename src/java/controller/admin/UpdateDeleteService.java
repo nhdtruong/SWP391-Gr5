@@ -105,11 +105,9 @@ public class UpdateDeleteService extends HttpServlet {
             serviceDAO.deleteService(Integer.parseInt(service_id));
 
            
-            if (returnUrl != null && !returnUrl.isEmpty()) {
-                response.sendRedirect(returnUrl);
-            } else {
+          
                 response.sendRedirect("servicemanager?action=all"); // fallback
-            }
+            
 
         }
     }
