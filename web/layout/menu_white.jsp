@@ -111,15 +111,9 @@
                         <li><a href="specialty" class="sub-menu-item">Đặt khám chuyên khoa</a></li>
                         <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
                         <li><a href="callVideoWithDoctor?action=all&categoryService_id=2" class="sub-menu-item">Gọi video với bác sĩ</a></li>
-                        <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
+                        <li><a href="healthPackageService?action=all&categoryService_id=4" class="sub-menu-item">Gói khám sức khỏe</a></li>
 
-                        <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
-                        <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
-                        <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
-                        <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>
-                        <li><a href="service?type=1" class="sub-menu-item">Khám tổng quát</a></li>
-                        <li><a href="service?type=2" class="sub-menu-item">Chuyên khoa</a></li>
-                        <li><a href="service?type=3" class="sub-menu-item">Tư vấn online</a></li>
+                        
 
 
                     </ul>

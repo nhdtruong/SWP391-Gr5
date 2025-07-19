@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Service;
 import model.CategoryServices;
-import model.Deparment; // Đảm bảo bạn đã tạo class Department
+import model.Deparment;
 
 public class ServiceDAO extends DBContext {
 
-    // Lấy danh sách tất cả dịch vụ
     public List<Service> getAllServices() {
         List<Service> list = new ArrayList<>();
         String sql = "SELECT s.service_id, s.service_name, s.is_bhyt, s.description, "
@@ -101,6 +100,36 @@ public class ServiceDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             ps.setInt(2, categoryId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Service s = new Service();
+                    s.setService_id(rs.getInt("service_id"));
+                    s.setService_name(rs.getString("service_name"));
+                    s.setIs_bhyt(rs.getBoolean("is_bhyt"));
+                    s.setDescription(rs.getString("description"));
+                    s.setCategory_service_id(rs.getInt("category_service_id"));
+                    s.setDepartment_id(rs.getInt("department_id"));
+                    s.setFee(rs.getDouble("fee"));
+                    s.setDiscount(rs.getDouble("discount"));
+                    s.setPayment_type_id(rs.getInt("payment_type_id"));
+
+                    list.add(s);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Service> getServicesByCategory(int categoryId) {
+        List<Service> list = new ArrayList<>();
+        String sql = "SELECT * FROM service WHERE category_service_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, categoryId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -445,7 +474,6 @@ public class ServiceDAO extends DBContext {
         return categories;
     }
 
-    // Lấy danh sách tất cả department (Khoa)
     public List<Deparment> getAllDepartments() {
         List<Deparment> departments = new ArrayList<>();
         String sql = "SELECT department_id, department_name, img FROM department";
@@ -482,11 +510,11 @@ public class ServiceDAO extends DBContext {
     public static void main(String[] args) {
         ServiceDAO sdao = new ServiceDAO();
 
-      //  System.out.println(sdao.getAllServices());
-     //   System.out.println(sdao.getAllCategories());
-      //  System.out.println(sdao.getAllDepartments());
+        //  System.out.println(sdao.getAllServices());
+        //   System.out.println(sdao.getAllCategories());
+        //  System.out.println(sdao.getAllDepartments());
         //   sdao.updateService(17, "ok", true, "ok", 1, 2, 34000, 200, 1, "default");
-      //  System.out.println(sdao.getAllServicesByDepartmentId(6));
-        System.out.println(sdao.getServicesByDoctorAndDepartment(70, 6));
+        //  System.out.println(sdao.getAllServicesByDepartmentId(6));
+        System.out.println(sdao.getServicesByCategory(4));
     }
 }

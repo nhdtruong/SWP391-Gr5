@@ -22,6 +22,7 @@ public class AppointmentView {
     private double amount;
     private String paymentStatus;
     private Date workingDate;
+    private Date bookPacketServiceDate;
     private Date created_at;
     private boolean is_refunded;
     private Time slotStart;

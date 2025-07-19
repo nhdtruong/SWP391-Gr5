@@ -54,7 +54,7 @@ public class UpdateDeleteService extends HttpServlet {
             CategoryServiceDAO caDao = new CategoryServiceDAO();
             List<Deparment> listDe = deDao.getAllDeparment();
             List<CategoryServices> listCa = caDao.getAllCategoryServiceses();
-            DoctorServiceDAO doctorServiceDAO =  new DoctorServiceDAO();
+            DoctorServiceDAO doctorServiceDAO = new DoctorServiceDAO();
             Doctor doctor = doctorServiceDAO.getDoctorByService(Integer.parseInt(serviceId));
             request.setAttribute("doctor", doctor);
             request.setAttribute("category", listCa);
@@ -77,7 +77,7 @@ public class UpdateDeleteService extends HttpServlet {
             String fee = request.getParameter("fee").replace(",", "");
             String discount_ = request.getParameter("discount");
             String paymentTypeId = request.getParameter("payment_type_id");
-            System.out.println("fee" + fee +"serciid" +serviceId);
+            System.out.println("fee" + fee + "serciid" + serviceId);
             String img = "default";
             double discount = 0;
             if (discount_ != null) {
@@ -98,16 +98,13 @@ public class UpdateDeleteService extends HttpServlet {
         if (action.equals("delete")) {
             DoctorServiceDAO doctorServiceDAO = new DoctorServiceDAO();
             String service_id = request.getParameter("service_id");
-            String returnUrl = request.getParameter("returnUrl"); 
+            String returnUrl = request.getParameter("returnUrl");
 
             doctorServiceDAO.removeDoctorServiceByServiceId(Integer.parseInt(service_id));
             ServiceDAO serviceDAO = new ServiceDAO();
             serviceDAO.deleteService(Integer.parseInt(service_id));
 
-           
-          
-                response.sendRedirect("servicemanager?action=all"); // fallback
-            
+            response.sendRedirect("servicemanager?action=all"); // fallback
 
         }
     }
