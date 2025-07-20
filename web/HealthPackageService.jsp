@@ -84,7 +84,7 @@
                                             <div class="text-warning fw-bold fs-6">Giá: <span><fmt:formatNumber value="${s.fee}" pattern="#,##0"/> đ</span></div>
                                             <div class="d-flex gap-2">
                                                 <button class="btn btn-outline-primary btn-sm rounded-pill">Xem chi tiết</button>
-                                                 <a href="booking.HealthPackage?stepName=service&categoryService_id=${s.category_service_id}" class="btn btn-info text-white fw-bold px-4 py-2 rounded-pill">Đặt khám ngay</a>
+                                                 <a href="booking.HealthPackage?stepName=service&service_id=${s.service_id}&categoryService_id=${s.category_service_id}" class="btn btn-info text-white fw-bold px-4 py-2 rounded-pill">Đặt khám ngay</a>
                                             </div>
                                         </div>
                                     </div>

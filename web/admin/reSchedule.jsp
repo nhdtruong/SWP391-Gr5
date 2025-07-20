@@ -27,7 +27,7 @@
                                 <h6>Mã phiếu: <strong>${appointmentCode}</strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <h6>Đang đặt ngày: <strong>${workingDate}</strong></h6>
+                                <h6>Đang đặt ngày: <strong><fmt:formatDate value="${dateBooking}" pattern="dd/ MM/ yyyy"/> </strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <h6>Bác sĩ: <strong>${currentDoctorName}</strong></h6>
@@ -42,7 +42,7 @@
                             <input type="hidden" name="patientName" value="${patientName}" />
                             <input type="hidden" name="appointmentId" value="${appointmentId}" />
                             <input type="hidden" name="appointmentCode" value="${appointmentCode}" />
-                            <input type="hidden" name="workingDate" value="${workingDate}" />
+                            <input type="hidden" name="dateBooking" value="${dateBooking}" />
                             <input type="hidden" name="slotStart" value="${slotStart}" />
                             <input type="hidden" name="slotEnd" value="${slotEnd}" />
                             <input type="hidden" name="slotId" value="${slotId}" />
@@ -230,7 +230,7 @@
                                     <!-- Footer -->
                                     <div class="card-footer text-start">
                                         <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại sss
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                         </a>
                                     </div>
                                 </div>
@@ -252,12 +252,15 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body" id="confirmText">
-                            <!-- Text sẽ được gán bằng JS -->
+                           
                         </div>
 
                         <input type="hidden" name="appointmentId" id="appointmentId" />
                         <input type="hidden" name="doctorId" id="inputDoctorId" />
                         <input type="hidden" name="slotId" id="inputSlotId" />
+                        <input type="hidden" name="dateBooking" id="inputDateBooking" />
+                        <input type="hidden" name="slotStart" id="inputSlotStart" />
+                        <input type="hidden" name="slotEnd" id="inputSlotEnd" />
                         <input type="hidden" name="action" value="excuteUpdate" />
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -274,21 +277,24 @@
 
         <script>
                                                                                 function showConfirmModal(appointmentId, slotStart, slotEnd, dateBooking, reDoctorName, doctorId, slotId) {
-                                                                                   
+
                                                                                     const text = "Bạn có chắc chắn muốn đổi lịch hẹn sang:<br>" +
                                                                                             "📅 <strong>" + dateBooking + "</strong><br>" +
                                                                                             "🕒 <strong>" + slotStart + " - " + slotEnd + "</strong><br>" +
                                                                                             "👨‍⚕️ Bác sĩ: <strong>" + reDoctorName + "</strong>";
 
-                                                                                    // Hiển thị nội dung vào modal
+
                                                                                     document.getElementById('confirmText').innerHTML = text;
 
-                                                                                    // Set dữ liệu vào input ẩn trong form của modal
+
                                                                                     document.getElementById('appointmentId').value = appointmentId;
                                                                                     document.getElementById('inputDoctorId').value = doctorId;
                                                                                     document.getElementById('inputSlotId').value = slotId;
+                                                                                    document.getElementById('inputDateBooking').value = dateBooking;
+                                                                                    document.getElementById('inputSlotStart').value = slotStart;
+                                                                                    document.getElementById('inputSlotEnd').value = slotEnd;
 
-                                                                                    // Mở modal xác nhận
+
                                                                                     const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
                                                                                     modal.show();
                                                                                 }

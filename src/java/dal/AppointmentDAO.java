@@ -23,52 +23,70 @@ import model.Patient;
  */
 public class AppointmentDAO extends DBContext {
 
-    public int insertAppointment(String appointmentCode, int patientId, int doctorId, int slotId, int serviceId, String note) {
-        String sql = "INSERT INTO appointment (appointment_code, patient_id,doctor_id, slot_id, service_id, note) VALUES (?, ?,?, ?, ?, ?)";
+public int insertAppointment(
+        String appointmentCode,
+        int patientId,
+        int doctorId,
+        int slotId,
+        int serviceId,
+        Date booking_date,
+        Time slot_start,
+        Time slot_end,
+        String note) {
 
-        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, appointmentCode);
-            ps.setInt(2, patientId);
-            ps.setInt(3, doctorId);
-            ps.setInt(4, slotId);
-            ps.setInt(5, serviceId);
-            ps.setString(6, note);
+    String sql = "INSERT INTO appointment " +
+                 "(appointment_code, patient_id, doctor_id, slot_id, service_id, booking_date, slot_start, slot_end, note) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating appointment failed, no rows affected.");
-            }
+    try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        ps.setString(1, appointmentCode);
+        ps.setInt(2, patientId);
+        ps.setInt(3, doctorId);
+        ps.setInt(4, slotId);
+        ps.setInt(5, serviceId);
+        ps.setDate(6, booking_date);
+        ps.setTime(7, slot_start);
+        ps.setTime(8, slot_end);
+        ps.setString(9, note);
 
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                } else {
-                    throw new SQLException("Creating appointment failed, no ID obtained.");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        int affectedRows = ps.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Creating appointment failed, no rows affected.");
         }
 
-        return -1;
-    }
-
-    public boolean rescheduleAppointment(int appointmentId, int doctorId, int slotId) {
-        String sql = "UPDATE appointment SET doctor_id = ?, slot_id = ? WHERE appointment_id = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
-            ps.setInt(2, slotId);
-            ps.setInt(3, appointmentId);
-
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try (ResultSet rs = ps.getGeneratedKeys()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Creating appointment failed, no ID obtained.");
+            }
         }
-
-        return false;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return -1;
+}
+
+    public boolean rescheduleAppointment(int appointmentId, int doctorId, int slotId, Date dateBooking, Time slotStart, Time slotEnd) {
+    String sql = "UPDATE appointment SET doctor_id = ?, slot_id = ?, booking_date = ?, slot_start = ?, slot_end = ? WHERE appointment_id = ?";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, doctorId);
+        ps.setInt(2, slotId);
+        ps.setDate(3, dateBooking);
+        ps.setTime(4, slotStart);
+        ps.setTime(5, slotEnd);
+        ps.setInt(6, appointmentId);
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
 
     public List<AppointmentView> getAllAppointmentsSearchDoctor(String text) {
         List<AppointmentView> list = new ArrayList<>();
@@ -289,11 +307,11 @@ public class AppointmentDAO extends DBContext {
                 + "    d.doctor_name,\n"
                 + "    s.service_name,\n"
                 + "    dpt.department_name,\n"
-                + "    ds.working_date,\n"
+                + "    a.booking_date,\n"
                 + "    a.created_at,\n"
                 + "    a.is_refunded,\n"
-                + "    sl.slot_start,\n"
-                + "    sl.slot_end,\n"
+                + "    a.slot_start,\n"
+                + "    a.slot_end,\n"
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -323,7 +341,7 @@ public class AppointmentDAO extends DBContext {
                     a.setDoctorName(rs.getString("doctor_name"));
                     a.setServiceName(rs.getString("service_name"));
                     a.setDepartmentName(rs.getString("department_name"));
-                    a.setWorkingDate(rs.getDate("working_date"));
+                    a.setDateBooking(rs.getDate("booking_date"));
                     a.setCreated_at(rs.getDate("created_at"));
                     a.setIs_refunded(rs.getBoolean("is_refunded"));
                     a.setSlotStart(rs.getTime("slot_start"));
@@ -416,7 +434,7 @@ public class AppointmentDAO extends DBContext {
                 + "    a.doctor_id,\n"
                 + "    s.service_name,\n"
                 + "    dpt.department_name,\n"
-                + "    ds.working_date,\n"
+                + "    a.booking_date,\n"
                 + "    a.created_at,\n"
                 + "    a.is_refunded,\n"
                 + "    sl.slot_start,\n"
@@ -452,7 +470,7 @@ public class AppointmentDAO extends DBContext {
                     a.setDoctorId(rs.getInt("doctor_id"));
                     a.setServiceName(rs.getString("service_name"));
                     a.setDepartmentName(rs.getString("department_name"));
-                    a.setWorkingDate(rs.getDate("working_date"));
+                    a.setDateBooking(rs.getDate("booking_date"));
                     a.setCreated_at(rs.getDate("created_at"));
                     a.setIs_refunded(rs.getBoolean("is_refunded"));
                     a.setSlotStart(rs.getTime("slot_start"));

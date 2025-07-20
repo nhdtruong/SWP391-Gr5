@@ -19,8 +19,15 @@
                         <nav aria-label="breadcrumb" class="d-inline-block mt-3">
                             <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
                                 <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
-
+                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
                                 <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
+                                </c:if>
+                                <c:if test="${sessionScope.token == 'online'}">
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Hỗ trợ trực tuyến</a></li>
+                                </c:if>
+                                <c:if test="${sessionScope.token == 'packageService'}">
+                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Gói khám sức khỏe</a></li>
+                                </c:if>
 
                                 <c:if test="${stepName == 'doctor'}">
                                     <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn bác sĩ</a></li>
@@ -209,7 +216,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-
+                                                        
                                                         <c:forEach var="s" items="${listService}" varStatus="loop">
                                                             <tr>
                                                                 <td><strong>${loop.index +1 }</strong></td>
@@ -268,6 +275,11 @@
                                                 </c:if>
                                                 <c:if test="${sessionScope.token == 'online'}">
                                                     <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+                                               <c:if test="${sessionScope.token == 'packageService'}">
+                                                    <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
@@ -476,6 +488,8 @@
                                     window.location.href = "booking.VideoCall?stepName=chooseRecords&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
                                 } else if (token === 'chuyenkhoa') {
                                     window.location.href = "booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
+                                }else if (token === 'packageService') {
+                                    window.location.href = "booking.HealthPackage?stepName=dateTime&serviceId=" + serviceId + "&isBHYT=0";
                                 }
 
 

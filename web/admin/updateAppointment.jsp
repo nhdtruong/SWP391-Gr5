@@ -71,7 +71,7 @@
                                         <!-- Ngày khám -->
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Ngày khám</label>
-                                            <div class="form-control bg-light">${a.workingDate}</div>
+                                            <div class="form-control bg-light"><fmt:formatDate value="${a.dateBooking}" pattern="dd/ MM/ yyyy"/></div>
                                         </div>
 
                                         <!-- Giờ khám -->
@@ -87,7 +87,7 @@
                                     <input type="hidden" name="currentDoctorName" value="${a.doctorName}" />
                                     <input type="hidden" name="patientName" value="${a.patient.patientName}" />
                                     <input type="hidden" name="slotId" value="${a.slotId}" />
-                                    <input type="hidden" name="workingDate" value="${a.workingDate}" />
+                                    <input type="hidden" name="dateBooking" value="${a.dateBooking}" />
                                     <input type="hidden" name="slotEnd" value="${a.slotEnd}" />
                                     <input type="hidden" name="slotStart" value="${a.slotStart}" />
                                     <input type="hidden" name="departmentName" value="${a.departmentName}" />

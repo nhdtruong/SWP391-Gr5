@@ -90,6 +90,40 @@ public class ServiceDAO extends DBContext {
         return null;
     }
 
+    public List<Service> getServicesByServiceId( int serviceId) {
+        List<Service> list = new ArrayList<>();
+        String sql = "SELECT s.* "
+                + "FROM service s "
+        
+                + "WHERE  s.service_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, serviceId);
+       
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Service s = new Service();
+                    s.setService_id(rs.getInt("service_id"));
+                    s.setService_name(rs.getString("service_name"));
+                    s.setIs_bhyt(rs.getBoolean("is_bhyt"));
+                    s.setDescription(rs.getString("description"));
+                    s.setCategory_service_id(rs.getInt("category_service_id"));
+                    s.setDepartment_id(rs.getInt("department_id"));
+                    s.setFee(rs.getDouble("fee"));
+                    s.setDiscount(rs.getDouble("discount"));
+                    s.setPayment_type_id(rs.getInt("payment_type_id"));
+
+                    list.add(s);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
     public List<Service> getServicesByDoctorAndCategory(int doctorId, int categoryId) {
         List<Service> list = new ArrayList<>();
         String sql = "SELECT s.* "

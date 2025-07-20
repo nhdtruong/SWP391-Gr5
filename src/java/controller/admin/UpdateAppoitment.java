@@ -16,7 +16,15 @@ import dal.AppointmentDAO;
 import dal.DepartmentDAO;
 import dal.DoctorDAO;
 import dal.DoctorScheduleDAO;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Doctor;
 import model.WorkingDateSchedule;
 
@@ -87,33 +95,48 @@ public class UpdateAppoitment extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action.equals("reschedule")) {
+            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+            DoctorDAO doctorDAO = new DoctorDAO();
+            DepartmentDAO departmentDAO = new DepartmentDAO();
+
             String appointmentId = request.getParameter("appointmentId");
             String doctorId_reDoctorName = request.getParameter("doctorId_reDoctorName");
             String[] parts = doctorId_reDoctorName.split("_", 2);
-            String doctorId = parts[0];     
+            String doctorId = parts[0];
             String reDoctorName = parts[1];
-            System.out.println("id:"+doctorId +"re:"+reDoctorName);
+            System.out.println("id:" + doctorId + "re:" + reDoctorName);
             String slotId = request.getParameter("slotId");
             String patientName = request.getParameter("patientName");
             String currentDoctorName = request.getParameter("currentDoctorName");
-            String workingDate = request.getParameter("workingDate");
+            String dateBookingStr = request.getParameter("dateBooking");
             String slotEnd = request.getParameter("slotEnd");
             String slotStart = request.getParameter("slotStart");
             String departmentName = request.getParameter("departmentName");
 
-            DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-            DoctorDAO doctorDAO = new DoctorDAO();
-            DepartmentDAO departmentDAO = new DepartmentDAO();
             int departmentId = departmentDAO.getDepartmentIdByDoctorId(Integer.parseInt(doctorId));
             List<Doctor> listDoctor = doctorDAO.getAllDoctorInDepartmanent1(departmentId);
             List<WorkingDateSchedule> listWDS = DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
+
+            Date dateBooking = null;
+
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date utilDate = sdf.parse(dateBookingStr);
+                dateBooking = new java.sql.Date(utilDate.getTime());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            request.setAttribute("dateBooking", dateBooking);
 
             request.setAttribute("appointmentId", appointmentId);
             request.setAttribute("doctorId", doctorId);
             request.setAttribute("patientName", patientName);
             request.setAttribute("currentDoctorName", currentDoctorName);
             request.setAttribute("reDoctorName", reDoctorName);
-            request.setAttribute("workingDate", workingDate);
+
+            request.setAttribute("dateBooking", dateBooking);
+            request.setAttribute("dateBooking", dateBooking);
             request.setAttribute("slotStart", slotStart);
             request.setAttribute("slotEnd", slotEnd);
             request.setAttribute("departmentName", departmentName);
@@ -126,13 +149,42 @@ public class UpdateAppoitment extends HttpServlet {
             String doctorId = request.getParameter("doctorId");
             String slotId = request.getParameter("slotId");
             String appointmentId = request.getParameter("appointmentId");
+            String dateBooking_ = request.getParameter("dateBooking");
+            String slotId_ = request.getParameter("slotId");
+            String slotStart_ = request.getParameter("slotStart");
+            String slotEnd_ = request.getParameter("slotEnd");
 
-            System.out.println(doctorId + "d " + slotId + " d" + appointmentId);
+            System.out.println("Date input: " + dateBooking_);
+
+            
+
+            Date dateBooking = null;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                sdf.setLenient(false);
+
+                java.util.Date parsedDate = sdf.parse(dateBooking_);
+                dateBooking = new java.sql.Date(parsedDate.getTime());
+
+                System.out.println("Parsed date: " + dateBooking);  
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Time slotStart = Time.valueOf(slotStart_);
+            Time slotEnd = Time.valueOf(slotEnd_);
+
             AppointmentDAO appointmentDAO = new AppointmentDAO();
 
-              boolean updated = appointmentDAO.rescheduleAppointment(Integer.parseInt(appointmentId), Integer.parseInt(doctorId), Integer.parseInt(slotId));
+            boolean updated = appointmentDAO.rescheduleAppointment(
+                    Integer.parseInt(appointmentId),
+                    Integer.parseInt(doctorId),
+                    Integer.parseInt(slotId),
+                    dateBooking,
+                    slotStart,
+                    slotEnd
+            );
             if (updated) {
-                response.sendRedirect("updateAppoitment?appointmentId="+appointmentId);
+                response.sendRedirect("updateAppoitment?appointmentId=" + appointmentId);
             } else {
 
                 request.setAttribute("error", "Không thể cập nhật lịch hẹn");
