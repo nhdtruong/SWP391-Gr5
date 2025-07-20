@@ -89,11 +89,16 @@
                                                                 <i class="fa-solid fa-hospital text-primary me-2 opacit"></i>
                                                                 <h5 class="mb-0" style="color:#2698D6">Bệnh viện đại học FPT</h5>
                                                             </li>
+                                                            <c:if test="${not empty b.departmentName}">
                                                             <li class="d-flex align-items-center margin5px">
                                                                 <i class="fa-solid fa-stethoscope text-primary me-2 opacit"></i>
-                                                                <span class="me-2 text-secondary" style="min-width: 150px;">Chuyên khoa:</span>
+                                                                
+                                                                    <span class="me-2 text-secondary" style="min-width: 150px;">Chuyên khoa:</span>
                                                                 <span>${b.departmentName}</span>
+                                                              
+                                                                
                                                             </li>
+                                                              </c:if>
                                                             <li class="d-flex align-items-center margin5px">
                                                                 <i class="fa-solid fa-hand-holding-medical text-primary me-2 opacit"></i>
                                                                 <span class="me-2 text-secondary" style="min-width: 150px;">Dịch vụ:</span>
@@ -103,7 +108,7 @@
                                                                 <i class="fa-solid fa-calendar-days text-primary me-2 mt-1 opacit"></i>
                                                                 <span class="me-2 text-secondary" style="min-width: 150px;">Ngày khám:</span>
                                                                 <span style="color:#2698D6">
-                                                                    <fmt:formatDate value="${b.workingDate}" pattern="dd/ MM/ yyyy" />
+                                                                    <fmt:formatDate value="${b.dateBooking}" pattern="dd/ MM/ yyyy" />
                                                                 </span>
                                                             </li>
                                                             <li class="d-flex align-items-center margin5px">

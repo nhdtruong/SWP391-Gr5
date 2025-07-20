@@ -66,16 +66,18 @@ public class ajaxServlet extends HttpServlet {
         }
 
         if (paymentMethod.equals("taiPhongKham")) {
-
-            int slotId = Integer.parseInt((String) session.getAttribute("slotId"));
-            int doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
+            String token = (String) session.getAttribute("token");
             String reason = (String) session.getAttribute("reason");
             Date dateBooking = (Date) session.getAttribute("dateBooking");
             Time slotStart = (Time) session.getAttribute("slotStart");
             Time slotEnd = (Time) session.getAttribute("slotEnd");
-
+            int slotId = 0 ,doctorId = 0;  int appointmentId =0;
             String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
-            int appointmentId = appointmentDao.insertAppointment(
+            if (!token.equals("packageService")) {
+                 slotId = Integer.parseInt((String) session.getAttribute("slotId"));
+                 doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
+                 
+                 appointmentId = appointmentDao.insertAppointment(
                     appointmentCode,
                     p.getPatientId(),
                     doctorId,
@@ -84,8 +86,18 @@ public class ajaxServlet extends HttpServlet {
                     dateBooking,
                     slotStart,
                     slotEnd,
-                    reason
-            );
+                    reason);
+            }else{
+                 appointmentId = appointmentDao.insertAppointment(
+                    appointmentCode,
+                    p.getPatientId(),
+                    s.getService_id(),
+                    dateBooking,
+                    slotStart,
+                    slotEnd,
+                    reason);
+                
+            }
 
             payDAO.insertPayment(appointmentId, amountDouble,
                     "CASH", "pending",

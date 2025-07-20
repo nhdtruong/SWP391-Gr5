@@ -85,9 +85,13 @@ public class ConfirmFinalInformation extends HttpServlet {
             } else if (check == 0) {
                 response.sendRedirect("payment");
             }
+        } else if (token.equals("packageService")) {
+            
+             response.sendRedirect("payment");
+            }
         }
 
-    }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
