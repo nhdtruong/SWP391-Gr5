@@ -581,7 +581,7 @@ public int insertAppointment(
                 + "AND s.department_id = ? "
                 + "AND a.status != 0 ";
 
-        String sqlTime = "SELECT COUNT(*) FROM appointment a " // đặt cùng thời gian khác chuyên khoa 
+        String sqlTime = "SELECT COUNT(*) FROM appointment a " // đặt cùng thời gian,khác chuyên khoa 
                 + "JOIN [service] s ON a.service_id = s.service_id "
                 + "JOIN doctor_schedule_slot dss ON a.slot_id = dss.slot_id "
                 + "JOIN doctor_schedule ds ON dss.schedule_id = ds.schedule_id "

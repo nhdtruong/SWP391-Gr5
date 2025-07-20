@@ -98,10 +98,7 @@
                                                         </a>
                                                     </td>
 
-                                                    <td class="p-3">
-
-                                                        <a href="updateDoctorSchedule?action=updateSchedule&doctorId=${d.getDoctor_id()}" class="btn btn-primary">Update</a>
-                                                    </td>
+                                                    
                                                     <c:if test="${sessionScope.user.getRole()== 1}">
 
                                                         <td class="p-3">

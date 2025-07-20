@@ -5,6 +5,7 @@
 package controller;
 
 import dal.ServiceDAO;
+import dal.WeeklyPackageServiceScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,8 +14,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import model.Service;
+import model.WorkingDateSchedule;
 
 /**
  *
@@ -82,16 +86,35 @@ public class BookingHealthPackageService extends HttpServlet {
             request.getRequestDispatcher("booking.jsp").forward(request, response);
 
         } else if (stepName.equals("dateTime")) {
+            ServiceDAO serviceDao = new ServiceDAO();
+            WeeklyPackageServiceScheduleDAO packageServiceScheduleDAO = new WeeklyPackageServiceScheduleDAO();
             String serviceId = request.getParameter("serviceId");
             
-
-        } else if (stepName.equals("chooseRecords")) {
-              String serviceId = request.getParameter("serviceId");
-            ServiceDAO serviceDao = new ServiceDAO();
             Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
             session.setAttribute("serviceBooking", serviceBooking);
 
+            List<WorkingDateSchedule> listWDS = packageServiceScheduleDAO.getPackageServiceSchedule7Days(Integer.parseInt(serviceId));
+            request.setAttribute("listWDS", listWDS);
+
+            request.getRequestDispatcher("booking.jsp").forward(request, response);
+            
+            
+
+        }else if(stepName.equals("chooseRecords")){
+            String dateBooking_ = request.getParameter("dateBooking");
+            String slotId_ = request.getParameter("slotId");
+            String slotStart_ = request.getParameter("slotStart");
+            String slotEnd_ = request.getParameter("slotEnd");
+            Date dateBooking = Date.valueOf(dateBooking_);
+            Time slotStart = Time.valueOf(slotStart_);
+            Time slotEnd = Time.valueOf(slotEnd_);
+            session.setAttribute("dateBooking",dateBooking );
+            session.setAttribute("slotId", slotId_);
+            session.setAttribute("slotStart", slotStart);
+            session.setAttribute("slotEnd", slotEnd);
             response.sendRedirect("chooseRecords");
+
+            
         }
     }
 

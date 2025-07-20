@@ -14,20 +14,22 @@
             <jsp:include page="layout/menu_white.jsp"/>
             <div class="main-content" >
                 <div class="container my-4" style="min-height: 600px">
-
+                   <c:set value="" var="booking"/>
                     <div class="col-12" style="height: 80px;margin-right: -30px">
                         <nav aria-label="breadcrumb" class="d-inline-block mt-3">
                             <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
                                 <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
-                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
-                                </c:if>
-                                <c:if test="${sessionScope.token == 'online'}">
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Hỗ trợ trực tuyến</a></li>
-                                </c:if>
-                                <c:if test="${sessionScope.token == 'packageService'}">
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Gói khám sức khỏe</a></li>
-                                </c:if>
+                                    <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
+                                     <c:set value="booking" var="booking"/>
+                                    </c:if>
+                                    <c:if test="${sessionScope.token == 'online'}">
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Hỗ trợ trực tuyến</a></li>
+                                    </c:if>
+                                    <c:if test="${sessionScope.token == 'packageService'}">
+                                    <c:set value="booking.HealthPackage" var="booking"/>
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Gói khám sức khỏe</a></li>
+                                    </c:if>
 
                                 <c:if test="${stepName == 'doctor'}">
                                     <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn bác sĩ</a></li>
@@ -216,7 +218,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        
+
                                                         <c:forEach var="s" items="${listService}" varStatus="loop">
                                                             <tr>
                                                                 <td><strong>${loop.index +1 }</strong></td>
@@ -278,7 +280,7 @@
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
-                                               <c:if test="${sessionScope.token == 'packageService'}">
+                                                <c:if test="${sessionScope.token == 'packageService'}">
                                                     <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
@@ -300,131 +302,137 @@
 
 
                                                 <label for="dateSelect" style="margin-bottom: 15px"><strong>Chọn ngày khám:</strong></label>
+
                                                 <fmt:setLocale value="vi_VN" />
+
                                                 <select id="dateSelect" class="form-select mb-3" onchange="showSlotsByDate(this.value)">
                                                     <c:forEach var="wds" items="${listWDS}" varStatus="i">
+
                                                         <option value="date${i.index}">
+
                                                             <fmt:formatDate value="${wds.workingDate}" pattern="EEEE - dd/ MM/ yyyy" />
                                                         </option>
                                                     </c:forEach>
                                                 </select>
+                                                
+                                                   
 
-                                                <c:forEach var="wds" items="${listWDS}" varStatus="i">
-                                                    <div id="date${i.index}" class="slot-group" style="${i.index == 0 ? '' : 'display:none'}">
+                                                    <c:forEach var="wds" items="${listWDS}" varStatus="i">
+                                                        <div id="date${i.index}" class="slot-group" style="${i.index == 0 ? '' : 'display:none'}">
 
-                                                        <!-- Buổi sáng -->
-                                                        <c:if test="${not empty wds.getMorningSlots()}">
-                                                            <div style="margin-bottom: 15px"><strong>Buổi sáng</strong></div>
-                                                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                                                <c:forEach var="slot" items="${wds.getMorningSlots()}">
-                                                                    <c:set var="status" value="${slot.status}" />
-                                                                    <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
-                                                                        <input type="hidden" name="stepName" value="chooseRecords" />
-                                                                        <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
-                                                                        <input type="hidden" name="slotId" value="${slot.slotId}" />
-                                                                        <input type="hidden" name="slotStart" value="${slot.slotStart}" />
-                                                                        <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
-                                                                        <button 
-                                                                            type="submit"
-                                                                            class="btn btn-sm
-                                                                            ${status == 1 ? 'btn-outline-info' :
-                                                                              status == 0 ? 'btn-warning text-white disabled' :
-                                                                              'btn-secondary text-white disabled'}"
-                                                                            style="${status != 1 ? 'pointer-events: none; opacity: 0.6;' : ''}"
+                                                            <!-- Buổi sáng -->
+                                                            <c:if test="${not empty wds.getMorningSlots()}">
+                                                                <div style="margin-bottom: 15px"><strong>Buổi sáng</strong></div>
+                                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                                    <c:forEach var="slot" items="${wds.getMorningSlots()}">
+                                                                        <c:set var="status" value="${slot.status}" />
+                                                                        <form action="${booking}" method="get" class="me-2 mb-2 d-inline-block">
+                                                                            <input type="hidden" name="stepName" value="chooseRecords" />
+                                                                            <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                            <input type="hidden" name="slotId" value="${slot.slotId}" />
+                                                                            <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                            <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
+                                                                            <button 
+                                                                                type="submit"
+                                                                                class="btn btn-sm
+                                                                                ${status == 1 ? 'btn-outline-info' :
+                                                                                  status == 0 ? 'btn-warning text-white disabled' :
+                                                                                  'btn-secondary text-white disabled'}"
+                                                                                style="${status != 1 ? 'pointer-events: none; opacity: 0.6;' : ''}"
 
-                                                                            >
-                                                                            <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
-                                                                            <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
-                                                                        </button>
-                                                                    </form>
-                                                                </c:forEach>
-                                                            </div>
-                                                        </c:if>
+                                                                                >
+                                                                                <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
+                                                                                <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
+                                                                            </button>
+                                                                        </form>
+                                                                    </c:forEach>
+                                                                </div>
+                                                            </c:if>
 
-                                                        <!-- Buổi chiều -->
-                                                        <c:if test="${not empty wds.getAfternoonSlots()}">
-                                                            <div style="margin-bottom: 15px"><strong>Buổi chiều</strong></div>
-                                                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                                                <c:forEach var="slot" items="${wds.getAfternoonSlots()}">
-                                                                    <c:set var="status" value="${slot.status}" />
-                                                                    <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
-                                                                        <input type="hidden" name="stepName" value="chooseRecords" />
-                                                                        <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
-                                                                        <input type="hidden" name="slotId" value="${slot.slotId}" />
-                                                                        <input type="hidden" name="slotStart" value="${slot.slotStart}" />
-                                                                        <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
-                                                                        <button 
-                                                                            type="submit"
-                                                                            class="btn btn-sm
-                                                                            ${status == 1 ? 'btn-outline-info' :
-                                                                              status == 0 ? 'btn-warning text-white disabled' :
-                                                                              'btn-secondary text-white disabled'}"
-                                                                            style="${status != 1 ? 'pointer-events: none; opacity: 0.6;' : ''}"
+                                                            <!-- Buổi chiều -->
+                                                            <c:if test="${not empty wds.getAfternoonSlots()}">
+                                                                <div style="margin-bottom: 15px"><strong>Buổi chiều</strong></div>
+                                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                                    <c:forEach var="slot" items="${wds.getAfternoonSlots()}">
+                                                                        <c:set var="status" value="${slot.status}" />
+                                                                        <form action="${booking}" method="get" class="me-2 mb-2 d-inline-block">
+                                                                            <input type="hidden" name="stepName" value="chooseRecords" />
+                                                                            <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                            <input type="hidden" name="slotId" value="${slot.slotId}" />
+                                                                            <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                            <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
+                                                                            <button 
+                                                                                type="submit"
+                                                                                class="btn btn-sm
+                                                                                ${status == 1 ? 'btn-outline-info' :
+                                                                                  status == 0 ? 'btn-warning text-white disabled' :
+                                                                                  'btn-secondary text-white disabled'}"
+                                                                                style="${status != 1 ? 'pointer-events: none; opacity: 0.6;' : ''}"
 
-                                                                            >
-                                                                            <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
-                                                                            <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
-                                                                        </button>
-                                                                    </form>
-                                                                </c:forEach>
-                                                            </div>
-                                                        </c:if>
+                                                                                >
+                                                                                <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
+                                                                                <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
+                                                                            </button>
+                                                                        </form>
+                                                                    </c:forEach>
+                                                                </div>
+                                                            </c:if>
 
-                                                        <!-- Buổi tối -->
-                                                        <c:if test="${not empty wds.getEveningSlots()}">
-                                                            <div style="margin-bottom: 15px"><strong>Buổi tối</strong></div>
-                                                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                                                <c:forEach var="slot" items="${wds.getEveningSlots()}">
-                                                                    <c:set var="status" value="${slot.status}" />
-                                                                    <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
-                                                                        <input type="hidden" name="stepName" value="chooseRecords" />
-                                                                        <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
-                                                                        <input type="hidden" name="slotId" value="${slot.slotId}" />
-                                                                        <input type="hidden" name="slotStart" value="${slot.slotStart}" />
-                                                                        <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
-                                                                        <button 
-                                                                            type="submit"
-                                                                            class="btn btn-sm
-                                                                            ${status == 1 ? 'btn-outline-info' :
-                                                                              status == 0 ? 'btn-warning text-white disabled' :
-                                                                              'btn-secondary text-white disabled'}"
-                                                                            style="${status != 1 ? 'pointer-events: none; opacity: 0.6;' : ''}"
+                                                            <!-- Buổi tối -->
+                                                            <c:if test="${not empty wds.getEveningSlots()}">
+                                                                <div style="margin-bottom: 15px"><strong>Buổi tối</strong></div>
+                                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                                    <c:forEach var="slot" items="${wds.getEveningSlots()}">
+                                                                        <c:set var="status" value="${slot.status}" />
+                                                                        <form action="${booking}" method="get" class="me-2 mb-2 d-inline-block">
+                                                                            <input type="hidden" name="stepName" value="chooseRecords" />
+                                                                            <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
+                                                                            <input type="hidden" name="slotId" value="${slot.slotId}" />
+                                                                            <input type="hidden" name="slotStart" value="${slot.slotStart}" />
+                                                                            <input type="hidden" name="slotEnd" value="${slot.slotEnd}" />
+                                                                            <button 
+                                                                                type="submit"
+                                                                                class="btn btn-sm
+                                                                                ${status == 1 ? 'btn-outline-info' :
+                                                                                  status == 0 ? 'btn-warning text-white disabled' :
+                                                                                  'btn-secondary text-white disabled'}"
+                                                                                style="${status != 1 ? 'pointer-events: none; opacity: 0.6;' : ''}"
 
-                                                                            >
-                                                                            <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
-                                                                            <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
-                                                                        </button>
-                                                                    </form>
-                                                                </c:forEach>
-                                                            </div>
-                                                        </c:if>
+                                                                                >
+                                                                                <fmt:formatDate value="${slot.slotStart}" pattern="HH:mm" /> -
+                                                                                <fmt:formatDate value="${slot.slotEnd}" pattern="HH:mm" />
+                                                                            </button>
+                                                                        </form>
+                                                                    </c:forEach>
+                                                                </div>
+                                                            </c:if>
 
+                                                        </div>
+                                                    </c:forEach>
+                                                    <div class="mb-4 d-flex flex-wrap justify-content-center align-items-center gap-3">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <button type="button" class="btn btn-outline-info btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
+                                                            <span style="font-size: 14px;">Còn lịch</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <button type="button" class="btn btn-warning btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
+                                                            <span style="font-size: 14px;">Lịch khám đã đầy</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <button type="button" class="btn btn-secondary btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
+                                                            <span style="font-size: 14px;">Quá gần hoặc giờ khám không còn hợp lệ</span>
+                                                        </div>
                                                     </div>
-                                                </c:forEach>
-                                                <div class="mb-4 d-flex flex-wrap justify-content-center align-items-center gap-3">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <button type="button" class="btn btn-outline-info btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
-                                                        <span style="font-size: 14px;">Còn lịch</span>
-                                                    </div>
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <button type="button" class="btn btn-warning btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
-                                                        <span style="font-size: 14px;">Lịch khám đã đầy</span>
-                                                    </div>
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <button type="button" class="btn btn-secondary btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
-                                                        <span style="font-size: 14px;">Quá gần hoặc giờ khám không còn hợp lệ</span>
-                                                    </div>
+
                                                 </div>
 
-                                            </div>
-
-                                            <div class="card-footer text-start">
-                                                <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                </a>
+                                                <div class="card-footer text-start">
+                                                    <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
                                 </c:when>
 
@@ -488,7 +496,7 @@
                                     window.location.href = "booking.VideoCall?stepName=chooseRecords&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
                                 } else if (token === 'chuyenkhoa') {
                                     window.location.href = "booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
-                                }else if (token === 'packageService') {
+                                } else if (token === 'packageService') {
                                     window.location.href = "booking.HealthPackage?stepName=dateTime&serviceId=" + serviceId + "&isBHYT=0";
                                 }
 

@@ -17,9 +17,7 @@ import java.sql.Statement;
  */
 public class WeeklyDoctorScheduleDAO extends DBContext {
 
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-
+  
     public int insertTemplateSchdule(int doctorId, int dayOfWeek) {
         String sql = "INSERT INTO weekly_schedule_doctor (doctor_id, day_of_week) VALUES (?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
