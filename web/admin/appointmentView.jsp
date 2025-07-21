@@ -119,7 +119,7 @@
                                                     <td class="p-3">${a.doctorName}</td>
                                                     <td class="p-3">${a.patientName}</td>
                                                     <td class="p-3">${a.serviceName}</td>
-                                                    <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/></td>
+                                                    <td class="p-3"><fmt:formatDate value="${a.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
                                                     <td class="p-3"><fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> </td>
                                                     <td class="p-3">
 

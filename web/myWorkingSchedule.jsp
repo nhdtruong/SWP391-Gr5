@@ -46,7 +46,7 @@
                                         </a>
                                     </li>
                                     <li class="navbar-item">
-                                        <a href="myPatinet?action=mypatient" class="navbar-link">
+                                        <a href="myPatient?action=mypatient" class="navbar-link">
                                             <i class="ri-empathize-line align-middle navbar-icon"></i> Bệnh nhân của tôi
                                         </a>
                                     </li>

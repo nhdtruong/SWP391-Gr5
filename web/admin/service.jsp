@@ -90,6 +90,7 @@
                                                 <th class="border-bottom p-3">Phí</th>
                                                 <th class="border-bottom p-3">Bác sĩ đảm nhiệm</th>
                                                 <th class="border-bottom p-3">Action</th>
+                                                <th class="border-bottom p-3">Add licj gois</th>
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -126,6 +127,10 @@
                                                                onclick="openDeleteModal('${s.getService_id()}')">Xóa</a>
                                                         </c:if>
 
+                                                    </td>
+                                                    <td class="p-3">
+
+                                                        <a href="addPackageServiceSchedule?serviceId=${s.service_id}" class="btn btn-primary">lich</a>
                                                     </td>
                                                 </tr>
                                                 <c:set var="st" value="${st + 1}"  />

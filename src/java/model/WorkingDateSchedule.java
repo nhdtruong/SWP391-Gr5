@@ -84,5 +84,14 @@ public class WorkingDateSchedule {
         }
         return result;
     }
+    
+     @Override
+    public String toString() {
+        return "WorkingDateSchedule{" +
+                "workingDate=" + workingDate +
+                ", status=" + status +
+                ", slots=" + slots +
+                '}';
+    }
 
 }

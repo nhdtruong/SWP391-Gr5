@@ -4,12 +4,9 @@
  */
 package controller.uer;
 
-import config.EmailSender;
 import dal.UserDAO;
 import jakarta.mail.MessagingException;
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,7 +18,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import config.EmailSender;
-import config.EncodeData;
 import config.PasswordUtils;
 import model.OTPdata;
 import model.OTPutil;

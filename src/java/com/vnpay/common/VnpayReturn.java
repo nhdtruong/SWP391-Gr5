@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 import model.Patient;
 import model.Service;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  *
@@ -77,25 +79,32 @@ public class VnpayReturn extends HttpServlet {
 
                     Patient p = (Patient) session.getAttribute("patient");
                     Service s = (Service) session.getAttribute("serviceBooking");
-                    String reason =(String) session.getAttribute("reason");
+                    int slotId = Integer.parseInt((String) session.getAttribute("slotId"));
+                    int doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
+                    String reason = (String) session.getAttribute("reason");
+                    Date dateBooking = (Date) session.getAttribute("dateBooking");
+                    Time slotStart = (Time) session.getAttribute("slotStart");
+                    Time slotEnd = (Time) session.getAttribute("slotEnd");
 
-                    AppointmentDAO appointmentDAO = new AppointmentDAO();
                     String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
-                    int appointmentId = appointmentDAO.insertAppointment(
+                    int appointmentId = appointmentDao.insertAppointment(
                             appointmentCode,
                             p.getPatientId(),
-                            Integer.parseInt((String) session.getAttribute("doctorId")),
-                            Integer.parseInt((String) session.getAttribute("slotId")),
+                            doctorId,
+                            slotId,
                             s.getService_id(),
+                            dateBooking,
+                            slotStart,
+                            slotEnd,
                             reason
                     );
 
                     paymentDAO.updateAppointmentIdForPaymentSuccess(appointmentId, txnRef, vnp_TransactionNo);
 
-                    response.sendRedirect("billsDetail?appointment_code="+appointmentCode);
-                   
+                    response.sendRedirect("billsDetail?appointment_code=" + appointmentCode);
+
                     transSuccess = true;
-                     return;
+                    return;
                 } else {
                     paymentDAO.updatePaymentStatusFailed(txnRef);
                     request.setAttribute("result", "false");
@@ -103,7 +112,6 @@ public class VnpayReturn extends HttpServlet {
                     return;
                 }
 
-   
             } else {
 
                 System.out.println("GD KO HOP LE (invalid signature)");

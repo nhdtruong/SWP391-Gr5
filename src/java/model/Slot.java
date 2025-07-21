@@ -49,5 +49,14 @@ public class Slot {
         this.slotEnd = slotEnd;
     }
     
-    
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "slotId=" + slotId +
+                ", slotStart=" + slotStart +
+                ", slotEnd=" + slotEnd +
+                ", status=" + status +
+                '}';
+    }
+
 }
