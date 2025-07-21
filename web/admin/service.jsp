@@ -90,7 +90,7 @@
                                                 <th class="border-bottom p-3">Phí</th>
                                                 <th class="border-bottom p-3">Bác sĩ đảm nhiệm</th>
                                                 <th class="border-bottom p-3">Action</th>
-                                                <th class="border-bottom p-3">Add licj gois</th>
+                                                <th class="border-bottom p-3">Add PSS</th>
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -128,10 +128,13 @@
                                                         </c:if>
 
                                                     </td>
-                                                    <td class="p-3">
+                                                    <c:if test="${s.category_service.id == 4}">
+                                                        <td class="p-3">
 
-                                                        <a href="addPackageServiceSchedule?serviceId=${s.service_id}" class="btn btn-primary">lich</a>
+                                                        <a href="addPackageServiceSchedule?serviceId=${s.service_id}" class="btn btn-primary">++</a>
                                                     </td>
+                                                    </c:if>
+                                                    
                                                 </tr>
                                                 <c:set var="st" value="${st + 1}"  />
                                             </c:forEach>

@@ -357,12 +357,12 @@ public int insertAppointment(
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
                 + "    ISNULL(pm.status, 'Chưa thanh toán') AS payment_status\n"
                 + "FROM appointment a\n"
-                + "JOIN patients p ON a.patient_id = p.patient_id\n"
-                + "JOIN doctors d ON a.doctor_id = d.doctor_id\n"
-                + "JOIN service s ON a.service_id = s.service_id\n"
-                + "JOIN department dpt ON s.department_id = dpt.department_id\n"
-                + "JOIN doctor_schedule_slot sl ON a.slot_id = sl.slot_id\n"
-                + "JOIN doctor_schedule ds ON sl.schedule_id = ds.schedule_id\n"
+                + "left JOIN patients p ON a.patient_id = p.patient_id\n"
+                + "left JOIN doctors d ON a.doctor_id = d.doctor_id\n"
+                + "left JOIN service s ON a.service_id = s.service_id\n"
+                + "left JOIN department dpt ON s.department_id = dpt.department_id\n"
+                + "left JOIN doctor_schedule_slot sl ON a.slot_id = sl.slot_id\n"
+                + "left JOIN doctor_schedule ds ON sl.schedule_id = ds.schedule_id\n"
                 + "LEFT JOIN payment pm ON pm.payment_id = (\n"
                 + "    SELECT TOP 1 payment_id FROM payment\n"
                 + "    WHERE appointment_id = a.appointment_id\n"
@@ -463,7 +463,6 @@ public int insertAppointment(
         String sql = "SELECT \n"
                 + "    a.appointment_id,\n"
                 + "    a.appointment_code,\n"
-                + "    a.slot_id,\n"
                 + "    a.patient_id,\n"
                 + "    d.doctor_name,\n"
                 + "    a.doctor_id,\n"
@@ -472,19 +471,17 @@ public int insertAppointment(
                 + "    a.booking_date,\n"
                 + "    a.created_at,\n"
                 + "    a.is_refunded,\n"
-                + "    sl.slot_start,\n"
-                + "    sl.slot_end,\n"
+                + "    a.slot_start,\n"
+                + "    a.slot_end,\n"
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
                 + "    ISNULL(pm.status, 'Chưa thanh toán') AS payment_status\n"
                 + "FROM appointment a\n"
-                + "JOIN patients p ON a.patient_id = p.patient_id\n"
-                + "JOIN doctors d ON a.doctor_id = d.doctor_id\n"
-                + "JOIN service s ON a.service_id = s.service_id\n"
-                + "JOIN department dpt ON s.department_id = dpt.department_id\n"
-                + "JOIN doctor_schedule_slot sl ON a.slot_id = sl.slot_id\n"
-                + "JOIN doctor_schedule ds ON sl.schedule_id = ds.schedule_id\n"
+                + "left JOIN patients p ON a.patient_id = p.patient_id\n"
+                + "left JOIN doctors d ON a.doctor_id = d.doctor_id\n"
+                + "left JOIN service s ON a.service_id = s.service_id\n"
+                + "left JOIN department dpt ON s.department_id = dpt.department_id\n"
                 + "LEFT JOIN payment pm ON pm.payment_id = (\n"
                 + "    SELECT TOP 1 payment_id FROM payment\n"
                 + "    WHERE appointment_id = a.appointment_id\n"
@@ -499,7 +496,6 @@ public int insertAppointment(
                     AppointmentView a = new AppointmentView();
                     a.setAppointmentId(rs.getInt("appointment_id"));
                     a.setAppointment_code(rs.getString("appointment_code"));
-                    a.setSlotId(rs.getInt("slot_id"));
                     a.setPatient(getPatientById(rs.getInt("patient_id")));
                     a.setDoctorName(rs.getString("doctor_name"));
                     a.setDoctorId(rs.getInt("doctor_id"));
@@ -661,7 +657,8 @@ public int insertAppointment(
 
     public static void main(String[] args) {
         AppointmentDAO a = new AppointmentDAO();
-        System.out.println(a.getBillstByCode("T250721LUUTKJ"));
+       // System.out.println(a.getBillstByCode("T250721LUUTKJ"));
+        System.out.println(a.getAppointmentsByAppointmentId(1));
         //   System.out.println(a.getAllAppointments());
         //  System.out.println(a.getAppointmentsByUsername("user10"));
         //System.out.println(a.getAllAppointments());
