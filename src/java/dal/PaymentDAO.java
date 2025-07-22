@@ -22,33 +22,46 @@ public class PaymentDAO extends DBContext {
     public List<Map<String, Object>> getRevenueByMonth(int year) {
         List<Map<String, Object>> revenueList = new ArrayList<>();
 
-        String sql = "SELECT MONTH(pay_date) AS month, SUM(amount) AS total_revenue " +
-                     "FROM payment " +
-                     "WHERE status = 'success' AND YEAR(pay_date) = ? " +
-                     "GROUP BY MONTH(pay_date) " +
-                     "ORDER BY MONTH(pay_date)";
+        String sql = "SELECT MONTH(pay_date) AS month, SUM(amount) AS total_revenue "
+                + "FROM payment "
+                + "WHERE status = 'success' AND YEAR(pay_date) = ? "
+                + "GROUP BY MONTH(pay_date) "
+                + "ORDER BY MONTH(pay_date)";
+
+        Map<Integer, Double> dataMap = new HashMap<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-
             ps.setInt(1, year);
-
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Map<String, Object> item = new HashMap<>();
-                    item.put("month", rs.getInt("month"));
-                    item.put("revenue", rs.getDouble("total_revenue"));
-                    revenueList.add(item);
+                    int month = rs.getInt("month");
+                    double revenue = rs.getDouble("total_revenue");
+                    dataMap.put(month, revenue);
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        // Lấy tháng hiện tại nếu là năm hiện tại
+        int maxMonth = 12;
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        int currentYear = cal.get(java.util.Calendar.YEAR);
+        if (year == currentYear) {
+            maxMonth = cal.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH đếm từ 0
+        }
+
+        // Tạo đủ tháng từ 1 đến maxMonth
+        for (int m = 1; m <= maxMonth; m++) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("month", m);
+            item.put("revenue", dataMap.getOrDefault(m, 0.0));
+            revenueList.add(item);
+        }
+
         return revenueList;
     }
-    
-    
+
     public double getTotalRevenue() {
         double total = 0.0;
 

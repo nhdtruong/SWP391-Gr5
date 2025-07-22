@@ -97,7 +97,7 @@
         </ul>
 
         <div id="navigation">
-            <ul class="navigation-menu nav-left">
+            <ul class="navigation-menu nav-left" style="margin-left: 300px">
                 <li><a href="home" class="sub-menu-item">Trang chủ</a></li>
                 <li><a href="doctor?action=all" class="sub-menu-item">Bác sĩ</a></li>
 
@@ -120,7 +120,7 @@
                 </li>
 
                 <li><a href="contact" class="sub-menu-item">Liên hệ</a></li>
-                <li><a href="blogs" class="sub-menu-item">Tin tức & chủ đề</a></li>
+<!--                <li><a href="blogs" class="sub-menu-item">Tin tức & chủ đề</a></li>-->
             </ul>
         </div>
     </div>

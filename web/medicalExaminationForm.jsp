@@ -83,22 +83,22 @@
                                                         </div>
 
                                                         <!-- Body -->
-                                                        <ul class="list-unstyled mb-4">
+                                                        <ul class="list-unstyled mb-4" >
                                                             <li class="d-flex align-items-center margin5px">
                                                                 <i class="fa-solid fa-hospital text-primary me-2 opacit"></i>
                                                                 <h5 class="mb-0" style="color:#2698D6">Bệnh viện đại học FPT</h5>
-                                                                <img style="width: 70px; height: 70px;margin-left: 300px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>
+<!--                                                                <img style="width: 280px; height: 280px;margin-left: 50px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>-->
                                                             </li>
                                                             <c:if test="${not empty b.departmentName}">
-                                                            <li class="d-flex align-items-center margin5px">
-                                                                <i class="fa-solid fa-stethoscope text-primary me-2 opacit"></i>
-                                                                
+                                                                <li class="d-flex align-items-center margin5px">
+                                                                    <i class="fa-solid fa-stethoscope text-primary me-2 opacit"></i>
+
                                                                     <span class="me-2 text-secondary" style="min-width: 150px;">Chuyên khoa:</span>
-                                                                <span>${b.departmentName}</span>
-                                                              
-                                                                
-                                                            </li>
-                                                              </c:if>
+                                                                    <span>${b.departmentName}</span>
+
+
+                                                                </li>
+                                                            </c:if>
                                                             <li class="d-flex align-items-center margin5px">
                                                                 <i class="fa-solid fa-hand-holding-medical text-primary me-2 opacit"></i>
                                                                 <span class="me-2 text-secondary" style="min-width: 150px;">Dịch vụ:</span>
@@ -118,9 +118,13 @@
                                                                     <fmt:formatDate value="${b.slotStart}" pattern="HH:mm" />
                                                                 </span>
                                                             </li>
-<!--                                                            <li class="d-flex align-items-center margin5px">
-                                                                <img style="width: 70px; height: 70px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>
-                                                            </li>-->
+                                                            <!--                                                            <li class="d-flex align-items-center margin5px">
+                                                                                                                            <img style="width: 70px; height: 70px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>
+                                                                                                                        </li>-->
+
+                                                            <div class="text-end" style="margin-top: -130px">
+                                                                <img style="width: 150px; height: 150px;margin-left: 50px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>
+                                                            </div>
                                                         </ul>
                                                     </div>
                                                 </div>
