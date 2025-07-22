@@ -140,7 +140,7 @@
                                             <a class="dropdown-item text-dark" href="dashboard?action=default"><i class="uil uil-setting me-1"></i> Quản lý</a>
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 2}">
-                                            <a class="dropdown-item text-dark" href="appointmentmanage?action=all"><i class="uil uil-calendar-alt me-1"></i> Quản lý</a>
+                                            <a class="dropdown-item text-dark" href="dashboard?action=default"><i class="uil uil-calendar-alt me-1"></i> Quản lý</a>
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 4}">
                                             <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user-md me-1"></i> Quản lý</a>
@@ -155,7 +155,7 @@
                                     <a class="dropdown-item text-dark" href="logout">
                                         <i class="uil uil-sign-out-alt me-1"></i> Đăng xuất
                                     </a>
-                                    <c:if test="${sessionScope.user.role == 1 || sessionScope.user.role == 3}">
+                                    <c:if test="${sessionScope.user.role == 3}">
                                         <a class="dropdown-item text-dark" href="dashboard">
                                             <i class="uil uil-sign-out-alt me-1"></i> Quản Lý
                                         </a>
