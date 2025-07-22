@@ -4,6 +4,7 @@
  */
 package dal;
 
+import DTOStatic.StaticDepartment;
 import context.DBContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +57,42 @@ public class DepartmentDAO extends DBContext {
 
         return null;
     }
+    
+    
+    public int CountDoctorInDepartment(int depId){
+        String sql = "  select Count (*) from doctors where deparment_id ="+ depId;
+        
+        try {
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+
+        } catch (Exception e) {
+        }
+
+        return 0;
+    }
 
     public static void main(String[] args) {
-        DepartmentDAO dao = new DepartmentDAO();
-        List<Deparment> listDe = dao.getAllDeparment();
-        System.out.println(listDe);
+        DepartmentDAO departmentDAO = new DepartmentDAO();
+        List<StaticDepartment> staticDepartments = new ArrayList<>();
+        var listDep = departmentDAO.getAllDeparment();
+        for (Deparment dep : listDep) {
+            StaticDepartment sd = new StaticDepartment();
+            sd.setId(dep.getId());
+            sd.setDepartment_name(dep.getDepartment_name());
+            sd.setNumber(departmentDAO.CountDoctorInDepartment(dep.getId()));
+            
+            staticDepartments.add(sd);
+        }
+        for (var deparment : staticDepartments) {
+            System.out.println(deparment.getId());
+            System.out.println(deparment.getDepartment_name());
+            System.out.println(deparment.getNumber());
+        }
     }
 
 }

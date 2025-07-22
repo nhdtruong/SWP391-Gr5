@@ -28,6 +28,26 @@ public class DoctorDAO extends DBContext {
 
     PreparedStatement ps = null;
     ResultSet rs = null;
+    
+    
+    public int CountNumberDoctor(){
+        List<Doctor> list = new ArrayList<>();
+        String sql = "select *\n"
+                + "from doctors d ";
+        try {
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+                count=count+1;
+            }
+            return count;
+
+        } catch (SQLException e) {
+        }
+
+        return 0;
+    }
 
     public List<Doctor> getTop6Doctor() {
         List<Doctor> list = new ArrayList<>();
@@ -1018,7 +1038,7 @@ public class DoctorDAO extends DBContext {
 
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM (");
-        sql.append("SELECT d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, COUNT(rs.ratestar_id) AS total_reviews,");
+        sql.append("SELECT d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, d.deparment_id, COUNT(rs.ratestar_id) AS total_reviews,");
         sql.append("dp.department_name, ");
         sql.append("AVG(CAST(rs.star AS FLOAT)) AS average_rating, ");
         sql.append("ROW_NUMBER() OVER (ORDER BY ");
@@ -1061,7 +1081,7 @@ public class DoctorDAO extends DBContext {
             sql.append(") ");
         }
 
-        sql.append("GROUP BY d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description, dp.department_name ");
+        sql.append("GROUP BY d.doctor_id, d.doctor_name, d.gender, d.dob, d.phone, d.img, d.address, d.description,d.deparment_id, dp.department_name ");
         sql.append(") AS paged_result ");
         sql.append("WHERE RowNum BETWEEN ? AND ?");
 
@@ -1104,6 +1124,7 @@ public class DoctorDAO extends DBContext {
                 doctor.setAverageRateStar(rs.getFloat("average_rating"));
                 doctor.setNumber_rate_star(rs.getInt("total_reviews"));
                 doctor.setPosition(positionDAO.GetPositionName(doctor.getDoctor_id()));
+                doctor.setDeparment_id(rs.getInt("deparment_id"));
                 doctors.add(doctor);
             }
         } catch (Exception e) {

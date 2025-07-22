@@ -35,7 +35,6 @@
                         <div class="col-xl-8 col-lg-8 col-md-7 mt-4 pt-2 mt-sm-0 pt-sm-0" style="padding: 0 30px">
                             <div class="d-flex justify-content-between align-items-center pb-3">
                                 <h4 class="mb-0">Danh sách phiếu khám bệnh</h4>
-
                             </div>
                             <div class="mb-3">
                                 <div class="d-flex gap-3 flex-wrap" role="group" aria-label="Lọc phiếu khám">
@@ -88,6 +87,7 @@
                                                             <li class="d-flex align-items-center margin5px">
                                                                 <i class="fa-solid fa-hospital text-primary me-2 opacit"></i>
                                                                 <h5 class="mb-0" style="color:#2698D6">Bệnh viện đại học FPT</h5>
+                                                                <img style="width: 70px; height: 70px;margin-left: 300px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>
                                                             </li>
                                                             <c:if test="${not empty b.departmentName}">
                                                             <li class="d-flex align-items-center margin5px">
@@ -118,6 +118,9 @@
                                                                     <fmt:formatDate value="${b.slotStart}" pattern="HH:mm" />
                                                                 </span>
                                                             </li>
+<!--                                                            <li class="d-flex align-items-center margin5px">
+                                                                <img style="width: 70px; height: 70px"  src="http://localhost:8080/doctris2/QRCodeServlet?data=http://localhost:8080/doctris2/billsDetail?appointment_code=${b.appointment_code}" alt="alt"/>
+                                                            </li>-->
                                                         </ul>
                                                     </div>
                                                 </div>

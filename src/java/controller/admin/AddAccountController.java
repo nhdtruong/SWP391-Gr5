@@ -5,6 +5,7 @@
 package controller.admin;
 
 import config.EmailSender;
+import config.PasswordUtils;
 import controller.uer.RegisterServerlet;
 import dal.UserDAO;
 import jakarta.mail.MessagingException;
@@ -90,6 +91,9 @@ public class AddAccountController extends HttpServlet {
         AccountUser account1 = u.CheckAccByUsername(username);
         AccountUser account2 = u.CheckAccByEmail(email);
 
+        
+        String hashedPassword = PasswordUtils.hashPassword(password);
+        
         if (account1 != null && account2 != null) {
             request.setAttribute("errorEM", "Email đã tồn tại!");
             request.setAttribute("errorTK", "Tên đăng nhập đã tồn tại!");
@@ -105,10 +109,10 @@ public class AddAccountController extends HttpServlet {
             return;
         } else {
             if (Integer.parseInt(role_id) == 5) {
-                u.registerNewUser(username, Integer.parseInt(role_id), password, email, img, 2);
+                u.registerNewUser(username, Integer.parseInt(role_id), hashedPassword, email, img, 2);
 
             } else {
-                u.registerNewUser(username, Integer.parseInt(role_id), password, email, img, status);
+                u.registerNewUser(username, Integer.parseInt(role_id), hashedPassword, email, img, status);
 
             }
 

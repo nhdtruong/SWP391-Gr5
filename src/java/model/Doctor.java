@@ -36,7 +36,7 @@ public class Doctor {
     private int number_rate_star;
     private String department_name;
     private double fee;
-
+    private int deparment_id;
     private Set<Integer> workingWeekdays;
 
     public Doctor(int doctor_id) {
@@ -370,4 +370,11 @@ public class Doctor {
         this.username = username;
     }
 
+    public int getDeparment_id() {
+        return deparment_id;
+    }
+
+    public void setDeparment_id(int deparment_id) {
+        this.deparment_id = deparment_id;
+    }
 }
