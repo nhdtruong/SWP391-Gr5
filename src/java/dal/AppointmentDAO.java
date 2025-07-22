@@ -15,6 +15,8 @@ import java.sql.Time;
 import java.sql.SQLException;
 
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import model.Patient;
 
 /**
@@ -23,112 +25,157 @@ import model.Patient;
  */
 public class AppointmentDAO extends DBContext {
 
-public int insertAppointment(
-        String appointmentCode,
-        int patientId,
-        int doctorId,
-        int slotId,
-        int serviceId,
-        Date booking_date,
-        Time slot_start,
-        Time slot_end,
-        String note) {
+    public List<Map<String, Object>> getAppointmentsLast5Days() {
+        List<Map<String, Object>> list = new ArrayList<>();
 
-    String sql = "INSERT INTO appointment " +
-                 "(appointment_code, patient_id, doctor_id, slot_id, service_id, booking_date, slot_start, slot_end, note) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "SELECT CONVERT(date, created_at) AS day, COUNT(*) AS total_appointments "
+                + "FROM appointment "
+                + "WHERE created_at >= DATEADD(day, -4, CAST(GETDATE() AS date)) "
+                + "GROUP BY CONVERT(date, created_at) "
+                + "ORDER BY day";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-        ps.setString(1, appointmentCode);
-        ps.setInt(2, patientId);
-        ps.setInt(3, doctorId);
-        ps.setInt(4, slotId);
-        ps.setInt(5, serviceId);
-        ps.setDate(6, booking_date);
-        ps.setTime(7, slot_start);
-        ps.setTime(8, slot_end);
-        ps.setString(9, note);
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
-        int affectedRows = ps.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Creating appointment failed, no rows affected.");
+            while (rs.next()) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("day", rs.getDate("day")); // java.sql.Date
+                item.put("total", rs.getInt("total_appointments"));
+                list.add(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        try (ResultSet rs = ps.getGeneratedKeys()) {
+        return list;
+    }
+
+    public int CountAppointment() {
+        String sql = "select count(*) from appointment";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 return rs.getInt(1);
             } else {
                 throw new SQLException("Creating appointment failed, no ID obtained.");
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+
+        return -1;
     }
 
-    return -1;
-}
+    public int insertAppointment(
+            String appointmentCode,
+            int patientId,
+            int doctorId,
+            int slotId,
+            int serviceId,
+            Date booking_date,
+            Time slot_start,
+            Time slot_end,
+            String note) {
 
-public int insertAppointment(
-        String appointmentCode,
-        int patientId,
-        int serviceId,
-        Date booking_date,
-        Time slot_start,
-        Time slot_end,
-        String note) {
+        String sql = "INSERT INTO appointment "
+                + "(appointment_code, patient_id, doctor_id, slot_id, service_id, booking_date, slot_start, slot_end, note) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    String sql = "INSERT INTO appointment " +
-                 "(appointment_code, patient_id, service_id, booking_date, slot_start, slot_end, note) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, appointmentCode);
+            ps.setInt(2, patientId);
+            ps.setInt(3, doctorId);
+            ps.setInt(4, slotId);
+            ps.setInt(5, serviceId);
+            ps.setDate(6, booking_date);
+            ps.setTime(7, slot_start);
+            ps.setTime(8, slot_end);
+            ps.setString(9, note);
 
-    try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-        ps.setString(1, appointmentCode);
-        ps.setInt(2, patientId);
-   
-        ps.setInt(3, serviceId);
-        ps.setDate(4, booking_date);
-        ps.setTime(5, slot_start);
-        ps.setTime(6, slot_end);
-        ps.setString(7, note);
-
-        int affectedRows = ps.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Creating appointment failed, no rows affected.");
-        }
-
-        try (ResultSet rs = ps.getGeneratedKeys()) {
-            if (rs.next()) {
-                return rs.getInt(1);
-            } else {
-                throw new SQLException("Creating appointment failed, no ID obtained.");
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating appointment failed, no rows affected.");
             }
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    throw new SQLException("Creating appointment failed, no ID obtained.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+
+        return -1;
     }
 
-    return -1;
-}
+    public int insertAppointment(
+            String appointmentCode,
+            int patientId,
+            int serviceId,
+            Date booking_date,
+            Time slot_start,
+            Time slot_end,
+            String note) {
+
+        String sql = "INSERT INTO appointment "
+                + "(appointment_code, patient_id, service_id, booking_date, slot_start, slot_end, note) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, appointmentCode);
+            ps.setInt(2, patientId);
+
+            ps.setInt(3, serviceId);
+            ps.setDate(4, booking_date);
+            ps.setTime(5, slot_start);
+            ps.setTime(6, slot_end);
+            ps.setString(7, note);
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating appointment failed, no rows affected.");
+            }
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    throw new SQLException("Creating appointment failed, no ID obtained.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
 
     public boolean rescheduleAppointment(int appointmentId, int doctorId, int slotId, Date dateBooking, Time slotStart, Time slotEnd) {
-    String sql = "UPDATE appointment SET doctor_id = ?, slot_id = ?, booking_date = ?, slot_start = ?, slot_end = ? WHERE appointment_id = ?";
+        String sql = "UPDATE appointment SET doctor_id = ?, slot_id = ?, booking_date = ?, slot_start = ?, slot_end = ? WHERE appointment_id = ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, doctorId);
-        ps.setInt(2, slotId);
-        ps.setDate(3, dateBooking);
-        ps.setTime(4, slotStart);
-        ps.setTime(5, slotEnd);
-        ps.setInt(6, appointmentId);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ps.setInt(2, slotId);
+            ps.setDate(3, dateBooking);
+            ps.setTime(4, slotStart);
+            ps.setTime(5, slotEnd);
+            ps.setInt(6, appointmentId);
 
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
-
-    return false;
-}
 
     public List<AppointmentView> getAllAppointmentsSearchDoctor(String text) {
         List<AppointmentView> list = new ArrayList<>();
@@ -285,7 +332,7 @@ public int insertAppointment(
                 + "    ORDER BY pay_date DESC\n"
                 + ")\n"
                 + "WHERE p.username = ?";
-
+        System.out.println(sql);
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {

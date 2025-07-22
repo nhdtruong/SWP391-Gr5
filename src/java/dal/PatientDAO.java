@@ -22,6 +22,23 @@ public class PatientDAO extends DBContext {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
+    public int CountPatient(){
+        String sql = "SELECT * FROM patients";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            int count  = 0;
+            while (rs.next()) {
+                count++;
+            }
+            return count;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    
     public List<Patient> getPatientByUsername(String username) {
 
         List<Patient> list = new ArrayList<>();

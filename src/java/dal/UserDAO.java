@@ -22,6 +22,20 @@ public class UserDAO extends DBContext {
 
     PreparedStatement ps = null;
     ResultSet rs = null;
+    
+    public int CountUser(){
+        String sql = "select Count(*) from users";
+        try {
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return 0;
+    }
 
     public AccountUser Login(String username) throws SQLException {
         String sql = "select u.username ,u.password ,u.role_id ,u.email,u.img ,u.status from users u where u.username =?";
