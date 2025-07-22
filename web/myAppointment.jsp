@@ -190,7 +190,7 @@
                                                                 <a href="#" class="btn btn-danger" 
                                                                    onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')" 
                                                                    title="Xóa bác sĩ">
-                                                                    <i class="fa-solid fa-trash"></i>
+                                                                    <i class="fa-solid fa-trash"></i>Y/c Dời lịch
                                                                 </a>
                                                             </td>
 

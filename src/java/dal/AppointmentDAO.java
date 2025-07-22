@@ -473,6 +473,7 @@ public int insertAppointment(
                 + "    a.is_refunded,\n"
                 + "    a.slot_start,\n"
                 + "    a.slot_end,\n"
+                + "    a.slot_id,\n"
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -507,6 +508,7 @@ public int insertAppointment(
                     a.setSlotStart(rs.getTime("slot_start"));
                     a.setSlotEnd(rs.getTime("slot_end"));
                     a.setStatus(rs.getInt("status"));
+                    a.setSlotId(rs.getInt("slot_id"));
                     a.setNote(rs.getString("note"));
                     a.setAmount(rs.getDouble("amount"));
                     a.setPaymentStatus(rs.getString("payment_status"));
