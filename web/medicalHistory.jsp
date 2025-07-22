@@ -18,7 +18,7 @@
             <div class="con" style="margin-right: 150px;margin-left: 150px;padding-top: 10px">
                 <div class="row">
                     <!-- Bên trái: Menu -->
-                    <div class="col-md-3 mb-4">
+                    <div class="col-md-3 mb-4" style="margin-top: 24px;">
                         <div class="rounded shadow overflow-hidden sticky-bar">
                             <div class="text-center avatar-profile margin-nagative mt-n5 position-relative pb-4 border-bottom">
                                 <br><br><br><br>
@@ -75,7 +75,8 @@
                                             <i class="ri-calendar-check-line align-middle navbar-icon"></i> Phiếu khám bệnh
                                         </a>
                                     </li>
-                                </c:if>
+                                    <li class="navbar-item"><a href="medicalHistory" class="navbar-link"><i class="ri-calendar-check-line align-middle navbar-icon"></i>Lịch sử khám bệnh</a></li>
+                                    </c:if>
                             </ul>
                         </div>
                     </div>

@@ -101,6 +101,12 @@ public class Booking extends HttpServlet {
             session.removeAttribute("serviceBooking");
             session.removeAttribute("isBHYT");
             String departmentId = (String) session.getAttribute("departmentId");
+            departmentId = request.getParameter("departmentId");
+            var tuan = Integer.parseInt(doctorId);
+            var sang = Integer.parseInt(departmentId);
+            
+            var truong = request.getParameter("truong");
+            request.setAttribute("truong", truong);
             List<Service> listService = serviceDao.getServicesByDoctorAndDepartment(Integer.parseInt(doctorId), Integer.parseInt(departmentId));
             request.setAttribute("listService",listService);
             request.getRequestDispatcher("booking.jsp").forward(request, response);

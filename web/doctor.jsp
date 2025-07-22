@@ -61,7 +61,7 @@
 
                                     <!-- Button footer -->
                                     <div class="pt-2 pb-3 text-center">
-                                        <button class="btn btn-soft-primary me-1" onclick="window.location.href = 'booking?stepName=service&doctorId=${d.doctor_id}&doctorName=${d.doctor_name}&departmentName=${d.department_name}&departmentId=${d.deparment_id}'">Đặt lịch</button>
+                                        <button class="btn btn-soft-primary me-1" onclick="window.location.href = 'booking?stepName=service&doctorId=${d.doctor_id}&doctorName=${d.doctor_name}&departmentName=${d.department_name}&departmentId=${d.deparment_id}&truong=1'">Đặt lịch</button>
                                         <button class="btn btn-soft-primary" onclick="window.location.href = 'doctor?action=detail&id=${d.doctor_id}'">Chi tiết</button>  
                                     </div>
                                 </div>
