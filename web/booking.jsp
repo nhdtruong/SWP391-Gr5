@@ -433,12 +433,16 @@
                                                 </div>
 
                                             </div>
+                                           
+                                                <div class="card-footer text-start">
+                                                    <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </div>
+                                           
 
-                                            <div class="card-footer text-start">
-                                                <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                </a>
-                                            </div>
+
+                                          
                                         </div>
                                     </div>
 

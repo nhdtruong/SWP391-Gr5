@@ -154,11 +154,11 @@
                                         </div>
 
 
-                                        <div class="card-footer text-start">
+<!--                                        <div class="card-footer text-start">
                                             <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
                                                 <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                             </a>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </c:when>

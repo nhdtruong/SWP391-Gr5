@@ -142,6 +142,7 @@
                                                                                         class="btn btn-sm
                                                                                         <c:choose>
                                                                                             <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                            <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white disabled</c:when>
                                                                                             <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                             <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                             <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -169,6 +170,7 @@
                                                                                         class="btn btn-sm
                                                                                         <c:choose>
                                                                                             <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                            <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white disabled</c:when>
                                                                                             <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                             <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                             <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -204,6 +206,7 @@
                                                                                         class="btn btn-sm
                                                                                         <c:choose>
                                                                                             <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                            <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white disabled</c:when>
                                                                                             <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                             <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                             <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -230,6 +233,7 @@
                                                                                         class="btn btn-sm
                                                                                         <c:choose>
                                                                                             <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                            <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white disabled</c:when>
                                                                                             <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                             <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                             <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -258,6 +262,10 @@
                                                         <div class="d-flex align-items-center gap-2">
                                                             <button type="button" class="btn btn-success btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
                                                             <span style="font-size: 14px;">Đang chọn lịch này</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <button type="button" class="btn btn-danger btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
+                                                            <span style="font-size: 14px;">Đang yêu cầu dời lịch</span>
                                                         </div>
                                                         <div class="d-flex align-items-center gap-2">
                                                             <button type="button" class="btn btn-warning btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>

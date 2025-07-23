@@ -24,7 +24,7 @@
                                 <h6>Dời lịch khám cho bệnh nhân: <strong>${patientName}</strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <h6>Mã phiếu: <strong>${appointmentCode}</strong></h6>
+                                <h6>Chuyên khoa: <strong>${departmentName}</strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <h6>Đang đặt ngày: <strong><fmt:formatDate value="${dateBooking}" pattern="dd/ MM/ yyyy"/> </strong></h6>
@@ -32,9 +32,7 @@
                             <div class="col-md-6 mb-2">
                                 <h6>Bác sĩ: <strong>${currentDoctorName}</strong></h6>
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <h6>Chuyên khoa: <strong>${departmentName}</strong></h6>
-                            </div>
+                            
                         </div>
 
                         <form action="updateAppoitment" method="post" id="doctorForm">
@@ -46,6 +44,7 @@
                             <input type="hidden" name="slotStart" value="${slotStart}" />
                             <input type="hidden" name="slotEnd" value="${slotEnd}" />
                             <input type="hidden" name="slotId" value="${slotId}" />
+                            <input type="hidden" name="slotIdReqChange" value="${slotIdReqChange}" />
                             <input type="hidden" name="departmentName" value="${departmentName}" />
                             <input type="hidden" name="action" value="reschedule" />
 
@@ -77,6 +76,7 @@
 
                                         <fmt:setLocale value="vi_VN" />
                                         <c:set var="slotId" value="${slotId}"/>
+                                        <c:set var="slotIdReqChange" value="${slotIdReqChange}"/>
                                         <c:forEach var="i" begin="0" end="${fn:length(listWDS) - 1}" step="2">
                                             <div class="row mb-4">
 
@@ -96,6 +96,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -123,6 +124,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
@@ -159,6 +161,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -185,6 +188,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -212,7 +216,11 @@
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <button type="button" class="btn btn-success btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
-                                                <span style="font-size: 14px;">Đang chọn lịch này</span>
+                                                <span style="font-size: 14px;">Đang đặt lịch này</span>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <button type="button" class="btn btn-danger btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
+                                                <span style="font-size: 14px;">BS yêu cầu đổi lịch</span>
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <button type="button" class="btn btn-warning btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>

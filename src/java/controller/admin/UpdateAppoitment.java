@@ -106,6 +106,7 @@ public class UpdateAppoitment extends HttpServlet {
             String reDoctorName = parts[1];
             System.out.println("id:" + doctorId + "re:" + reDoctorName);
             String slotId = request.getParameter("slotId");
+            String slotIdReqChange = request.getParameter("slotIdReqChange");
             String patientName = request.getParameter("patientName");
             String currentDoctorName = request.getParameter("currentDoctorName");
             String dateBookingStr = request.getParameter("dateBooking");
@@ -142,6 +143,7 @@ public class UpdateAppoitment extends HttpServlet {
             request.setAttribute("departmentName", departmentName);
             request.setAttribute("listDoctor", listDoctor);
             request.setAttribute("slotId", slotId);
+            request.setAttribute("slotIdReqChange", slotIdReqChange);
             request.setAttribute("listWDS", listWDS);
             request.getRequestDispatcher("admin/reSchedule.jsp").forward(request, response);
         } else if (action.equals("excuteUpdate")) {

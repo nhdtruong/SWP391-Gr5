@@ -115,7 +115,8 @@ public class Booking extends HttpServlet {
             
             DoctorScheduleDAO DSD = new DoctorScheduleDAO();
             ServiceDAO serviceDao = new ServiceDAO();
-            String doctorId = (String) session.getAttribute("doctorId");
+          //  String doctorId = (String) session.getAttribute("doctorId");
+            String doctorId = request.getParameter("doctorId");
             List<WorkingDateSchedule> listWDS =  DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
             String serviceId = request.getParameter("serviceId");
             String isBHYT = request.getParameter("isBHYT");

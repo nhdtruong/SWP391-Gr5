@@ -91,6 +91,7 @@ public class ReqChangeAppointment extends HttpServlet {
             String appointmentId = request.getParameter("appointmentId");
             String doctorId = request.getParameter("doctorId");
             String slotId = request.getParameter("slotId");
+            String slotIdReqChange = request.getParameter("slotIdReqChange");
             String patientName = request.getParameter("patientName");
             String doctorName = request.getParameter("doctorName");
             String dateBookingStr = request.getParameter("dateBooking");
@@ -121,6 +122,7 @@ public class ReqChangeAppointment extends HttpServlet {
             request.setAttribute("slotEnd", slotEnd);
             request.setAttribute("departmentName", departmentName);
             request.setAttribute("slotId", slotId);
+            request.setAttribute("slotIdReqChange", slotIdReqChange);
             request.setAttribute("listWDS", listWDS);
             request.getRequestDispatcher("doctorReqChangeAppointment.jsp").forward(request, response);
 

@@ -94,6 +94,7 @@
                                     <input type="hidden" name="currentDoctorName" value="${a.doctorName}" />
                                     <input type="hidden" name="patientName" value="${a.patient.patientName}" />
                                     <input type="hidden" name="slotId" value="${a.slotId}" />
+                                    <input type="hidden" name="slotIdReqChange" value="${a.slotIdReqChange}" />
                                     <input type="hidden" name="dateBooking" value="${a.dateBooking}" />
                                     <input type="hidden" name="slotEnd" value="${a.slotEnd}" />
                                     <input type="hidden" name="slotStart" value="${a.slotStart}" />

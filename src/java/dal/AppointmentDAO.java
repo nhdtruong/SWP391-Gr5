@@ -69,6 +69,45 @@ public class AppointmentDAO extends DBContext {
 
         return -1;
     }
+    
+    public int insertAppointment(
+            String appointmentCode,
+            int patientId,
+            int doctorId,
+            int serviceId,
+            String note) {
+
+        String sql = "INSERT INTO appointment "
+                + "(appointment_code, patient_id, doctor_id,service_id, note) "
+                + "VALUES ( ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, appointmentCode);
+            ps.setInt(2, patientId);
+            ps.setInt(3, doctorId);
+
+            ps.setInt(4, serviceId);
+
+            ps.setString(5, note);
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating appointment failed, no rows affected.");
+            }
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    throw new SQLException("Creating appointment failed, no ID obtained.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
 
     public int insertAppointment(
             String appointmentCode,
@@ -158,7 +197,7 @@ public class AppointmentDAO extends DBContext {
     }
 
     public boolean rescheduleAppointment(int appointmentId, int doctorId, int slotId, Date dateBooking, Time slotStart, Time slotEnd) {
-        String sql = "UPDATE appointment SET doctor_id = ?, slot_id = ?, booking_date = ?, slot_start = ?, slot_end = ? WHERE appointment_id = ?";
+        String sql = "UPDATE appointment SET doctor_id = ?, slot_id = ?, booking_date = ?, slot_start = ?, slot_end = ?,slot_id_request_change=null,status=1 WHERE appointment_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
@@ -630,6 +669,7 @@ public class AppointmentDAO extends DBContext {
                 + "    a.slot_start,\n"
                 + "    a.slot_end,\n"
                 + "    a.slot_id,\n"
+                + "    a.slot_id_request_change,\n"        
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -654,6 +694,7 @@ public class AppointmentDAO extends DBContext {
                     a.setAppointmentId(rs.getInt("appointment_id"));
                     a.setAppointment_code(rs.getString("appointment_code"));
                     a.setSlotId(rs.getInt("slot_id"));
+                    a.setSlotIdReqChange(rs.getInt("slot_id_request_change"));
                     a.setDoctorId(rs.getInt("doctor_id"));
                     a.setPatient(getPatientById(rs.getInt("patient_id")));
                     a.setDoctorName(rs.getString("doctor_name"));
