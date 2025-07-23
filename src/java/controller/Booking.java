@@ -102,6 +102,7 @@ public class Booking extends HttpServlet {
             session.removeAttribute("isBHYT");
             String departmentId = (String) session.getAttribute("departmentId");
             departmentId = request.getParameter("departmentId");
+            session.setAttribute("departmentId", departmentId);
             var tuan = Integer.parseInt(doctorId);
             var sang = Integer.parseInt(departmentId);
             

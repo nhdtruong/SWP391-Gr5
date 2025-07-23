@@ -81,9 +81,11 @@
                                         </div>
                                     </form>
                                 </div>
+
                                 <!--                                <div class="col-md-1">
                                                                     <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
                                                                 </div>                         -->
+
                             </div>
 
                             <div class="row">
