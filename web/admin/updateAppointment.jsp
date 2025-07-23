@@ -29,7 +29,7 @@
                         <form action="updateAppoitment" method="post">
                             <div class="card shadow border-0">
                                 <div class="card-body p-4">
-                                  
+
                                     <div class="text-center mb-4">
                                         <h5 class="mb-0">Mã phiếu khám: 
                                             <span class="text-danger fw-bold">${a.appointment_code}</span>
@@ -37,25 +37,32 @@
                                     </div>
 
                                     <div class="row g-3">
-                                
+
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Tên bệnh nhân</label>
                                             <div class="form-control bg-light">${a.patient.patientName}</div>
                                         </div>
 
-                                       
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold text-secondary">Bác sĩ khám</label>
-                                            <div class="form-control bg-light">${a.doctorName}</div>
-                                        </div>
 
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold text-secondary">Ngày sinh</label>
-                                            <div class="form-control bg-light">${a.patient.dob}</div>
+                                            <label class="form-label fw-semibold text-secondary">Bác sĩ khám</label>
+                                            <div class="form-control bg-light">
+                                                <c:if test="${not empty a.doctorName}">${a.doctorName}</c:if>
+                                                <c:if test="${ empty a.doctorName}">#</c:if>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold text-secondary">Ngày sinh</label>
+                                                <div class="form-control bg-light">${a.patient.dob}</div>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Chuyên khoa</label>
-                                            <div class="form-control bg-light">${a.departmentName}</div>
+                                            <div class="form-control bg-light">
+                                                <c:if test="${not empty a.departmentName}">${a.departmentName}</c:if>
+                                                <c:if test="${ empty a.departmentName}">#</c:if>
+                                               
+                                            </div>
                                         </div>
 
                                         <!-- Dịch vụ -->
@@ -77,11 +84,11 @@
                                         <!-- Giờ khám -->
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold text-secondary">Giờ khám dự kiến</label>
-                                            <div class="form-control bg-light">${a.slotStart}</div>
+                                            <div class="form-control bg-light"><fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/></div>
                                         </div>
 
                                     </div>
-                                      <input type="hidden" name="appointmentId" value="${a.appointmentId}" />
+                                    <input type="hidden" name="appointmentId" value="${a.appointmentId}" />
                                     <input type="hidden" name="appointmentCode" value="${a.appointment_code}" />
                                     <input type="hidden" name="doctorId_reDoctorName" value="${a.doctorId}_${a.doctorName}" />
                                     <input type="hidden" name="currentDoctorName" value="${a.doctorName}" />
@@ -91,8 +98,8 @@
                                     <input type="hidden" name="slotEnd" value="${a.slotEnd}" />
                                     <input type="hidden" name="slotStart" value="${a.slotStart}" />
                                     <input type="hidden" name="departmentName" value="${a.departmentName}" />
-                                
-                                    
+
+
                                     <div class="mt-5 d-flex justify-content-center gap-4">
                                         <button type="submit" name="action" value="reschedule" class="btn btn-danger px-4 py-2">
                                             <i class="fa-solid fa-calendar-days me-1"></i> Dời lịch hẹn

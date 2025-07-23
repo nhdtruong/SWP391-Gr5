@@ -70,6 +70,7 @@ public class WeeklyDoctorScheduleDAO extends DBContext {
     public static void main(String[] args) {
         WeeklyDoctorScheduleDAO d = new WeeklyDoctorScheduleDAO();
         System.out.println(d.deleteWeeklyScheduleByDoctorId(2));
+        //truong yh alsdja
     }
 
 }
