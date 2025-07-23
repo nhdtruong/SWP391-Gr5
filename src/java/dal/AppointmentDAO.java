@@ -580,8 +580,10 @@ public class AppointmentDAO extends DBContext {
                 + "    a.is_refunded,\n"
                 + "    a.slot_start,\n"
                 + "    a.slot_end,\n"
+
                 + "    a.slot_id,\n"
                 + "    a.slot_id_request_change,\n"
+
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -799,8 +801,10 @@ public class AppointmentDAO extends DBContext {
 
     public static void main(String[] args) {
         AppointmentDAO a = new AppointmentDAO();
+
         // System.out.println(a.getBillstByCode("T250721LUUTKJ"));
        // System.out.println(a.getAppointmentsByAppointmentId(1));
+
         //   System.out.println(a.getAllAppointments());
         //  System.out.println(a.getAppointmentsByUsername("user10"));
         //System.out.println(a.getAllAppointments());
