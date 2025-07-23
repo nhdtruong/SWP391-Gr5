@@ -177,6 +177,27 @@ public class AppointmentDAO extends DBContext {
         return false;
     }
 
+     public boolean reqChangeAppointmentByDoctor(int appointmentId, int doctorId, int slot_id_request_change, Date dateBooking, Time slotStart, Time slotEnd) {
+        String sql = "UPDATE appointment SET doctor_id = ?, slot_id_request_change = ?, booking_date = ?, slot_start = ?, slot_end = ?,status = 4  WHERE appointment_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ps.setInt(2, slot_id_request_change);
+            ps.setDate(3, dateBooking);
+            ps.setTime(4, slotStart);
+            ps.setTime(5, slotEnd);
+            ps.setInt(6, appointmentId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
+    
     public List<AppointmentView> getAllAppointmentsSearchDoctor(String text) {
         List<AppointmentView> list = new ArrayList<>();
         String sql = "SELECT \n"
@@ -521,6 +542,7 @@ public class AppointmentDAO extends DBContext {
                 + "    a.slot_start,\n"
                 + "    a.slot_end,\n"
                 + "    a.slot_id,\n"
+                + "    a.slot_id_request_change,\n"
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -555,6 +577,7 @@ public class AppointmentDAO extends DBContext {
                     a.setSlotStart(rs.getTime("slot_start"));
                     a.setSlotEnd(rs.getTime("slot_end"));
                     a.setStatus(rs.getInt("status"));
+                    a.setSlotIdReqChange(rs.getInt("slot_id_request_change"));
                     a.setSlotId(rs.getInt("slot_id"));
                     a.setNote(rs.getString("note"));
                     a.setAmount(rs.getDouble("amount"));
@@ -593,31 +616,60 @@ public class AppointmentDAO extends DBContext {
     public List<AppointmentView> getAppointmentsByDoctorId(int doctorId) {
         List<AppointmentView> list = new ArrayList<>();
 
-        String sql = "SELECT a.appointment_id,p.patient_id, s.service_name, "
-                + "a.status, a.note, dss.slot_start, dss.slot_end, ds.working_date "
-                + "FROM appointment a "
-                + "JOIN patients p ON a.patient_id = p.patient_id "
-                + "JOIN service s ON a.service_id = s.service_id "
-                + "JOIN doctor_schedule_slot dss ON a.slot_id = dss.slot_id "
-                + "JOIN doctor_schedule ds ON dss.schedule_id = ds.schedule_id "
+         String sql = "SELECT \n"
+                + "    a.appointment_id,\n"
+                + "    a.appointment_code,\n"
+                + "    a.patient_id,\n"
+                + "    d.doctor_name,\n"
+                + "    a.doctor_id,\n"
+                + "    s.service_name,\n"
+                + "    dpt.department_name,\n"
+                + "    a.booking_date,\n"
+                + "    a.created_at,\n"
+                + "    a.is_refunded,\n"
+                + "    a.slot_start,\n"
+                + "    a.slot_end,\n"
+                + "    a.slot_id,\n"
+                + "    a.status,\n"
+                + "    a.note,\n"
+                + "    ISNULL(pm.amount, 0) AS amount,\n"
+                + "    ISNULL(pm.status, 'Chưa thanh toán') AS payment_status\n"
+                + "FROM appointment a\n"
+                + "left JOIN patients p ON a.patient_id = p.patient_id\n"
+                + "left JOIN doctors d ON a.doctor_id = d.doctor_id\n"
+                + "left JOIN service s ON a.service_id = s.service_id\n"
+                + "left JOIN department dpt ON s.department_id = dpt.department_id\n"
+                + "LEFT JOIN payment pm ON pm.payment_id = (\n"
+                + "    SELECT TOP 1 payment_id FROM payment\n"
+                + "    WHERE appointment_id = a.appointment_id\n"
+                + "    ORDER BY pay_date DESC\n"
+                + ")\n"
                 + "WHERE a.doctor_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                AppointmentView a = new AppointmentView();
-                a.setPatient(getPatientById(rs.getInt("patient_id")));
-                a.setAppointmentId(rs.getInt("appointment_id"));
-                a.setServiceName(rs.getString("service_name"));
-                a.setStatus(rs.getInt("status"));
-                a.setNote(rs.getString("note"));
-                a.setSlotStart(rs.getTime("slot_start"));
-                a.setSlotEnd(rs.getTime("slot_end"));
-                a.setWorkingDate(rs.getDate("working_date"));
-
-                list.add(a);
+             ps.setInt(1, doctorId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    AppointmentView a = new AppointmentView();
+                    a.setAppointmentId(rs.getInt("appointment_id"));
+                    a.setAppointment_code(rs.getString("appointment_code"));
+                    a.setSlotId(rs.getInt("slot_id"));
+                    a.setDoctorId(rs.getInt("doctor_id"));
+                    a.setPatient(getPatientById(rs.getInt("patient_id")));
+                    a.setDoctorName(rs.getString("doctor_name"));
+                    a.setServiceName(rs.getString("service_name"));
+                    a.setDepartmentName(rs.getString("department_name"));
+                    a.setDateBooking(rs.getDate("booking_date"));
+                    a.setCreated_at(rs.getDate("created_at"));
+                    a.setIs_refunded(rs.getBoolean("is_refunded"));
+                    a.setSlotStart(rs.getTime("slot_start"));
+                    a.setSlotEnd(rs.getTime("slot_end"));
+                    a.setStatus(rs.getInt("status"));
+                    a.setNote(rs.getString("note"));
+                    a.setAmount(rs.getDouble("amount"));
+                    a.setPaymentStatus(rs.getString("payment_status"));
+                    list.add(a);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -673,7 +725,7 @@ public class AppointmentDAO extends DBContext {
                 + "AND a.status != 0 ";
 
         try {
-            //  lỗi 1
+            
             try (PreparedStatement ps = connection.prepareStatement(sqlDept)) {
                 ps.setInt(1, patientId);
                 ps.setDate(2, dateBooking);
@@ -684,7 +736,7 @@ public class AppointmentDAO extends DBContext {
                 }
             }
 
-            // lỗi 2
+           
             try (PreparedStatement ps = connection.prepareStatement(sqlTime)) {
                 ps.setInt(1, patientId);
                 ps.setDate(2, dateBooking);
@@ -706,12 +758,13 @@ public class AppointmentDAO extends DBContext {
 
     public static void main(String[] args) {
         AppointmentDAO a = new AppointmentDAO();
-       // System.out.println(a.getBillstByCode("T250721LUUTKJ"));
-        System.out.println(a.getAppointmentsByAppointmentId(1));
+        // System.out.println(a.getBillstByCode("T250721LUUTKJ"));
+       // System.out.println(a.getAppointmentsByAppointmentId(1));
         //   System.out.println(a.getAllAppointments());
         //  System.out.println(a.getAppointmentsByUsername("user10"));
         //System.out.println(a.getAllAppointments());
         //   System.out.println(a.getAppointmentsByAppointmentId(19));
+        System.out.println(a.getAppointmentsByDoctorId(70));
     }
 
 }

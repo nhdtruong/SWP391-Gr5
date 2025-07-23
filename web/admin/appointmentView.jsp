@@ -55,6 +55,7 @@
                                                     <option <c:if test="${status == '0'}"> selected </c:if> value="0">Đã hủy lịch</option>
                                                     <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã khám</option>
                                                     <option <c:if test="${status == '3'}"> selected </c:if> value="3">Yêu cầu hủy lịch</option>
+                                                    <option <c:if test="${status == '4'}"> selected </c:if> value="4">BS yêu cầu đổi lịch</option>
                                                     </select>  
                                                 </div>
                                             </div>
@@ -80,9 +81,9 @@
                                         </div>
                                     </form>
                                 </div>
-<!--                                <div class="col-md-1">
-                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
-                                </div>                         -->
+                                <!--                                <div class="col-md-1">
+                                                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
+                                                                </div>                         -->
                             </div>
 
                             <div class="row">
@@ -140,6 +141,9 @@
                                                             </c:when>
                                                             <c:when test="${a.status == 3}">
                                                                 <span style="color: orange;">Yêu cầu hủy lịch</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 4}">
+                                                                <span style="color: orange;">Bs yêu cầu đổi lịch</span>
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <span style="color: gray;">Không xác định</span>

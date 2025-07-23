@@ -82,7 +82,7 @@ public class RateDoctor extends HttpServlet {
                 response.sendRedirect("medicalHistory");
             }
         } catch (Exception e) {
-            
+            System.out.println("e");
         }
         
     }

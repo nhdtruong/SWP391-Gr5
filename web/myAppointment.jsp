@@ -170,8 +170,11 @@
                                                                         <span style="color: goldenrod;">Đã khám</span>
                                                                     </c:when>
                                                                     <c:when test="${a.status == 3}">
-                                                                        <span style="color: orange;">Yêu cầu hủy lịch</span>
+                                                                        <span style="color: orange;">Bệnh nhân yêu cầu hủy lịch</span>
                                                                     </c:when>
+                                                                    <c:when test="${a.status == 4}">
+                                                                        <span style="color: orange;">Đang Y/c đổi lịch</span>
+                                                                    </c:when>    
                                                                     <c:otherwise>
                                                                         <span style="color: gray;">Không xác định</span>
                                                                     </c:otherwise>
@@ -182,16 +185,28 @@
                                                             <td class="p-3">
 
 
-                                                                <a href="examination?patientId=${a.patient.patientId}" class="btn btn-primary" title="Sửa bác sĩ">
-                                                                    <i class="fa-solid fa-pen-to-square"></i>Khám
-                                                                </a>
+                                                                <div class="d-flex gap-2" style="justify-content: center">
+                                                                    <a href="examination?patientId=${a.patient.patientId}" class="btn btn-primary">
+                                                                        <i class="fa-solid fa-pen-to-square"></i> Khám
+                                                                    </a>
 
-                                                                <!-- Nút xóa -->
-                                                                <a href="#" class="btn btn-danger" 
-                                                                   onclick="openDeleteModal('${d.getDoctor_id()}', '${d.getDoctor_name()}')" 
-                                                                   title="Xóa bác sĩ">
-                                                                    <i class="fa-solid fa-trash"></i>Y/c Dời lịch
-                                                                </a>
+                                                                    <form action="reqChangeAppointment" method="post">
+                                                                        <input type="hidden" name="action" value="reqChangeAppoitment" />
+                                                                        <input type="hidden" name="appointmentId" value="${a.appointmentId}" />
+                                                                        <input type="hidden" name="appointmentCode" value="${a.appointment_code}" />
+                                                                        <input type="hidden" name="doctorId" value="${a.doctorId}" />
+                                                                        <input type="hidden" name="currentDoctorName" value="${a.doctorName}" />
+                                                                        <input type="hidden" name="patientName" value="${a.patient.patientName}" />
+                                                                        <input type="hidden" name="slotId" value="${a.slotId}" />
+                                                                        <input type="hidden" name="dateBooking" value="${a.dateBooking}" />
+                                                                        <input type="hidden" name="slotEnd" value="${a.slotEnd}" />
+                                                                        <input type="hidden" name="slotStart" value="${a.slotStart}" />
+                                                                        <input type="hidden" name="departmentName" value="${a.departmentName}" />
+
+                                                                        <button class="btn btn-danger" type="submit">Y/c Dời lịch</button>
+                                                                    </form>
+                                                                </div>
+
                                                             </td>
 
 
@@ -266,6 +281,8 @@
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
 
+
+        
         
     </body>
 
