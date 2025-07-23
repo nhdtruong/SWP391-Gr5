@@ -99,7 +99,7 @@
                                                     </td>
 
                                                     
-                                                    <c:if test="${sessionScope.user.getRole()== 1}">
+                                                    <c:if test="${sessionScope.user.getRole()== 2}">
 
                                                         <td class="p-3">
                                                             <a href="#" class="btn btn-danger"

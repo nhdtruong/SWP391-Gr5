@@ -122,7 +122,7 @@
                                                         <a href="#" class="btn btn-info" onclick="openServiceDetailModal('${fn:escapeXml(s.getService_name())}', '${fn:escapeXml(s.getCategory_service().getName())}', '${fn:escapeXml(s.getDepartment().getDepartment_name())}', '${fn:escapeXml(s.getDescription())}', '${s.isIs_bhyt() ? "Có" : "Không"}', '${s.getFee()}', '${s.getDiscount()}', '${fn:escapeXml(s.getPayment_type_id()) == 1 ? "Thanh toán tại bệnh viện" : "Thanh toán online"}', '${s.getImg()}')">Chi tiết</a>
                                                         <a href="updateservice?action=updateService&serviceId=${s.service_id}" class="btn btn-primary">Sửa</a>
 
-                                                        <c:if test="${sessionScope.user.getRole()== 1}">
+                                                        <c:if test="${sessionScope.user.getRole()== 2}">
                                                             <a href="#" class="btn btn-danger"
                                                                onclick="openDeleteModal('${s.getService_id()}')">Xóa</a>
                                                         </c:if>
