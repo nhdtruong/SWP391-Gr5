@@ -21,7 +21,7 @@
                 <div class="container-fluid">
                     <div class="layout-specing" style="">
                         <div class="row">
-                            
+
                             <div class="col-md-3 row">
                                 <div class="col-md-4">
                                     <h5 class="mb-0">Appointment</h5>
@@ -80,9 +80,9 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-md-1">
+<!--                                <div class="col-md-1">
                                     <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
-                                </div>                         
+                                </div>                         -->
                             </div>
 
                             <div class="row">
@@ -116,7 +116,12 @@
                                             <c:forEach items="${Appointment}" var="a">
                                                 <tr> 
                                                     <td class="p-3">${i}</td>
-                                                    <td class="p-3">${a.doctorName}</td>
+                                                    <c:if test="${not empty a.doctorName}">
+                                                        <td class="p-3">${a.doctorName}</td>
+                                                    </c:if>
+                                                    <c:if test="${ empty a.doctorName}">
+                                                        <td class="p-3">#</td>
+                                                    </c:if>
                                                     <td class="p-3">${a.patientName}</td>
                                                     <td class="p-3">${a.serviceName}</td>
                                                     <td class="p-3"><fmt:formatDate value="${a.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
@@ -274,7 +279,7 @@
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
 
-      
+
 
     </body>
 

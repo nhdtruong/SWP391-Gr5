@@ -77,27 +77,42 @@ public class VnpayReturn extends HttpServlet {
                     PaymentDAO payDAO = new PaymentDAO();
                     AppointmentDAO appointmentDao = new AppointmentDAO();
 
+                    String token = (String) session.getAttribute("token");
                     Patient p = (Patient) session.getAttribute("patient");
                     Service s = (Service) session.getAttribute("serviceBooking");
-                    int slotId = Integer.parseInt((String) session.getAttribute("slotId"));
-                    int doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
                     String reason = (String) session.getAttribute("reason");
                     Date dateBooking = (Date) session.getAttribute("dateBooking");
                     Time slotStart = (Time) session.getAttribute("slotStart");
                     Time slotEnd = (Time) session.getAttribute("slotEnd");
 
+                    int slotId = 0, doctorId = 0;
+                    int appointmentId = 0;
                     String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
-                    int appointmentId = appointmentDao.insertAppointment(
-                            appointmentCode,
-                            p.getPatientId(),
-                            doctorId,
-                            slotId,
-                            s.getService_id(),
-                            dateBooking,
-                            slotStart,
-                            slotEnd,
-                            reason
-                    );
+                    if (!token.equals("packageService")) {
+                        slotId = Integer.parseInt((String) session.getAttribute("slotId"));
+                        doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
+
+                        appointmentId = appointmentDao.insertAppointment(
+                                appointmentCode,
+                                p.getPatientId(),
+                                doctorId,
+                                slotId,
+                                s.getService_id(),
+                                dateBooking,
+                                slotStart,
+                                slotEnd,
+                                reason);
+                    } else {
+                        appointmentId = appointmentDao.insertAppointment(
+                                appointmentCode,
+                                p.getPatientId(),
+                                s.getService_id(),
+                                dateBooking,
+                                slotStart,
+                                slotEnd,
+                                reason);
+
+                    }
 
                     paymentDAO.updateAppointmentIdForPaymentSuccess(appointmentId, txnRef, vnp_TransactionNo);
 
