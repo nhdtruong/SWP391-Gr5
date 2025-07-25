@@ -161,8 +161,8 @@
 
                                    
                                    
-
-                                    <!-- Hành động -->
+<!--
+                  
                                     <tr>
                                         <td><strong>Hành động</strong></td>
                                         <c:forEach var="day" items="${weeklySchedule[weekIndex]}" begin="0" end="6">
@@ -173,14 +173,14 @@
                                                             <input type="hidden" name="doctorId" value="${doctorId}" />
                                                             <input type="hidden" name="doctorName" value="${doctorName}" />
                                                             <input type="hidden" name="workingDate" value="${day.workingDate}" />
-                                                            <button type="submit" class="btn btn-sm btn-info">Sửa</button>
+                                                           
                                                         </form>
                                                         
                                                     </div>
                                                 </c:if>
                                             </td>
                                         </c:forEach>
-                                    </tr>
+                                    </tr>-->
                                 </tbody>
                             </table>
                         </div>

@@ -43,8 +43,18 @@ public class AccountUser {
         this.email = email;
     }
 
-      public AccountUser(String username,String password, int role ,String email, String img, int status) {
+      public AccountUser(String username,String name,String password, int role ,String email, String img, int status) {
         this.username = username;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.img = img;
+        this.status = status;
+        this.role = role;
+    }
+         public AccountUser(String username,String password, int role ,String email, String img, int status) {
+        this.username = username;
+
         this.password = password;
         this.email = email;
         this.img = img;

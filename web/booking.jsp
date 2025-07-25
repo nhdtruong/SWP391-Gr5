@@ -291,11 +291,7 @@
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
-                                                <c:if test="${sessionScope.token == 'packageService'}">
-                                                    <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
-                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                    </a>
-                                                </c:if>
+
 
 
                                             </div>
@@ -331,7 +327,7 @@
                                                 <c:forEach var="wds" items="${listWDS}" varStatus="i">
                                                     <div id="date${i.index}" class="slot-group" style="${i.index == 0 ? '' : 'display:none'}">
 
-                                                        <!-- Buổi sáng -->
+                                                        <!--  sáng -->
                                                         <c:if test="${not empty wds.getMorningSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi sáng</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
@@ -360,7 +356,7 @@
                                                             </div>
                                                         </c:if>
 
-                                                        <!-- Buổi chiều -->
+                                                        <!-- chiều -->
                                                         <c:if test="${not empty wds.getAfternoonSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi chiều</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
@@ -389,7 +385,7 @@
                                                             </div>
                                                         </c:if>
 
-                                                        <!-- Buổi tối -->
+                                                        <!--  tối -->
                                                         <c:if test="${not empty wds.getEveningSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi tối</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
@@ -438,10 +434,17 @@
                                             </div>
 
                                             <div class="card-footer text-start">
-                                                
-                                                <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                </a>
+                                                <c:if test="${sessionScope.token == 'packageService'}">
+                                                    <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                    <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+
                                             </div>
 
 

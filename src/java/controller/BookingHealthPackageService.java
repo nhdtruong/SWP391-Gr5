@@ -82,13 +82,13 @@ public class BookingHealthPackageService extends HttpServlet {
             request.getRequestDispatcher("booking.jsp").forward(request, response);
 
         } else if (stepName.equals("dateTime")) {
-
+    
             session.removeAttribute("departmentId");
             session.removeAttribute("patient");
             session.removeAttribute("dateBooking");
             session.removeAttribute("slotStart");
             session.removeAttribute("slotEnd");
-
+            
             String service_id = request.getParameter("service_id");
             String categoryService_id = request.getParameter("categoryService_id");
             ServiceDAO serviceDao = new ServiceDAO();
@@ -96,6 +96,7 @@ public class BookingHealthPackageService extends HttpServlet {
        
             
             request.setAttribute("categoryService_id", categoryService_id);
+            request.setAttribute("service_id", service_id);
             Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(service_id));
             session.setAttribute("serviceBooking", serviceBooking);
 

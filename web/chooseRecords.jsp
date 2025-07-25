@@ -150,6 +150,11 @@
                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                     </a>
                                 </c:if>
+                                <c:if test="${sessionScope.token == 'packageService'}">
+                                                    <a href="booking.HealthPackage?stepName=dateTime&service_id=${service_id}&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                 </c:if>
 
 
 
