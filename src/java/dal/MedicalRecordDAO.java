@@ -205,14 +205,14 @@ public class MedicalRecordDAO extends DBContext {
 
         return list;
     }
-
+    
     public List<MedicalRecord> getMedicalRecordsByDoctorAndPatient(int doctorId, int patientId) {
         List<MedicalRecord> records = new ArrayList<>();
         String sql = "SELECT [record_id], [patient_id], [doctor_id], [symptoms], [diagnosis], "
                 + "[conclusion], [instruction], [note], [visit_date] "
                 + "FROM [medical_record] "
                 + "WHERE doctor_id = ? AND patient_id = ?";
-
+        MedicineDAO medicineDAO = new MedicineDAO();
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, doctorId);
@@ -230,6 +230,8 @@ public class MedicalRecordDAO extends DBContext {
                     record.setInstruction(rs.getString("instruction"));
                     record.setNote(rs.getString("note"));
                     record.setVisitDate(rs.getDate("visit_date"));
+                    record.setMedicines(medicineDAO.GetMedicineByRecord_id(record.getRecordId()));
+                    
                     records.add(record);
                 }
             }

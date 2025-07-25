@@ -25,7 +25,7 @@ public class MedicalRecord {
     private Patient patient;
     private String doctorName;
     private String departmentName;
-
+    
     public String getDoctorName() {
         return doctorName;
     }
