@@ -100,7 +100,7 @@ public class LoginServerlet extends HttpServlet {
                 if (account.getRole() == 1) {
                     response.sendRedirect("dashboard");
                 } else if (account.getRole() == 2) {
-                    response.sendRedirect("dashboard");
+                    response.sendRedirect("appointmentManager?action=all");
                 } else if (account.getRole() == 3) {
                     response.sendRedirect("dashboard");
                 } else if (account.getRole() == 4) {

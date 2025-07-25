@@ -16,6 +16,7 @@ public class AppointmentView {
     private int appointmentId;
     private String appointment_code;
     private int slotId;
+    private int slotIdReqChange;
     private Patient patient;
     private String doctorName;
     private int doctorId;
@@ -231,6 +232,14 @@ public class AppointmentView {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getSlotIdReqChange() {
+        return slotIdReqChange;
+    }
+
+    public void setSlotIdReqChange(int slotIdReqChange) {
+        this.slotIdReqChange = slotIdReqChange;
     }
 
 }

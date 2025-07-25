@@ -102,25 +102,27 @@
                                             <input type="hidden" name="doctorId" value="${doctorId}" />
                                         </div>
                                     </div>
-
                                     <!-- 2. Nội dung khám -->
                                     <div class="card mb-4">
                                         <div class="card-header bg-primary text-white fw-bold">Nội dung khám</div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label>Triệu chứng</label>
-                                                <textarea class="form-control" name="symptoms" rows="2" placeholder="Nhập triệu chứng bệnh nhân..."></textarea>
+                                        <c:forEach items="${listmdr}" var="mdr">
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label>Triệu chứng</label>
+                                                    <textarea class="form-control" readonly="" name="symptoms" rows="2" value="${mdr.getSymptoms()}" placeholder="Nhập triệu chứng bệnh nhân...">${mdr.getSymptoms()}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Chẩn đoán</label>
+                                                    <textarea class="form-control"  readonly="" value="${mdr.getDiagnosis()}" name="diagnosis" rows="2" placeholder="Nhập chẩn đoán...">${mdr.getDiagnosis()}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Kết luận</label>
+                                                    <textarea class="form-control"  readonly="" value="${mdr.getConclusion()}" name="conclusion" rows="2" placeholder="Nhập kết luận khám...">${mdr.getConclusion()}</textarea>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label>Chẩn đoán</label>
-                                                <textarea class="form-control" name="diagnosis" rows="2" placeholder="Nhập chẩn đoán..."></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label>Kết luận</label>
-                                                <textarea class="form-control" name="conclusion" rows="2" placeholder="Nhập kết luận khám..."></textarea>
-                                            </div>
-                                        </div>
+                                        </c:forEach>
                                     </div>
+
 
 
                                     <div class="card mb-4">

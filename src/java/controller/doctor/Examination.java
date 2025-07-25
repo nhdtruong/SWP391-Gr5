@@ -83,6 +83,10 @@ public class Examination extends HttpServlet {
         String patientId = request.getParameter("patientId");
         PatientDAO patientDAO = new PatientDAO();
         Patient patient = patientDAO.getPatientById(Integer.parseInt(patientId));
+        MedicalRecordDAO medicalRecordDAO = new MedicalRecordDAO();
+        var listmdr = medicalRecordDAO.getMedicalRecordsByDoctorAndPatient(doctorId, Integer.parseInt(patientId));
+        request.setAttribute("listmdr", listmdr);
+        System.out.println(listmdr.size());
         request.setAttribute("patient", patient);
         request.getRequestDispatcher("medicalRecord.jsp").forward(request, response);
 

@@ -2,8 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.doctor;
 
+import dal.AppointmentDAO;
+import dal.DepartmentDAO;
+import dal.DoctorDAO;
+import dal.DoctorScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,20 +15,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.AppointmentView;
-import dal.AppointmentDAO;
-import dal.DepartmentDAO;
-import dal.DoctorDAO;
-import dal.DoctorScheduleDAO;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Doctor;
 import model.WorkingDateSchedule;
 
@@ -32,8 +27,8 @@ import model.WorkingDateSchedule;
  *
  * @author DELL
  */
-@WebServlet(name = "UpdateAppoitment", urlPatterns = {"/updateAppoitment"})
-public class UpdateAppoitment extends HttpServlet {
+@WebServlet(name = "ReqChangeAppointment", urlPatterns = {"/reqChangeAppointment"})
+public class ReqChangeAppointment extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,10 +47,10 @@ public class UpdateAppoitment extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateAppoitment</title>");
+            out.println("<title>Servlet ReqChangeAppointment</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UpdateAppoitment at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ReqChangeAppointment at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,11 +68,7 @@ public class UpdateAppoitment extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String appointmentId = request.getParameter("appointmentId");
-        AppointmentDAO appointmentDAO = new AppointmentDAO();
-        AppointmentView appointmentView = appointmentDAO.getAppointmentsByAppointmentId(Integer.parseInt(appointmentId));
-        request.setAttribute("appointmentView", appointmentView);
-        request.getRequestDispatcher("admin/updateAppointment.jsp").forward(request, response);
+
     }
 
     /**
@@ -91,30 +82,22 @@ public class UpdateAppoitment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String action = request.getParameter("action");
 
-        if (action.equals("reschedule")) {
+        if (action.equals("reqChangeAppoitment")) {
             DoctorScheduleDAO DSD = new DoctorScheduleDAO();
             DoctorDAO doctorDAO = new DoctorDAO();
-            DepartmentDAO departmentDAO = new DepartmentDAO();
 
             String appointmentId = request.getParameter("appointmentId");
-            String doctorId_reDoctorName = request.getParameter("doctorId_reDoctorName");
-            String[] parts = doctorId_reDoctorName.split("_", 2);
-            String doctorId = parts[0];
-            String reDoctorName = parts[1];
-            System.out.println("id:" + doctorId + "re:" + reDoctorName);
+            String doctorId = request.getParameter("doctorId");
             String slotId = request.getParameter("slotId");
             String patientName = request.getParameter("patientName");
-            String currentDoctorName = request.getParameter("currentDoctorName");
+            String doctorName = request.getParameter("doctorName");
             String dateBookingStr = request.getParameter("dateBooking");
             String slotEnd = request.getParameter("slotEnd");
             String slotStart = request.getParameter("slotStart");
             String departmentName = request.getParameter("departmentName");
 
-            int departmentId = departmentDAO.getDepartmentIdByDoctorId(Integer.parseInt(doctorId));
-            List<Doctor> listDoctor = doctorDAO.getAllDoctorInDepartmanent1(departmentId);
             List<WorkingDateSchedule> listWDS = DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
 
             Date dateBooking = null;
@@ -128,35 +111,30 @@ public class UpdateAppoitment extends HttpServlet {
             }
 
             request.setAttribute("dateBooking", dateBooking);
-
             request.setAttribute("appointmentId", appointmentId);
             request.setAttribute("doctorId", doctorId);
             request.setAttribute("patientName", patientName);
-            request.setAttribute("currentDoctorName", currentDoctorName);
-            request.setAttribute("reDoctorName", reDoctorName);
-
+            request.setAttribute("doctorName", doctorName);
             request.setAttribute("dateBooking", dateBooking);
             request.setAttribute("dateBooking", dateBooking);
             request.setAttribute("slotStart", slotStart);
             request.setAttribute("slotEnd", slotEnd);
             request.setAttribute("departmentName", departmentName);
-            request.setAttribute("listDoctor", listDoctor);
             request.setAttribute("slotId", slotId);
             request.setAttribute("listWDS", listWDS);
-            request.getRequestDispatcher("admin/reSchedule.jsp").forward(request, response);
-        } else if (action.equals("excuteUpdate")) {
+            request.getRequestDispatcher("doctorReqChangeAppointment.jsp").forward(request, response);
 
+        } else if (action.equals("excuteReqChange")) {
+            
+            AppointmentDAO appointmentDAO = new AppointmentDAO();
+            String appointmentId = request.getParameter("appointmentId");
             String doctorId = request.getParameter("doctorId");
             String slotId = request.getParameter("slotId");
-            String appointmentId = request.getParameter("appointmentId");
             String dateBooking_ = request.getParameter("dateBooking");
-            String slotId_ = request.getParameter("slotId");
-            String slotStart_ = request.getParameter("slotStart");
             String slotEnd_ = request.getParameter("slotEnd");
-
-            System.out.println("Date input: " + dateBooking_);
-
-           
+            String slotStart_ = request.getParameter("slotStart");
+            
+            
             Date dateBooking = null;
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -172,9 +150,7 @@ public class UpdateAppoitment extends HttpServlet {
             Time slotStart = Time.valueOf(slotStart_);
             Time slotEnd = Time.valueOf(slotEnd_);
 
-            AppointmentDAO appointmentDAO = new AppointmentDAO();
-
-            boolean updated = appointmentDAO.rescheduleAppointment(
+             boolean updated = appointmentDAO.reqChangeAppointmentByDoctor(
                     Integer.parseInt(appointmentId),
                     Integer.parseInt(doctorId),
                     Integer.parseInt(slotId),
@@ -183,14 +159,16 @@ public class UpdateAppoitment extends HttpServlet {
                     slotEnd
             );
             if (updated) {
-                response.sendRedirect("updateAppoitment?appointmentId=" + appointmentId);
+                response.sendRedirect("myAppointment?action=all");
             } else {
 
-                request.setAttribute("error", "Không thể cập nhật lịch hẹn");
+                request.setAttribute("error", "Lỗi yêu cầu đổi lịch hẹn");
                 response.sendRedirect("login");
             }
-        }
 
+            
+
+        }
     }
 
     /**

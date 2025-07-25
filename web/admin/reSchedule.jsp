@@ -123,6 +123,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                <c:when test="${slot.slotId == slotId}">btn-success text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
