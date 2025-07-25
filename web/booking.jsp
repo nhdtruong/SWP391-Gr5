@@ -272,28 +272,31 @@
 
 
                                             <div class="card-footer text-start">
-                                                <c:if test="${truong==null}">
-                                                    <c:if test="${sessionScope.token == 'chuyenkhoa'}">
-                                                        <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
+
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                    <c:if test="${not empty sessionScope.chuyenkhoaTypeDoctor}">
+                                                        <a href="doctor" class="btn btn-outline-secondary">
                                                             <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                         </a>
                                                     </c:if>
-                                                    <c:if test="${sessionScope.token == 'online'}">
-                                                        <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                    <c:if test="${empty sessionScope.chuyenkhoaTypeDoctor}">
+                                                        <a href="booking?stepName=doctor&departmentId=${departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
                                                             <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                         </a>
                                                     </c:if>
-                                                    <c:if test="${sessionScope.token == 'packageService'}">
-                                                        <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
-                                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                        </a>
-                                                    </c:if>
+
                                                 </c:if>
-                                                <c:if test="${truong!=null}">
-                                                    <a href="doctor?action=all" class="btn btn-outline-secondary">
+                                                <c:if test="${sessionScope.token == 'online'}">
+                                                    <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
+                                                <c:if test="${sessionScope.token == 'packageService'}">
+                                                    <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+
 
                                             </div>
                                         </div>
@@ -433,16 +436,17 @@
                                                 </div>
 
                                             </div>
-                                           
-                                                <div class="card-footer text-start">
-                                                    <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                    </a>
-                                                </div>
-                                           
+
+                                            <div class="card-footer text-start">
+                                                
+                                                <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                </a>
+                                            </div>
 
 
-                                          
+
+
                                         </div>
                                     </div>
 

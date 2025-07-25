@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.coordinator;
 
 import dal.CategoryServiceDAO;
 import dal.DepartmentDAO;
@@ -90,27 +90,31 @@ public class AddServiceController extends HttpServlet {
         String discount_ = request.getParameter("discount");
         String paymentTypeId = request.getParameter("payment_type_id");
         String img = "default";
-        
-         double discount = 0;
+
+        double discount = 0;
         if (discount_ != null) {
             discount = Double.parseDouble(discount_) / 100;
         }
 
-       int serviceId =  serviceDAO.addService(serviceName, (Integer.parseInt(bhyt) == 1) ? true : false,
+        int serviceId = serviceDAO.addService(serviceName, (Integer.parseInt(bhyt) == 1) ? true : false,
                 description,
                 Integer.parseInt(categoryServiceId),
                 Integer.parseInt(derpartmentId),
                 Double.parseDouble(fee), discount,
                 Integer.parseInt(paymentTypeId), img);
-        if(categoryServiceId.equals("2")){
-            
+        if (categoryServiceId.equals("2")) {
+
             String doctorId = request.getParameter("doctorId");
             DoctorServiceDAO doctorServiceDAO = new DoctorServiceDAO();
-            doctorServiceDAO.addDoctorToService(Integer.parseInt(doctorId),serviceId);
-            
+            doctorServiceDAO.addDoctorToService(Integer.parseInt(doctorId), serviceId);
+
         }
-        request.setAttribute("success", "success");
-        request.getRequestDispatcher("servicemanager?action=all").forward(request, response);
+        
+        if (serviceId > 0) {
+            request.setAttribute("success", "success");
+            request.getRequestDispatcher("servicemanager?action=all").forward(request, response);
+        }
+
     }
 
     /**
