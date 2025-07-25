@@ -42,7 +42,7 @@ public class LoginServerlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
-
+    
         UserDAO dao = new UserDAO();
         String action = "";
         action = request.getParameter("action");
@@ -68,8 +68,11 @@ public class LoginServerlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+//            boolean isMatch=false;
             boolean isMatch = PasswordUtils.checkPassword(password, account.getPassword());
+
             isMatch = password.equals("1234");
+
             if (!isMatch) {
                 request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
