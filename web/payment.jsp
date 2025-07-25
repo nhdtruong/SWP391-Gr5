@@ -113,14 +113,14 @@
                                                     </label>
 
                                                     <!-- Ví Momo -->
-                                                    <label class="d-flex align-items-start mb-2 payment-option" for="vimo">
+<!--                                                    <label class="d-flex align-items-start mb-2 payment-option" for="vimo">
                                                         <input class="form-check-input me-2 mt-1" type="radio" name="paymentMethod" id="vimo" value="Ví Momo" disabled />
                                                         <div>
                                                             <span class="form-check-label">Ví Momo</span>
                                                         </div>
                                                     </label>
 
-                                                    <!-- Thẻ quốc tế -->
+                                                     Thẻ quốc tế 
                                                     <label class="d-flex align-items-start mb-2 payment-option" for="theQT">
                                                         <input class="form-check-input me-2 mt-1" type="radio" name="paymentMethod" id="theQT" value="Thẻ quốc tế Visa, Master, JCB" disabled  />
                                                         <div>
@@ -129,7 +129,7 @@
                                                         </div>
                                                     </label>
 
-                                                    <!-- Internet Banking -->
+                                                     Internet Banking 
                                                     <label class="d-flex align-items-start mb-2 payment-option" for="internetBanking">
                                                         <input class="form-check-input me-2 mt-1" type="radio" name="paymentMethod" id="internetBanking" value="ATM / IB" disabled />
                                                         <div>
@@ -138,14 +138,14 @@
                                                         </div>
                                                     </label>
 
-                                                    <!-- Thanh toán hộ -->
+                                                     Thanh toán hộ 
                                                     <label class="d-flex align-items-start mb-2 payment-option" for="hom">
                                                         <input class="form-check-input me-2 mt-1" type="radio" name="paymentMethod" id="hom" value="Thanh toán hộ" disabled />
                                                         <div>
                                                             <span class="form-check-label">Thanh toán hộ</span><br />
                                                             <small class="text-muted">Chia sẻ link thanh toán cho người thân</small>
                                                         </div>
-                                                    </label>
+                                                    </label>-->
 
                                                     <!-- Phòng khám -->
                                                     <c:if test="${sessionScope.serviceBooking.payment_type_id == 1}" >

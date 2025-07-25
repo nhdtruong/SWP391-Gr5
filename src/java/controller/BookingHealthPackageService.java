@@ -70,18 +70,8 @@ public class BookingHealthPackageService extends HttpServlet {
         request.setAttribute("stepName", stepName);
         session.setAttribute("isBHYT", "0");
         session.setAttribute("token", "packageService");
-        if (stepName.equals("service")) {
-
-            ServiceDAO serviceDao = new ServiceDAO();
-            String service_id = request.getParameter("service_id");
-            String categoryService_id = request.getParameter("categoryService_id");
-            session.removeAttribute("serviceBooking");
-            List<Service> listService = serviceDao.getServicesByServiceId(Integer.parseInt(service_id));
-            request.setAttribute("listService", listService);
-            request.setAttribute("categoryService_id", categoryService_id);
-            request.getRequestDispatcher("booking.jsp").forward(request, response);
-
-        } else if (stepName.equals("dateTime")) {
+        
+        if (stepName.equals("dateTime")) {
     
             session.removeAttribute("departmentId");
             session.removeAttribute("patient");
@@ -94,9 +84,9 @@ public class BookingHealthPackageService extends HttpServlet {
             ServiceDAO serviceDao = new ServiceDAO();
             WeeklyPackageServiceScheduleDAO packageServiceScheduleDAO = new WeeklyPackageServiceScheduleDAO();
        
-            
-            request.setAttribute("categoryService_id", categoryService_id);
-            request.setAttribute("service_id", service_id);
+            session.setAttribute("service_id", service_id);
+            session.setAttribute("categoryService_id", categoryService_id);
+           
             Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(service_id));
             session.setAttribute("serviceBooking", serviceBooking);
 

@@ -126,14 +126,9 @@
                                             <h5 class="mb-0">Vui lòng chọn Bác sĩ</h5>
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex mb-3 flex-wrap">
-                                                <input type="text" class="form-control me-2 mb-2" placeholder="Tìm nhanh bác sĩ" style="flex: 1 1 auto;">
-                                                <button class="btn btn-outline-primary me-2 mb-2">Học hàm / học vị</button>
-                                                <button class="btn btn-outline-primary me-2 mb-2">Chuyên khoa</button>
-                                                <button class="btn btn-outline-primary mb-2">Giới tính</button>
-                                            </div>
+                                           
 
-
+                                      
                                             <c:if test="${empty listDoctor}">
                                                 <div class="text-center mt-5">
                                                     <h5 class="mt-3 text-muted">Không tìm thấy bác sĩ có lịch khám.</h5>
@@ -435,7 +430,7 @@
 
                                             <div class="card-footer text-start">
                                                 <c:if test="${sessionScope.token == 'packageService'}">
-                                                    <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                    <a href="healthPackageService?action=all&categoryService_id=${sessionScope.categoryService_id}&service_id=${sessionScope.service_id}" class="btn btn-outline-secondary">
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
