@@ -70,37 +70,32 @@ public class BookingHealthPackageService extends HttpServlet {
         request.setAttribute("stepName", stepName);
         session.setAttribute("isBHYT", "0");
         session.setAttribute("token", "packageService");
-        if (stepName.equals("service")) {
+        
+        if (stepName.equals("dateTime")) {
+    
             session.removeAttribute("departmentId");
             session.removeAttribute("patient");
             session.removeAttribute("dateBooking");
             session.removeAttribute("slotStart");
             session.removeAttribute("slotEnd");
-            ServiceDAO serviceDao = new ServiceDAO();
+            
             String service_id = request.getParameter("service_id");
             String categoryService_id = request.getParameter("categoryService_id");
-            session.removeAttribute("serviceBooking");
-            List<Service> listService = serviceDao.getServicesByServiceId(Integer.parseInt(service_id));
-            request.setAttribute("listService", listService);
-            request.setAttribute("categoryService_id", categoryService_id);
-            request.getRequestDispatcher("booking.jsp").forward(request, response);
-
-        } else if (stepName.equals("dateTime")) {
             ServiceDAO serviceDao = new ServiceDAO();
             WeeklyPackageServiceScheduleDAO packageServiceScheduleDAO = new WeeklyPackageServiceScheduleDAO();
-            String serviceId = request.getParameter("serviceId");
-            
-            Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
+       
+            session.setAttribute("service_id", service_id);
+            session.setAttribute("categoryService_id", categoryService_id);
+           
+            Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(service_id));
             session.setAttribute("serviceBooking", serviceBooking);
 
-            List<WorkingDateSchedule> listWDS = packageServiceScheduleDAO.getPackageServiceSchedule7Days(Integer.parseInt(serviceId));
+            List<WorkingDateSchedule> listWDS = packageServiceScheduleDAO.getPackageServiceSchedule7Days(Integer.parseInt(service_id));
             request.setAttribute("listWDS", listWDS);
 
             request.getRequestDispatcher("booking.jsp").forward(request, response);
-            
-            
 
-        }else if(stepName.equals("chooseRecords")){
+        } else if (stepName.equals("chooseRecords")) {
             String dateBooking_ = request.getParameter("dateBooking");
             String slotId_ = request.getParameter("slotId");
             String slotStart_ = request.getParameter("slotStart");
@@ -108,13 +103,12 @@ public class BookingHealthPackageService extends HttpServlet {
             Date dateBooking = Date.valueOf(dateBooking_);
             Time slotStart = Time.valueOf(slotStart_);
             Time slotEnd = Time.valueOf(slotEnd_);
-            session.setAttribute("dateBooking",dateBooking );
+            session.setAttribute("dateBooking", dateBooking);
             session.setAttribute("slotId", slotId_);
             session.setAttribute("slotStart", slotStart);
             session.setAttribute("slotEnd", slotEnd);
             response.sendRedirect("chooseRecords");
 
-            
         }
     }
 

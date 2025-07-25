@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.coordinator;
 
-import dal.DoctorScheduleDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,18 +11,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.WorkingDateSchedule;
-import java.sql.Date;
-import java.sql.Time;
+import dal.DoctorScheduleDAO;
 import dal.DoctorScheduleSlotsDAO;
 import java.net.URLEncoder;
+import java.util.List;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  *
  * @author DELL
  */
-@WebServlet(name = "UpdateDoctorScheduleDetail", urlPatterns = {"/updateDoctorScheduleDetail"})
-public class UpdateDoctorScheduleDetail extends HttpServlet {
+@WebServlet(name = "AddDoctorWorkingDay", urlPatterns = {"/addDoctorWorkingDay"})
+public class AddDoctorWorkingDay extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +42,10 @@ public class UpdateDoctorScheduleDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateDoctorScheduleDetail</title>");
+            out.println("<title>Servlet AddDoctorWorkingDay</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UpdateDoctorScheduleDetail at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddDoctorWorkingDay at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,14 +65,13 @@ public class UpdateDoctorScheduleDetail extends HttpServlet {
             throws ServletException, IOException {
         String doctorId = request.getParameter("doctorId");
         String doctorName = request.getParameter("doctorName");
-        String workingDate = request.getParameter("workingDate");
-        Date date = Date.valueOf(workingDate);
-        DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-        WorkingDateSchedule WDS = DSD.getWorkingDayScheduleOfDoctor(Integer.parseInt(doctorId), date);
         request.setAttribute("doctorId", doctorId);
         request.setAttribute("doctorName", doctorName);
-        request.setAttribute("WDS", WDS);
-        request.getRequestDispatcher("admin/updateDoctorScheduleDetail.jsp").forward(request, response);
+        DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+        List<Date> listDate = DSD.getAllDaysWorkingInscheduleOfDoctor(Integer.parseInt(doctorId));
+        request.setAttribute("listDate", listDate);
+        request.getRequestDispatcher("admin/addWorkingDayDoctor.jsp").forward(request, response);
+
     }
 
     /**
@@ -86,45 +85,42 @@ public class UpdateDoctorScheduleDetail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DoctorScheduleDAO DSD = new DoctorScheduleDAO();
-        String doctorId_ = request.getParameter("doctorId");
-        int doctorId = Integer.parseInt(doctorId_);
-        String doctorName_ = request.getParameter("doctorName");
+        String doctorId = request.getParameter("doctorId");
+        String doctorName = request.getParameter("doctorName");
         String workingDate = request.getParameter("workingDate");
-        Date date = Date.valueOf(workingDate);
-        String action = request.getParameter("action");
+        request.setAttribute("doctorId", doctorId);
+        request.setAttribute("doctorName", doctorName);
+        String status = request.getParameter("status");
+        DoctorScheduleDAO DSD = new DoctorScheduleDAO();
+        DoctorScheduleSlotsDAO DSSD = new DoctorScheduleSlotsDAO();
+        List<Date> listDate = DSD.getAllDaysWorkingInscheduleOfDoctor(Integer.parseInt(doctorId));
+        request.setAttribute("listDate", listDate);
+        String[] day = request.getParameterValues("day");
 
-        if (action.equals("update")) {
+        if (workingDate == null || workingDate.isEmpty()) {
 
-            DoctorScheduleSlotsDAO DSSD = new DoctorScheduleSlotsDAO();
-            String[] day = request.getParameterValues("day");
-            String status = request.getParameter("status");
+            request.setAttribute("errorD", "Hãy chọn ngày làm việc!");
+            request.getRequestDispatcher("admin/addWorkingDayDoctor.jsp").forward(request, response);
 
-            if (day != null) {
-                DSD.deleteDayScheduleOfDoctor(doctorId, date);
-                int schedule_id = DSD.insertDoctorSchedule(doctorId, date, Integer.parseInt(status));
-                for (String days : day) {
+        } else if (day == null) {
+            request.setAttribute("error", "Hãy chọn slot làm việc!");
+            request.getRequestDispatcher("admin/addWorkingDayDoctor.jsp").forward(request, response);
 
-                    String slotstime[] = days.split("-");
+        } else {
+            int scheduleId = DSD.insertDoctorSchedule(Integer.parseInt(doctorId), java.sql.Date.valueOf(workingDate), Integer.parseInt(status));
 
-                    Time timeStart = Time.valueOf(slotstime[0]);
+            for (String days : day) {
 
-                    Time timeEnd = Time.valueOf(slotstime[1]);
+                String slotstime[] = days.split("-");
 
-                    DSSD.insertScheduleSlot(schedule_id, timeStart, timeEnd);
-                }
+                Time timeStart = Time.valueOf(slotstime[0]);
 
-                response.sendRedirect("doctorScheduleDetail?doctorId=" + doctorId
-                        + "&doctorName=" + URLEncoder.encode(doctorName_, "UTF-8"));
-            } else if (day == null) {
-                DSD.deleteDayScheduleOfDoctor(doctorId, date);
-                response.sendRedirect("doctorScheduleDetail?doctorId=" + doctorId
-                        + "&doctorName=" + URLEncoder.encode(doctorName_, "UTF-8"));
+                Time timeEnd = Time.valueOf(slotstime[1]);
+
+                DSSD.insertScheduleSlot(scheduleId, timeStart, timeEnd);
             }
-        } else if (action.equals("delete")) {
-            DSD.deleteDayScheduleOfDoctor(doctorId, date);
             response.sendRedirect("doctorScheduleDetail?doctorId=" + doctorId
-                    + "&doctorName=" + URLEncoder.encode(doctorName_, "UTF-8"));
+                    + "&doctorName=" + URLEncoder.encode(doctorName, "UTF-8"));
         }
 
     }

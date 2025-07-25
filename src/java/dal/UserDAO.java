@@ -22,8 +22,8 @@ public class UserDAO extends DBContext {
 
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
-    public int CountUser(){
+
+    public int CountUser() {
         String sql = "select Count(*) from users";
         try {
             ps = connection.prepareStatement(sql);
@@ -38,13 +38,17 @@ public class UserDAO extends DBContext {
     }
 
     public AccountUser Login(String username) throws SQLException {
-        String sql = "select u.username ,u.password ,u.role_id ,u.email,u.img ,u.status from users u where u.username =?";
+        String sql = "SELECT u.username, d.doctor_name, u.password, u.role_id, u.email, u.img, u.status \n"
+                + "FROM (\n"
+                + "    SELECT * FROM users WHERE username = ? \n"
+                + ") u\n"
+                + " left JOIN doctors d ON u.username = d.username;";
         try {
             ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             rs = ps.executeQuery();
             while (rs.next()) {
-                return new AccountUser(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6));
+                return new AccountUser(rs.getString(1),rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getInt(7));
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -69,12 +73,11 @@ public class UserDAO extends DBContext {
         return null;
     }
 
-      public List<String> getEmailsByRole12() {
+    public List<String> getEmailsByRole12() {
         List<String> emails = new ArrayList<>();
         String sql = "SELECT email FROM users WHERE role_id IN (1, 2)";
 
-        try ( PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 String email = rs.getString("email");
@@ -82,13 +85,12 @@ public class UserDAO extends DBContext {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
 
         return emails;
     }
 
-    
     public AccountUser CheckAccByUsername(String username) {
         String sql = "select u.username  from users u where u.username = ? ";
         try {
@@ -243,8 +245,6 @@ public class UserDAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-    
 
     public void deleteAccountByAdmin(String username) {
         String sql = "DELETE FROM users WHERE username = ?";
@@ -390,20 +390,20 @@ public class UserDAO extends DBContext {
         }
         return list;
     }
-    
+
     public int getDoctorIdByUsername(String username) {
-    String sql = "SELECT doctor_id FROM doctors WHERE username = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt("doctor_id");
+        String sql = "SELECT doctor_id FROM doctors WHERE username = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("doctor_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return -1; 
     }
-    return -1; // Không tìm thấy
-}
 
     public AccountUser getAccountByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
@@ -427,10 +427,10 @@ public class UserDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-      //  new UserDAO().updateAll();
-         UserDAO u =  new UserDAO();
-         System.out.println(u.getEmailsByRole12());
-        
+        //  new UserDAO().updateAll();
+        UserDAO u = new UserDAO();
+        System.out.println(u.getEmailsByRole12());
+
     }
 
     public void updateAll() {

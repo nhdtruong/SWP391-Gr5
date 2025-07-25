@@ -153,7 +153,7 @@
 
                                                             <td class="p-3">${a.patient.patientName}</td>
                                                             <td class="p-3">${a.serviceName}</td>
-                                                            <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/><br>
+                                                            <td class="p-3"><fmt:formatDate value="${a.dateBooking}" pattern="dd/ MM/ yyyy"/><br>
                                                                 <fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> 
                                                             </td>
                                                             <c:if test="${empty a.note }"><td class="p-3">Không</td></c:if>
@@ -198,6 +198,7 @@
                                                                         <input type="hidden" name="currentDoctorName" value="${a.doctorName}" />
                                                                         <input type="hidden" name="patientName" value="${a.patient.patientName}" />
                                                                         <input type="hidden" name="slotId" value="${a.slotId}" />
+                                                                        <input type="hidden" name="slotIdReqChange" value="${a.slotIdReqChange}" />
                                                                         <input type="hidden" name="dateBooking" value="${a.dateBooking}" />
                                                                         <input type="hidden" name="slotEnd" value="${a.slotEnd}" />
                                                                         <input type="hidden" name="slotStart" value="${a.slotStart}" />

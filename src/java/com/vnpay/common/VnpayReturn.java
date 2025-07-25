@@ -88,8 +88,25 @@ public class VnpayReturn extends HttpServlet {
                     int slotId = 0, doctorId = 0;
                     int appointmentId = 0;
                     String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
-                    if (!token.equals("packageService")) {
-                        slotId = Integer.parseInt((String) session.getAttribute("slotId"));
+                    if (token.equals("packageService")) {
+                        appointmentId = appointmentDao.insertAppointment(
+                                appointmentCode,
+                                p.getPatientId(),
+                                s.getService_id(),
+                                dateBooking,
+                                slotStart,
+                                slotEnd,
+                                reason);
+                    } else if(token.equals("online")){
+                        doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
+                        appointmentId = appointmentDao.insertAppointment(
+                                appointmentCode,
+                                p.getPatientId(),
+                                doctorId,
+                                s.getService_id(),
+                                reason);
+                    }else  {
+                         slotId = Integer.parseInt((String) session.getAttribute("slotId"));
                         doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
 
                         appointmentId = appointmentDao.insertAppointment(
@@ -102,15 +119,7 @@ public class VnpayReturn extends HttpServlet {
                                 slotStart,
                                 slotEnd,
                                 reason);
-                    } else {
-                        appointmentId = appointmentDao.insertAppointment(
-                                appointmentCode,
-                                p.getPatientId(),
-                                s.getService_id(),
-                                dateBooking,
-                                slotStart,
-                                slotEnd,
-                                reason);
+                       
 
                     }
 

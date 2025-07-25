@@ -126,14 +126,9 @@
                                             <h5 class="mb-0">Vui lòng chọn Bác sĩ</h5>
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex mb-3 flex-wrap">
-                                                <input type="text" class="form-control me-2 mb-2" placeholder="Tìm nhanh bác sĩ" style="flex: 1 1 auto;">
-                                                <button class="btn btn-outline-primary me-2 mb-2">Học hàm / học vị</button>
-                                                <button class="btn btn-outline-primary me-2 mb-2">Chuyên khoa</button>
-                                                <button class="btn btn-outline-primary mb-2">Giới tính</button>
-                                            </div>
+                                           
 
-
+                                      
                                             <c:if test="${empty listDoctor}">
                                                 <div class="text-center mt-5">
                                                     <h5 class="mt-3 text-muted">Không tìm thấy bác sĩ có lịch khám.</h5>
@@ -272,28 +267,27 @@
 
 
                                             <div class="card-footer text-start">
-                                                <c:if test="${truong==null}">
-                                                    <c:if test="${sessionScope.token == 'chuyenkhoa'}">
-                                                        <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
+
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                    <c:if test="${not empty sessionScope.chuyenkhoaTypeDoctor}">
+                                                        <a href="doctor" class="btn btn-outline-secondary">
                                                             <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                         </a>
                                                     </c:if>
-                                                    <c:if test="${sessionScope.token == 'online'}">
-                                                        <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
+                                                    <c:if test="${empty sessionScope.chuyenkhoaTypeDoctor}">
+                                                        <a href="booking?stepName=doctor&departmentId=${departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
                                                             <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                         </a>
                                                     </c:if>
-                                                    <c:if test="${sessionScope.token == 'packageService'}">
-                                                        <a href="healthPackageService?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
-                                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                        </a>
-                                                    </c:if>
+
                                                 </c:if>
-                                                <c:if test="${truong!=null}">
-                                                    <a href="doctor?action=all" class="btn btn-outline-secondary">
+                                                <c:if test="${sessionScope.token == 'online'}">
+                                                    <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
+
+
 
                                             </div>
                                         </div>
@@ -328,7 +322,7 @@
                                                 <c:forEach var="wds" items="${listWDS}" varStatus="i">
                                                     <div id="date${i.index}" class="slot-group" style="${i.index == 0 ? '' : 'display:none'}">
 
-                                                        <!-- Buổi sáng -->
+                                                        <!--  sáng -->
                                                         <c:if test="${not empty wds.getMorningSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi sáng</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
@@ -357,7 +351,7 @@
                                                             </div>
                                                         </c:if>
 
-                                                        <!-- Buổi chiều -->
+                                                        <!-- chiều -->
                                                         <c:if test="${not empty wds.getAfternoonSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi chiều</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
@@ -386,7 +380,7 @@
                                                             </div>
                                                         </c:if>
 
-                                                        <!-- Buổi tối -->
+                                                        <!--  tối -->
                                                         <c:if test="${not empty wds.getEveningSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi tối</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
@@ -435,10 +429,22 @@
                                             </div>
 
                                             <div class="card-footer text-start">
-                                                <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                </a>
+                                                <c:if test="${sessionScope.token == 'packageService'}">
+                                                    <a href="healthPackageService?action=all&categoryService_id=${sessionScope.categoryService_id}&service_id=${sessionScope.service_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                    <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+
                                             </div>
+
+
+
+
                                         </div>
                                     </div>
 
