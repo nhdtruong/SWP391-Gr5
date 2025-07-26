@@ -16,12 +16,14 @@ public class AppointmentView {
     private int appointmentId;
     private String appointment_code;
     private int slotId;
+    private int slotIdReqChange;
     private Patient patient;
     private String doctorName;
     private int doctorId;
     private double amount;
     private String paymentStatus;
     private Date workingDate;
+    private Date dateBooking;
     private Date created_at;
     private boolean is_refunded;
     private Time slotStart;
@@ -29,6 +31,8 @@ public class AppointmentView {
     private int status;
     private String note;
 
+    
+    
     public AppointmentView() {
     }
 
@@ -97,7 +101,14 @@ public class AppointmentView {
     private String serviceName;
     private String departmentName;
 
+    public Date getDateBooking() {
+        return dateBooking;
+    }
 
+    public void setDateBooking(Date dateBooking) {
+        this.dateBooking = dateBooking;
+    }
+    
 
     public String getDepartmentName() {
         return departmentName;
@@ -221,6 +232,14 @@ public class AppointmentView {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getSlotIdReqChange() {
+        return slotIdReqChange;
+    }
+
+    public void setSlotIdReqChange(int slotIdReqChange) {
+        this.slotIdReqChange = slotIdReqChange;
     }
 
 }

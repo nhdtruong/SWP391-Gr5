@@ -59,14 +59,21 @@
                                         <div class="card-header">
                                             <h5 class="mb-0">Xác nhận thông tin khám</h5>
                                         </div>
+
                                         <div class="card-body" style="padding: 0">
                                             <table class="table  align-middle">
                                                 <thead class="">
                                                     <tr>
                                                         <th style="width: 5%">#</th>
-                                                        <th style="width: 19%">Chuyên khoa</th>
+                                                            <c:if test="${sessionScope.token != 'packageService'}">
+                                                            <th style="width: 19%">Chuyên khoa</th>
+                                                            </c:if>
+                     
                                                         <th style="width: 23%">Dịch vụ</th>
-                                                        <th style="width: 15%" >Bác sĩ</th>
+                                                            <c:if test="${sessionScope.token != 'packageService'}">
+                                                            <th style="width: 15%" >Bác sĩ</th>
+                                                            </c:if>
+
                                                         <th style="width: 20%">Thời gian khám</th>
                                                         <th style="width: 20%">Tiền khám</th>
                                                         <th style="width: 5%"></th>
@@ -74,12 +81,19 @@
                                                 </thead>
                                                 <tbody>
                                                 <td>1</td>
-                                                <td>${sessionScope.departmentName}</td>
+                                                <c:if test="${sessionScope.token != 'packageService'}">
+                                                    <td>${sessionScope.departmentName}</td>
+                                                </c:if>
+
                                                 <td>${sessionScope.serviceBooking.service_name}</td>
-                                                <td>${sessionScope.doctorName}</td>
+                                                <c:if test="${sessionScope.token != 'packageService'}">
+                                                    <td>${sessionScope.doctorName}</td>
+                                                </c:if>
+
+
                                                 <c:if test="${sessionScope.token == 'online'}"> <td>Chờ cập nhật</td></c:if>
                                                 <c:if test="${sessionScope.token == 'chuyenkhoa'}"> <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td></c:if>
-
+                                                <c:if test="${sessionScope.token == 'packageService'}"> <td><fmt:formatDate value="${sessionScope.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${sessionScope.slotEnd}" pattern="HH:mm"/><br/><fmt:formatDate value="${sessionScope.dateBooking}" pattern="dd/ MM/ yyyy"/></td></c:if>
                                                 <c:if test="${sessionScope.isBHYT == '0'}"><td> <fmt:formatNumber value="${sessionScope.serviceBooking.fee}" pattern="#,##0"/> đ</td></c:if>
                                                 <c:if test="${sessionScope.isBHYT == '1' && empty sessionScope.changeY}">
                                                     <td>

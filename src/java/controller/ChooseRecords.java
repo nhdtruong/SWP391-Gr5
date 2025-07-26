@@ -71,6 +71,7 @@ public class ChooseRecords extends HttpServlet {
         List<Patient> listPa = pDao.getPatientByUsername(acc.getUsername());
         request.setAttribute("records", listPa);
         request.getRequestDispatcher("chooseRecords.jsp").forward(request, response);
+        
     } 
 
     /** 

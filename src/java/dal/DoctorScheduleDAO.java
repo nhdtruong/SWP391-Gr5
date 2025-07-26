@@ -390,7 +390,7 @@ public class DoctorScheduleDAO extends DBContext {
                 if (slots.stream().allMatch(s -> s.getStatus() == -1)) {
                     iterator.remove(); // xóa hôm nay
                 }
-                break; // đã xử lý hôm nay, không cần duyệt tiếp
+                break; // đã xử lý hôm nay, không cần duyệt tiếpok 
             }
         }
 

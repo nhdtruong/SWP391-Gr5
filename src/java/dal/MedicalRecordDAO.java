@@ -89,11 +89,9 @@ public class MedicalRecordDAO extends DBContext {
                         record.setVisitDate(rs.getDate("visit_date"));
                         record.setMedicines(new ArrayList<>());
 
-             
                         Patient patient = getPatientById(pid);
                         record.setPatient(patient);
 
-                      
                         record.setDoctorName(rs.getNString("doctor_name"));
                         record.setDepartmentName(rs.getNString("department_name"));
 
@@ -206,6 +204,43 @@ public class MedicalRecordDAO extends DBContext {
         }
 
         return list;
+    }
+    
+    public List<MedicalRecord> getMedicalRecordsByDoctorAndPatient(int doctorId, int patientId) {
+        List<MedicalRecord> records = new ArrayList<>();
+        String sql = "SELECT [record_id], [patient_id], [doctor_id], [symptoms], [diagnosis], "
+                + "[conclusion], [instruction], [note], [visit_date] "
+                + "FROM [medical_record] "
+                + "WHERE doctor_id = ? AND patient_id = ?";
+        MedicineDAO medicineDAO = new MedicineDAO();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, doctorId);
+            ps.setInt(2, patientId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    MedicalRecord record = new MedicalRecord();
+                    record.setRecordId(rs.getInt("record_id"));
+                    record.setPatientId(rs.getInt("patient_id"));
+                    record.setDoctorId(rs.getInt("doctor_id"));
+                    record.setSymptoms(rs.getString("symptoms"));
+                    record.setDiagnosis(rs.getString("diagnosis"));
+                    record.setConclusion(rs.getString("conclusion"));
+                    record.setInstruction(rs.getString("instruction"));
+                    record.setNote(rs.getString("note"));
+                    record.setVisitDate(rs.getDate("visit_date"));
+                    record.setMedicines(medicineDAO.GetMedicineByRecord_id(record.getRecordId()));
+                    
+                    records.add(record);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return records;
     }
 
     public boolean insertMedicalRecord(

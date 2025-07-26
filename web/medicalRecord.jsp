@@ -102,56 +102,108 @@
                                             <input type="hidden" name="doctorId" value="${doctorId}" />
                                         </div>
                                     </div>
-
                                     <!-- 2. Nội dung khám -->
-                                    <div class="card mb-4">
-                                        <div class="card-header bg-primary text-white fw-bold">Nội dung khám</div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label>Triệu chứng</label>
-                                                <textarea class="form-control" name="symptoms" rows="2" placeholder="Nhập triệu chứng bệnh nhân..."></textarea>
+                                    <c:forEach items="${listmdr}" var="mdr">
+                                        <div class="card mb-4">
+                                            <div class="card-header bg-primary text-white fw-bold">Nội dung khám</div>
+
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label>Triệu chứng</label>
+                                                    <textarea class="form-control" readonly="" name="symptoms" rows="2" value="${mdr.getSymptoms()}" placeholder="Nhập triệu chứng bệnh nhân...">${mdr.getSymptoms()}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Chẩn đoán</label>
+                                                    <textarea class="form-control"  readonly="" value="${mdr.getDiagnosis()}" name="diagnosis" rows="2" placeholder="Nhập chẩn đoán...">${mdr.getDiagnosis()}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Kết luận</label>
+                                                    <textarea class="form-control"  readonly="" value="${mdr.getConclusion()}" name="conclusion" rows="2" placeholder="Nhập kết luận khám...">${mdr.getConclusion()}</textarea>
+                                                </div>
+                                                
+
+                                                <div class="card mb-4">
+                                                    <div class="card-header bg-success text-white fw-bold">
+                                                        💊 Kê đơn thuốc
+                                                    </div>
+                                                    <c:if test="${ empty mdr.getMedicines()}">
+                                                        <div class="card-body">
+                                                            <div id="selectedMedicineList">
+                                                                <p class="text-muted">Chưa có thuốc nào được chọn.</p>
+                                                            </div>
+                                                        </div>
+                                                    </c:if>
+
+                                                    <c:if test="${not empty mdr.getMedicines()}">
+                                                        <div class="card-body">
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>STT</th>
+                                                                        <th>Tên thuốc</th>
+                                                                        <th>Đơn vị</th>
+                                                                        <th>Công dụng</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach var="m" items="${mdr.getMedicines()}" varStatus="idx">
+                                                                        <tr>
+                                                                            <td>${idx.index + 1}</td>
+                                                                            <td>${m.medicineName}</td>
+                                                                            <td>${m.unit}</td>
+                                                                            <td>${m.usage}</td>
+                                                                        </tr>
+                                                                    </c:forEach>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </c:if>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label>Hướng dẫn sử dụng thuốc</label>
+                                                    <textarea class="form-control"  readonly="" value="${mdr.getInstruction()}" name="conclusion" rows="2" placeholder="Nhập kết luận khám...">${mdr.getConclusion()}</textarea>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label>Ghi chú</label>
+                                                    <textarea class="form-control"  readonly="" value="${mdr.getNote() }" name="conclusion" rows="2" placeholder="Nhập kết luận khám...">${mdr.getConclusion()}</textarea>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label>Chẩn đoán</label>
-                                                <textarea class="form-control" name="diagnosis" rows="2" placeholder="Nhập chẩn đoán..."></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label>Kết luận</label>
-                                                <textarea class="form-control" name="conclusion" rows="2" placeholder="Nhập kết luận khám..."></textarea>
-                                            </div>
+
                                         </div>
-                                    </div>
+                                    </c:forEach>
 
 
-                                    <div class="card mb-4">
-                                        <div class="card-header bg-success text-white fw-bold">
-                                            💊 Kê đơn thuốc
-                                        </div>
-                                        <div class="card-body">
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#medicineModal">
-                                                ➕ Thêm thuốc
-                                            </button>
+                                    <!--                                    <div class="card mb-4">
+                                                                            <div class="card-header bg-success text-white fw-bold">
+                                                                                💊 Kê đơn thuốc
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#medicineModal">
+                                                                                    ➕ Thêm thuốc
+                                                                                </button>
+                                    
+                                                                                <div id="selectedMedicineList">
+                                                                                    <p class="text-muted">Chưa có thuốc nào được chọn.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>-->
 
-                                            <div id="selectedMedicineList">
-                                                <p class="text-muted">Chưa có thuốc nào được chọn.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 4. Hướng dẫn dùng thuốc -->
-                                    <div class="card mb-4">
-                                        <div class="card-header bg-warning fw-bold">Hướng dẫn dùng thuốc</div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label>Hướng dẫn dùng thuốc (chung)</label>
-                                                <textarea class="form-control" name="instruction" rows="2" placeholder="Ví dụ: Uống sau ăn, ngày 3 lần..."></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label>Ghi chú thêm (nếu có)</label>
-                                                <textarea class="form-control" name="note" rows="2" placeholder="Ví dụ: Tái khám sau 7 ngày..."></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!--                                     4. Hướng dẫn dùng thuốc 
+                                                                        <div class="card mb-4">
+                                                                            <div class="card-header bg-warning fw-bold">Hướng dẫn dùng thuốc</div>
+                                                                            <div class="card-body">
+                                                                                <div class="mb-3">
+                                                                                    <label>Hướng dẫn dùng thuốc (chung)</label>
+                                                                                    <textarea class="form-control" name="instruction" rows="2" placeholder="Ví dụ: Uống sau ăn, ngày 3 lần..."></textarea>
+                                                                                </div>
+                                                                                <div class="mb-3">
+                                                                                    <label>Ghi chú thêm (nếu có)</label>
+                                                                                    <textarea class="form-control" name="note" rows="2" placeholder="Ví dụ: Tái khám sau 7 ngày..."></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>-->
 
                                     <div class="modal fade" id="medicineModal" tabindex="-1" aria-labelledby="medicineModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -200,9 +252,6 @@
 
 
                                     <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary px-4 fw-bold">
-                                            💾 Lưu bệnh án
-                                        </button>
                                     </div>
 
                                 </form>

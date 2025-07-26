@@ -97,7 +97,7 @@
         </ul>
 
         <div id="navigation">
-            <ul class="navigation-menu nav-left">
+            <ul class="navigation-menu nav-left" style="margin-left: 300px">
                 <li><a href="home" class="sub-menu-item">Trang chủ</a></li>
                 <li><a href="doctor?action=all" class="sub-menu-item">Bác sĩ</a></li>
 
@@ -111,22 +111,16 @@
                         <li><a href="specialty" class="sub-menu-item">Đặt khám chuyên khoa</a></li>
                         <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
                         <li><a href="callVideoWithDoctor?action=all&categoryService_id=2" class="sub-menu-item">Gọi video với bác sĩ</a></li>
-                        <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
+                        <li><a href="healthPackageService?action=all&categoryService_id=4" class="sub-menu-item">Gói khám sức khỏe</a></li>
 
-                        <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
-                        <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
-                        <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
-                        <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>
-                        <li><a href="service?type=1" class="sub-menu-item">Khám tổng quát</a></li>
-                        <li><a href="service?type=2" class="sub-menu-item">Chuyên khoa</a></li>
-                        <li><a href="service?type=3" class="sub-menu-item">Tư vấn online</a></li>
+                        
 
 
                     </ul>
                 </li>
 
                 <li><a href="contact" class="sub-menu-item">Liên hệ</a></li>
-                <li><a href="blogs" class="sub-menu-item">Tin tức & chủ đề</a></li>
+<!--                <li><a href="blogs" class="sub-menu-item">Tin tức & chủ đề</a></li>-->
             </ul>
         </div>
     </div>

@@ -1,4 +1,3 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -85,6 +84,7 @@
                                     <!-- hidden input để lưu tỷ lệ 0.x gửi về server -->
                                     <input type="hidden" id="discount" name="discount" value="0" />
                                     <div class="col-md-6 mb-3">
+
                                         <label class="form-label">Phương thức thanh toán<span class="text-danger">*</span></label>
                                         <select name="payment_type_id" class="form-select">
                                             <option value="2" <c:if test="${service.payment_type_id == 2}">selected</c:if>>Thanh toán online</option>
@@ -111,17 +111,17 @@
         <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2/dist/trumbowyg.min.js"></script>
 
         <script>
-                                            // Format tiền khi nhập vào (giống 100000 → 100.000)
+
                                             function formatMoneyInput(input) {
                                                 input.addEventListener('input', function () {
-                                                    let value = this.value.replace(/\D/g, ''); // chỉ giữ số
-                                                    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // thêm dấu chấm
+                                                    let value = this.value.replace(/\D/g, '');
+                                                    this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                                                 });
                                             }
                                             const feeInput = document.getElementById('feeInput');
                                             formatMoneyInput(feeInput);
 
-                                            // Format discount
+
                                             const feeDiscount = document.getElementById('feeDiscount');
                                             formatMoneyInput(feeDiscount);
 
@@ -134,6 +134,7 @@
                                                     var reader = new FileReader();
 
                                                     reader.onload = function (e) {
+
                                                         const preview = document.getElementById('previewImage');
                                                         preview.src = e.target.result;
                                                         preview.style.display = 'block';
@@ -145,9 +146,8 @@
 
                                             function CheckFee(text) {
 
-                                                const feeValue = text.value.replace(/,/g, ''); // Xoá dấu phẩy ngăn cách số
-                                                const digitsOnly = feeValue.replace(/\D/g, ''); // Lấy phần chỉ chứa số
-
+                                                const feeValue = text.value.replace(/,/g, '');
+                                                const digitsOnly = feeValue.replace(/\D/g, '');
                                                 const feeNumber = parseInt(digitsOnly, 10);
 
                                                 if (digitsOnly < 0) {
@@ -179,12 +179,10 @@
                                             function CheckMaxLength200(text) {
                                                 const value = text.value;
 
-                                                // Kiểm tra khoảng trắng ở đầu
+
                                                 if (/^\s/.test(value)) {
                                                     text.setCustomValidity('Không được có khoảng trắng ở đầu.');
-                                                }
-                                                // Kiểm tra độ dài tối đa
-                                                else if (value.length > 200) {
+                                                } else if (value.length > 200) {
                                                     text.setCustomValidity("Vui lòng nhập không quá 200 ký tự.");
                                                 } else {
                                                     text.setCustomValidity('');
@@ -202,7 +200,7 @@
                                                     discountInput.disabled = false;
                                                 } else {
                                                     discountInput.disabled = true;
-                                                    discountInput.value = ""; // nếu không áp dụng BHYT
+                                                    discountInput.value = "";
                                                 }
                                             }
 
@@ -226,5 +224,8 @@
                                             });
 
         </script>
+
+
+
     </body>
-</html>
+</html>                         

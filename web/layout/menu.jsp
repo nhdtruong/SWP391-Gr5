@@ -140,7 +140,7 @@
                                             <a class="dropdown-item text-dark" href="dashboard?action=default"><i class="uil uil-setting me-1"></i> Quản lý</a>
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 2}">
-                                            <a class="dropdown-item text-dark" href="appointmentmanage?action=all"><i class="uil uil-calendar-alt me-1"></i> Quản lý</a>
+                                            <a class="dropdown-item text-dark" href="dashboard?action=default"><i class="uil uil-calendar-alt me-1"></i> Quản lý</a>
                                         </c:when>
                                         <c:when test="${sessionScope.user.role == 4}">
                                             <a class="dropdown-item text-dark" href="profile?action=profile"><i class="uil uil-user-md me-1"></i> Quản lý</a>
@@ -155,7 +155,7 @@
                                     <a class="dropdown-item text-dark" href="logout">
                                         <i class="uil uil-sign-out-alt me-1"></i> Đăng xuất
                                     </a>
-                                    <c:if test="${sessionScope.user.role == 1 || sessionScope.user.role == 3}">
+                                    <c:if test="${sessionScope.user.role == 3}">
                                         <a class="dropdown-item text-dark" href="dashboard">
                                             <i class="uil uil-sign-out-alt me-1"></i> Quản Lý
                                         </a>
@@ -169,7 +169,7 @@
 
                 <div id="navigation">
 
-                    <ul class="navigation-menu nav-left nav-light">
+                    <ul class="navigation-menu nav-left nav-light" style="margin-left: 300px">
                         <li><a href="home" class="sub-menu-item">Trang chủ</a></li>
                         <li><a href="doctor?action=all" class="sub-menu-item">Bác sĩ</a></li>
 
@@ -183,17 +183,13 @@
                                 <li><a href="specialty" class="sub-menu-item">Đặt khám chuyên khoa</a></li>
                                 <li><a href="doctor" class="sub-menu-item">Đặt khám theo bác sĩ</a></li>
                                 <li><a href="callVideoWithDoctor?action=all&categoryService_id=2" class="sub-menu-item">Gọi video với bác sĩ</a></li>
-                                <li><a href="#" class="sub-menu-item">Gói khám sức khỏe</a></li>
-<!--                                <li><a href="#" class="sub-menu-item">Đặt khám ngoài giờ</a></li>
-                                <li><a href="#" class="sub-menu-item">Đặt lịch xét nghiệm</a></li>
-                                <li><a href="#" class="sub-menu-item">Đặt lịch tiêm chủng</a></li>
-                                <li><a href="#" class="sub-menu-item">Y tế tại nhà</a></li>-->
+                                <li><a href="healthPackageService?action=all&categoryService_id=4" class="sub-menu-item">Gói khám sức khỏe</a></li>
+
 
                             </ul>
                         </li>
 
                         <li><a href="contact" class="sub-menu-item">Liên hệ</a></li>
-                        <li><a href="blogs" class="sub-menu-item">Tin tức & chủ đề</a></li>
                     </ul>
 
 

@@ -69,52 +69,69 @@ public class Booking extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        
+
         String stepName = request.getParameter("stepName");
+
+          request.setAttribute("stepName", stepName);
         
-        request.setAttribute("stepName", stepName);
-        session.setAttribute("token","chuyenkhoa");
+         session.setAttribute("token", "chuyenkhoa");
        
         
         if (stepName.equals("doctor")) {
+            
             session.removeAttribute("serviceBooking");
             session.removeAttribute("patient");
+            session.removeAttribute("chuyenkhoaTypeDoctor");
             DoctorDAO doctDAO = new DoctorDAO();
             String departmentId = request.getParameter("departmentId");
             String departmentName = request.getParameter("departmentName");
             List<Doctor> listDoctor = doctDAO.getAllDoctorInDepartmanentHaveSchedule(Integer.parseInt(departmentId));
             session.setAttribute("departmentName", departmentName);
-            session.setAttribute("departmentId", departmentId);
             session.removeAttribute("doctorId");
             session.removeAttribute("doctorName");
-            request.setAttribute("listDoctor", listDoctor);  
+            session.setAttribute("departmentId", departmentId);
+            request.setAttribute("listDoctor", listDoctor);
             request.getRequestDispatcher("booking.jsp").forward(request, response);
-            
-        } 
-        else if (stepName.equals("service")) {
+
+        } else if (stepName.equals("service")) {
             
             ServiceDAO serviceDao = new ServiceDAO();
             String doctorId = request.getParameter("doctorId");
             String doctorName = request.getParameter("doctorName");
+            String departmentId = (String)session.getAttribute("departmentId");
+ 
+            String chuyenkhoaTypeDoctor = (String)session.getAttribute("chuyenkhoaTypeDoctor");
+            
+            if(chuyenkhoaTypeDoctor == null || chuyenkhoaTypeDoctor.isEmpty() ){
+                chuyenkhoaTypeDoctor = request.getParameter("chuyenkhoaTypeDoctor");
+                if(chuyenkhoaTypeDoctor != null) {
+                    departmentId =  request.getParameter("departmentId");
+                    session.setAttribute("departmentId", departmentId);
+                    session.setAttribute("chuyenkhoaTypeDoctor", chuyenkhoaTypeDoctor);
+                }
+            }
+            
             session.setAttribute("doctorId", doctorId);
             session.setAttribute("doctorName", doctorName);
             session.removeAttribute("serviceBooking");
             session.removeAttribute("isBHYT");
-            String departmentId = (String) session.getAttribute("departmentId");
+        
             List<Service> listService = serviceDao.getServicesByDoctorAndDepartment(Integer.parseInt(doctorId), Integer.parseInt(departmentId));
-            request.setAttribute("listService",listService);
+            request.setAttribute("listService", listService);
             request.getRequestDispatcher("booking.jsp").forward(request, response);
-        }
-        else if(stepName.equals("dateTime")){
             
+            
+        } else if (stepName.equals("dateTime")) {
+
             DoctorScheduleDAO DSD = new DoctorScheduleDAO();
             ServiceDAO serviceDao = new ServiceDAO();
-            String doctorId = (String) session.getAttribute("doctorId");
-            List<WorkingDateSchedule> listWDS =  DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
+            String doctorId = request.getParameter("doctorId");
+            List<WorkingDateSchedule> listWDS = DSD.getWorkingScheduleOfDoctor10Day(Integer.parseInt(doctorId));
             String serviceId = request.getParameter("serviceId");
             String isBHYT = request.getParameter("isBHYT");
-            if(isBHYT != null){
-               session.setAttribute("isBHYT", isBHYT); 
+
+            if (isBHYT != null) {
+                session.setAttribute("isBHYT", isBHYT);
             }
             Service serviceBooking = serviceDao.getServiceById(Integer.parseInt(serviceId));
             session.setAttribute("serviceBooking", serviceBooking);
@@ -123,9 +140,8 @@ public class Booking extends HttpServlet {
             session.removeAttribute("slotEnd");
             request.setAttribute("listWDS", listWDS);
             request.getRequestDispatcher("booking.jsp").forward(request, response);
- 
-        }
-        else if(stepName.equals("chooseRecords")){
+
+        } else if (stepName.equals("chooseRecords")) {
             String dateBooking_ = request.getParameter("dateBooking");
             String slotId_ = request.getParameter("slotId");
             String slotStart_ = request.getParameter("slotStart");
@@ -133,13 +149,12 @@ public class Booking extends HttpServlet {
             Date dateBooking = Date.valueOf(dateBooking_);
             Time slotStart = Time.valueOf(slotStart_);
             Time slotEnd = Time.valueOf(slotEnd_);
-            session.setAttribute("dateBooking",dateBooking );
+            session.setAttribute("dateBooking", dateBooking);
             session.setAttribute("slotId", slotId_);
             session.setAttribute("slotStart", slotStart);
             session.setAttribute("slotEnd", slotEnd);
             response.sendRedirect("chooseRecords");
 
-            
         }
 
     }

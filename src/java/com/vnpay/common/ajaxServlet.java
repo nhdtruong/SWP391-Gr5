@@ -29,6 +29,8 @@ import model.Patient;
 import model.Service;
 import config.GenerateAppoinmentCode;
 import config.GenerateVnpTxnRef;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  *
@@ -46,7 +48,7 @@ public class ajaxServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-     //
+        //
         HttpSession session = req.getSession();
         PaymentDAO payDAO = new PaymentDAO();
         AppointmentDAO appointmentDao = new AppointmentDAO();
@@ -62,27 +64,61 @@ public class ajaxServlet extends HttpServlet {
             resp.sendRedirect("home");
             return;
         }
-        
+
         if (paymentMethod.equals("taiPhongKham")) {
-            
+            String token = (String) session.getAttribute("token");
+            String reason = (String) session.getAttribute("reason");
+            Date dateBooking = (Date) session.getAttribute("dateBooking");
+            Time slotStart = (Time) session.getAttribute("slotStart");
+            Time slotEnd = (Time) session.getAttribute("slotEnd");
+            int slotId = 0 ,doctorId = 0;  int appointmentId =0;
             String appointmentCode = GenerateAppoinmentCode.generateAppoinmentCode();
-            int appointmentId = appointmentDao.insertAppointment(appointmentCode, p.getPatientId(), Integer.parseInt((String) session.getAttribute("doctorId")),Integer.parseInt((String) session.getAttribute("slotId")), s.getService_id(), (String)session.getAttribute("reason"));
-            payDAO.insertPayment(appointmentId, amountDouble, "CASH", "pending", "", "", "");
+            if (!token.equals("packageService")) {
+                 slotId = Integer.parseInt((String) session.getAttribute("slotId"));
+                 doctorId = Integer.parseInt((String) session.getAttribute("doctorId"));
+                 
+                 appointmentId = appointmentDao.insertAppointment(
+                    appointmentCode,
+                    p.getPatientId(),
+                    doctorId,
+                    slotId,
+                    s.getService_id(),
+                    dateBooking,
+                    slotStart,
+                    slotEnd,
+                    reason);
+            }else{
+                 appointmentId = appointmentDao.insertAppointment(
+                    appointmentCode,
+                    p.getPatientId(),
+                    s.getService_id(),
+                    dateBooking,
+                    slotStart,
+                    slotEnd,
+                    reason);
+                
+            }
+
+            payDAO.insertPayment(appointmentId, amountDouble,
+                    "CASH", "pending",
+                    "",
+                    "",
+                    "");
             req.setAttribute("result", "true");
             resp.sendRedirect("billsDetail?appointment_code=" + appointmentCode);
-            
+
         } else if (paymentMethod.equals("vnPay")) {
 
             String vnp_TxnRef = GenerateVnpTxnRef.generateVnpTxnRef();
             payDAO.insertPayment(null, amountDouble, "VNPAY", "pending", vnp_TxnRef, "", "");
 
-            vnPay(req, resp, amountDouble,vnp_TxnRef, bankCode);
-            
+            vnPay(req, resp, amountDouble, vnp_TxnRef, bankCode);
+
         }
 
     }
 
-    protected void vnPay(HttpServletRequest req, HttpServletResponse resp, double amountDouble, String vnp_TxnRef ,String bankCode)
+    protected void vnPay(HttpServletRequest req, HttpServletResponse resp, double amountDouble, String vnp_TxnRef, String bankCode)
             throws ServletException, IOException {
 
         String vnp_Version = "2.1.0";
@@ -155,7 +191,7 @@ public class ajaxServlet extends HttpServlet {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
         resp.sendRedirect(paymentUrl);
-        
+
     }
 
 }

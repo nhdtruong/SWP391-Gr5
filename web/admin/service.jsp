@@ -90,6 +90,7 @@
                                                 <th class="border-bottom p-3">Phí</th>
                                                 <th class="border-bottom p-3">Bác sĩ đảm nhiệm</th>
                                                 <th class="border-bottom p-3">Action</th>
+                                                <th class="border-bottom p-3">Add PSS</th>
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -115,18 +116,25 @@
                                                     <c:if test="${not empty s.fee && s.fee !=0 }"><td class="p-3"><fmt:formatNumber value="${s.fee}" pattern="#,##0"/> đ</td></c:if>
                                                         <td class="p-3">
                                                         <c:if test="${s.category_service.id == 2}"></c:if>
-                                                            <a href="doctorService?serviceId=${s.service_id}&departmentId=${s.department.id}" class="btn btn-secondary">Xem</a>
+                                                        <a href="doctorService?serviceId=${s.service_id}&departmentId=${s.department.id}" class="btn btn-secondary">Xem</a>
                                                     </td>
                                                     <td class="p-3">
                                                         <a href="#" class="btn btn-info" onclick="openServiceDetailModal('${fn:escapeXml(s.getService_name())}', '${fn:escapeXml(s.getCategory_service().getName())}', '${fn:escapeXml(s.getDepartment().getDepartment_name())}', '${fn:escapeXml(s.getDescription())}', '${s.isIs_bhyt() ? "Có" : "Không"}', '${s.getFee()}', '${s.getDiscount()}', '${fn:escapeXml(s.getPayment_type_id()) == 1 ? "Thanh toán tại bệnh viện" : "Thanh toán online"}', '${s.getImg()}')">Chi tiết</a>
                                                         <a href="updateservice?action=updateService&serviceId=${s.service_id}" class="btn btn-primary">Sửa</a>
 
-                                                        <c:if test="${sessionScope.user.getRole()== 1}">
+                                                        <c:if test="${sessionScope.user.getRole()== 2}">
                                                             <a href="#" class="btn btn-danger"
                                                                onclick="openDeleteModal('${s.getService_id()}')">Xóa</a>
                                                         </c:if>
 
                                                     </td>
+                                                    <c:if test="${s.category_service.id == 4}">
+                                                        <td class="p-3">
+
+                                                            <a href="addPackageServiceSchedule?serviceId=${s.service_id}" class="btn btn-primary">++</a>
+                                                        </td>
+                                                    </c:if>
+
                                                 </tr>
                                                 <c:set var="st" value="${st + 1}"  />
                                             </c:forEach>
@@ -270,6 +278,11 @@
                         </div>
                     </div>
                 </div>   
+                <c:if test="${not empty success}">
+                    <div class="alert-success" role="alert">
+                        Dịch vụ đã được thêm thành công!
+                    </div>
+                </c:if>
                 <jsp:include page="../admin/layout/footer.jsp"/>
             </main>
 
@@ -287,28 +300,28 @@
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
         <script>
-                                                               function openServiceDetailModal(name, category, department, description, bhyt, fee, discount, payment, img) {
-                                                                   document.getElementById('serviceName').innerText = name;
-                                                                   document.getElementById('serviceCategory').innerText = category;
-                                                                   document.getElementById('serviceDepartment').innerText = department;
-                                                                   document.getElementById('serviceDescription').innerHTML = description?.trim() || 'Đang cập nhật';
-                                                                   document.getElementById('serviceInsurance').innerText = bhyt;
-                                                                   document.getElementById('serviceFee').innerText = parseFloat(fee).toLocaleString('vi-VN') + " VNĐ";
-                                                                   document.getElementById('serviceDiscount').innerText = (parseFloat(discount) * 100).toLocaleString('vi-VN') + "%";
-                                                                   document.getElementById('servicePayment').innerText = payment;
+                                                                   function openServiceDetailModal(name, category, department, description, bhyt, fee, discount, payment, img) {
+                                                                       document.getElementById('serviceName').innerText = name;
+                                                                       document.getElementById('serviceCategory').innerText = category;
+                                                                       document.getElementById('serviceDepartment').innerText = department;
+                                                                       document.getElementById('serviceDescription').innerHTML = description?.trim() || 'Đang cập nhật';
+                                                                       document.getElementById('serviceInsurance').innerText = bhyt;
+                                                                       document.getElementById('serviceFee').innerText = parseFloat(fee).toLocaleString('vi-VN') + " VNĐ";
+                                                                       document.getElementById('serviceDiscount').innerText = (parseFloat(discount) * 100).toLocaleString('vi-VN') + "%";
+                                                                       document.getElementById('servicePayment').innerText = payment;
 
-                                                                   document.getElementById('serviceImage').src = img && img !== 'default'
-                                                                           ? img
-                                                                           : 'assets/images/services/defaultService.png';
+                                                                       document.getElementById('serviceImage').src = img && img !== 'default'
+                                                                               ? img
+                                                                               : 'assets/images/services/defaultService.png';
 
-                                                                   new bootstrap.Modal(document.getElementById('detailModal')).show();
-                                                               }
+                                                                       new bootstrap.Modal(document.getElementById('detailModal')).show();
+                                                                   }
 
-                                                               function openDeleteModal(serviceId) {
+                                                                   function openDeleteModal(serviceId) {
 
-                                                                   document.getElementById('deleteServiceId').value = serviceId;
-                                                                   new bootstrap.Modal(document.getElementById('deleteModal')).show();
-                                                               }
+                                                                       document.getElementById('deleteServiceId').value = serviceId;
+                                                                       new bootstrap.Modal(document.getElementById('deleteModal')).show();
+                                                                   }
 
 
 

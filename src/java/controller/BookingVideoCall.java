@@ -4,8 +4,7 @@
  */
 package controller;
 
-import dal.DoctorDAO;
-import dal.DoctorScheduleDAO;
+
 import dal.ServiceDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,12 +14,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.Date;
-import java.sql.Time;
+
 import java.util.List;
-import model.Doctor;
+
 import model.Service;
-import model.WorkingDateSchedule;
+
 
 /**
  *

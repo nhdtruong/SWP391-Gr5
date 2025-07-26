@@ -24,17 +24,15 @@
                                 <h6>Dời lịch khám cho bệnh nhân: <strong>${patientName}</strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <h6>Mã phiếu: <strong>${appointmentCode}</strong></h6>
+                                <h6>Chuyên khoa: <strong>${departmentName}</strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <h6>Đang đặt ngày: <strong>${workingDate}</strong></h6>
+                                <h6>Đang đặt ngày: <strong><fmt:formatDate value="${dateBooking}" pattern="dd/ MM/ yyyy"/> </strong></h6>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <h6>Bác sĩ: <strong>${currentDoctorName}</strong></h6>
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <h6>Chuyên khoa: <strong>${departmentName}</strong></h6>
-                            </div>
+                            
                         </div>
 
                         <form action="updateAppoitment" method="post" id="doctorForm">
@@ -42,10 +40,11 @@
                             <input type="hidden" name="patientName" value="${patientName}" />
                             <input type="hidden" name="appointmentId" value="${appointmentId}" />
                             <input type="hidden" name="appointmentCode" value="${appointmentCode}" />
-                            <input type="hidden" name="workingDate" value="${workingDate}" />
+                            <input type="hidden" name="dateBooking" value="${dateBooking}" />
                             <input type="hidden" name="slotStart" value="${slotStart}" />
                             <input type="hidden" name="slotEnd" value="${slotEnd}" />
                             <input type="hidden" name="slotId" value="${slotId}" />
+                            <input type="hidden" name="slotIdReqChange" value="${slotIdReqChange}" />
                             <input type="hidden" name="departmentName" value="${departmentName}" />
                             <input type="hidden" name="action" value="reschedule" />
 
@@ -77,6 +76,7 @@
 
                                         <fmt:setLocale value="vi_VN" />
                                         <c:set var="slotId" value="${slotId}"/>
+                                        <c:set var="slotIdReqChange" value="${slotIdReqChange}"/>
                                         <c:forEach var="i" begin="0" end="${fn:length(listWDS) - 1}" step="2">
                                             <div class="row mb-4">
 
@@ -96,6 +96,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -123,6 +124,8 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
+                                                                                <c:when test="${slot.slotId == slotId}">btn-success text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -145,7 +148,7 @@
                                                 <c:if test="${i + 1 < fn:length(listWDS)}">
                                                     <c:set var="day2" value="${listWDS[i + 1]}" />
                                                     <div class="col-md-6">
-                                                        <h5>🗓️ <fmt:formatDate value="${day1.workingDate}" pattern="EEEE - dd/MM/yyyy" /></h5>
+                                                        <h5>🗓️ <fmt:formatDate value="${day2.workingDate}" pattern="EEEE - dd/MM/yyyy" /></h5>
 
 
                                                         <c:if test="${not empty day2.morningSlots}">
@@ -158,6 +161,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -184,6 +188,7 @@
                                                                             class="btn btn-sm
                                                                             <c:choose>
                                                                                 <c:when test="${slot.slotId == slotId}">btn-success text-white disabled</c:when>
+                                                                                 <c:when test="${slot.slotId == slotIdReqChange}">btn-danger text-white</c:when>
                                                                                 <c:when test="${slot.status == 1}">btn-outline-info</c:when>
                                                                                 <c:when test="${slot.status == 0}">btn-warning text-white disabled</c:when>
                                                                                 <c:otherwise>btn-secondary text-white disabled</c:otherwise>
@@ -211,7 +216,11 @@
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <button type="button" class="btn btn-success btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
-                                                <span style="font-size: 14px;">Đang chọn lịch này</span>
+                                                <span style="font-size: 14px;">Đang đặt lịch này</span>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <button type="button" class="btn btn-danger btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
+                                                <span style="font-size: 14px;">BS yêu cầu đổi lịch</span>
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <button type="button" class="btn btn-warning btn-sm px-2 rounded-circle" style="width: 24px; height: 24px;" disabled></button>
@@ -230,7 +239,7 @@
                                     <!-- Footer -->
                                     <div class="card-footer text-start">
                                         <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại sss
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                         </a>
                                     </div>
                                 </div>
@@ -252,12 +261,15 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body" id="confirmText">
-                            <!-- Text sẽ được gán bằng JS -->
+                           
                         </div>
 
                         <input type="hidden" name="appointmentId" id="appointmentId" />
                         <input type="hidden" name="doctorId" id="inputDoctorId" />
                         <input type="hidden" name="slotId" id="inputSlotId" />
+                        <input type="hidden" name="dateBooking" id="inputDateBooking" />
+                        <input type="hidden" name="slotStart" id="inputSlotStart" />
+                        <input type="hidden" name="slotEnd" id="inputSlotEnd" />
                         <input type="hidden" name="action" value="excuteUpdate" />
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -274,21 +286,24 @@
 
         <script>
                                                                                 function showConfirmModal(appointmentId, slotStart, slotEnd, dateBooking, reDoctorName, doctorId, slotId) {
-                                                                                   
+
                                                                                     const text = "Bạn có chắc chắn muốn đổi lịch hẹn sang:<br>" +
                                                                                             "📅 <strong>" + dateBooking + "</strong><br>" +
                                                                                             "🕒 <strong>" + slotStart + " - " + slotEnd + "</strong><br>" +
                                                                                             "👨‍⚕️ Bác sĩ: <strong>" + reDoctorName + "</strong>";
 
-                                                                                    // Hiển thị nội dung vào modal
+
                                                                                     document.getElementById('confirmText').innerHTML = text;
 
-                                                                                    // Set dữ liệu vào input ẩn trong form của modal
+
                                                                                     document.getElementById('appointmentId').value = appointmentId;
                                                                                     document.getElementById('inputDoctorId').value = doctorId;
                                                                                     document.getElementById('inputSlotId').value = slotId;
+                                                                                    document.getElementById('inputDateBooking').value = dateBooking;
+                                                                                    document.getElementById('inputSlotStart').value = slotStart;
+                                                                                    document.getElementById('inputSlotEnd').value = slotEnd;
 
-                                                                                    // Mở modal xác nhận
+
                                                                                     const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
                                                                                     modal.show();
                                                                                 }

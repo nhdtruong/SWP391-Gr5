@@ -124,7 +124,7 @@ public class DoctorController extends HttpServlet {
         Doctor doctor = doctorDAO.getDoctorByDoctorId(id);
         request.setAttribute("detail", doctor);
         RateStarDAO rateStarDAO = new RateStarDAO();
-        List<RateStar> rateStars = rateStarDAO.getAllRateStarByDoctorId(doctor.getDoctor_id());
+        List<RateStar> rateStars = rateStarDAO.getAllRateStarByDoctorId2(doctor.getDoctor_id());
         request.setAttribute("rate", rateStars);
         request.getRequestDispatcher("doctordetail.jsp").forward(request, response);
     }

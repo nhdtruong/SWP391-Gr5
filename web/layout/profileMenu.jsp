@@ -23,7 +23,7 @@
         </div>
 
         <ul class="list-unstyled sidebar-nav mb-0">
-                <li class="navbar-item"><a href="profile" class="navbar-link"><i class="ri-airplay-line align-middle navbar-icon"></i> Dashboard</a></li>
+                <li class="navbar-item"><a href="profile" class="navbar-link"><i class="ri-airplay-line align-middle navbar-icon"></i> Thông tin tài khoản</a></li>
                 <c:if test="${sessionScope.user.getRole() == 4}">
                 <li class="navbar-item"><a href="myFeedback?action=myfeedback" class="navbar-link"><i class="ri-chat-1-line align-middle navbar-icon"></i> Phản hồi</a></li>
                 <li class="navbar-item"><a href="myPatient?action=mypatient" class="navbar-link"><i class="ri-empathize-line align-middle navbar-icon"></i> Bệnh nhân của tôi</a></li>

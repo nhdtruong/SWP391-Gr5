@@ -14,13 +14,24 @@
             <jsp:include page="layout/menu_white.jsp"/>
             <div class="main-content" >
                 <div class="container my-4" style="min-height: 600px">
-
+                    <c:set value="" var="booking"/>
                     <div class="col-12" style="height: 80px;margin-right: -30px">
                         <nav aria-label="breadcrumb" class="d-inline-block mt-3">
                             <ul class="breadcrumb bg-transparent mb-0" style="margin-left: -30px">
                                 <li class="breadcrumb-item"><a href="home">Trang chủ</a></li>
-
-                                <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
+                                    <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                        <c:if test="${truong==null}"  >
+                                        <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Đặt khám chuyên khoa</a></li>
+                                        </c:if>
+                                        <c:set value="booking" var="booking"/>
+                                    </c:if>
+                                    <c:if test="${sessionScope.token == 'online'}">
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Hỗ trợ trực tuyến</a></li>
+                                    </c:if>
+                                    <c:if test="${sessionScope.token == 'packageService'}">
+                                        <c:set value="booking.HealthPackage" var="booking"/>
+                                    <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Gói khám sức khỏe</a></li>
+                                    </c:if>
 
                                 <c:if test="${stepName == 'doctor'}">
                                     <li class="breadcrumb-item"><a href="#" style="color: #00b5f1; ">Chọn bác sĩ</a></li>
@@ -115,14 +126,9 @@
                                             <h5 class="mb-0">Vui lòng chọn Bác sĩ</h5>
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex mb-3 flex-wrap">
-                                                <input type="text" class="form-control me-2 mb-2" placeholder="Tìm nhanh bác sĩ" style="flex: 1 1 auto;">
-                                                <button class="btn btn-outline-primary me-2 mb-2">Học hàm / học vị</button>
-                                                <button class="btn btn-outline-primary me-2 mb-2">Chuyên khoa</button>
-                                                <button class="btn btn-outline-primary mb-2">Giới tính</button>
-                                            </div>
+                                           
 
-
+                                      
                                             <c:if test="${empty listDoctor}">
                                                 <div class="text-center mt-5">
                                                     <h5 class="mt-3 text-muted">Không tìm thấy bác sĩ có lịch khám.</h5>
@@ -261,16 +267,26 @@
 
 
                                             <div class="card-footer text-start">
+
                                                 <c:if test="${sessionScope.token == 'chuyenkhoa'}">
-                                                    <a href="booking?stepName=doctor&departmentId=${sessionScope.departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
-                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                    </a>
+                                                    <c:if test="${not empty sessionScope.chuyenkhoaTypeDoctor}">
+                                                        <a href="doctor" class="btn btn-outline-secondary">
+                                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                        </a>
+                                                    </c:if>
+                                                    <c:if test="${empty sessionScope.chuyenkhoaTypeDoctor}">
+                                                        <a href="booking?stepName=doctor&departmentId=${departmentId}&departmentName=${sessionScope.departmentName}" class="btn btn-outline-secondary">
+                                                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                        </a>
+                                                    </c:if>
+
                                                 </c:if>
                                                 <c:if test="${sessionScope.token == 'online'}">
                                                     <a href="callVideoWithDoctor?action=all&categoryService_id=${categoryService_id}" class="btn btn-outline-secondary">
                                                         <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
                                                     </a>
                                                 </c:if>
+
 
 
                                             </div>
@@ -288,25 +304,31 @@
 
 
                                                 <label for="dateSelect" style="margin-bottom: 15px"><strong>Chọn ngày khám:</strong></label>
+
                                                 <fmt:setLocale value="vi_VN" />
+
                                                 <select id="dateSelect" class="form-select mb-3" onchange="showSlotsByDate(this.value)">
                                                     <c:forEach var="wds" items="${listWDS}" varStatus="i">
+
                                                         <option value="date${i.index}">
+
                                                             <fmt:formatDate value="${wds.workingDate}" pattern="EEEE - dd/ MM/ yyyy" />
                                                         </option>
                                                     </c:forEach>
                                                 </select>
 
+
+
                                                 <c:forEach var="wds" items="${listWDS}" varStatus="i">
                                                     <div id="date${i.index}" class="slot-group" style="${i.index == 0 ? '' : 'display:none'}">
 
-                                                        <!-- Buổi sáng -->
+                                                        <!--  sáng -->
                                                         <c:if test="${not empty wds.getMorningSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi sáng</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
                                                                 <c:forEach var="slot" items="${wds.getMorningSlots()}">
                                                                     <c:set var="status" value="${slot.status}" />
-                                                                    <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
+                                                                    <form action="${booking}" method="get" class="me-2 mb-2 d-inline-block">
                                                                         <input type="hidden" name="stepName" value="chooseRecords" />
                                                                         <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                         <input type="hidden" name="slotId" value="${slot.slotId}" />
@@ -329,13 +351,13 @@
                                                             </div>
                                                         </c:if>
 
-                                                        <!-- Buổi chiều -->
+                                                        <!-- chiều -->
                                                         <c:if test="${not empty wds.getAfternoonSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi chiều</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
                                                                 <c:forEach var="slot" items="${wds.getAfternoonSlots()}">
                                                                     <c:set var="status" value="${slot.status}" />
-                                                                    <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
+                                                                    <form action="${booking}" method="get" class="me-2 mb-2 d-inline-block">
                                                                         <input type="hidden" name="stepName" value="chooseRecords" />
                                                                         <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                         <input type="hidden" name="slotId" value="${slot.slotId}" />
@@ -358,13 +380,13 @@
                                                             </div>
                                                         </c:if>
 
-                                                        <!-- Buổi tối -->
+                                                        <!--  tối -->
                                                         <c:if test="${not empty wds.getEveningSlots()}">
                                                             <div style="margin-bottom: 15px"><strong>Buổi tối</strong></div>
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
                                                                 <c:forEach var="slot" items="${wds.getEveningSlots()}">
                                                                     <c:set var="status" value="${slot.status}" />
-                                                                    <form action="booking" method="get" class="me-2 mb-2 d-inline-block">
+                                                                    <form action="${booking}" method="get" class="me-2 mb-2 d-inline-block">
                                                                         <input type="hidden" name="stepName" value="chooseRecords" />
                                                                         <input type="hidden" name="dateBooking" value="${wds.workingDate}" />
                                                                         <input type="hidden" name="slotId" value="${slot.slotId}" />
@@ -407,10 +429,22 @@
                                             </div>
 
                                             <div class="card-footer text-start">
-                                                <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
-                                                    <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
-                                                </a>
+                                                <c:if test="${sessionScope.token == 'packageService'}">
+                                                    <a href="healthPackageService?action=all&categoryService_id=${sessionScope.categoryService_id}&service_id=${sessionScope.service_id}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${sessionScope.token == 'chuyenkhoa'}">
+                                                    <a href="booking?stepName=service&doctorId=${sessionScope.doctorId}&doctorName=${sessionScope.doctorName}" class="btn btn-outline-secondary">
+                                                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                                                    </a>
+                                                </c:if>
+
                                             </div>
+
+
+
+
                                         </div>
                                     </div>
 
@@ -476,6 +510,8 @@
                                     window.location.href = "booking.VideoCall?stepName=chooseRecords&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
                                 } else if (token === 'chuyenkhoa') {
                                     window.location.href = "booking?stepName=dateTime&doctorId=${sessionScope.doctorId}&serviceId=" + serviceId + "&isBHYT=0";
+                                } else if (token === 'packageService') {
+                                    window.location.href = "booking.HealthPackage?stepName=dateTime&serviceId=" + serviceId + "&isBHYT=0";
                                 }
 
 

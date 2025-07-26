@@ -21,7 +21,7 @@
                 <div class="container-fluid">
                     <div class="layout-specing" style="">
                         <div class="row">
-                            
+
                             <div class="col-md-3 row">
                                 <div class="col-md-4">
                                     <h5 class="mb-0">Appointment</h5>
@@ -55,6 +55,7 @@
                                                     <option <c:if test="${status == '0'}"> selected </c:if> value="0">Đã hủy lịch</option>
                                                     <option <c:if test="${status == '2'}"> selected </c:if> value="2">Đã khám</option>
                                                     <option <c:if test="${status == '3'}"> selected </c:if> value="3">Yêu cầu hủy lịch</option>
+                                                    <option <c:if test="${status == '4'}"> selected </c:if> value="4">BS yêu cầu đổi lịch</option>
                                                     </select>  
                                                 </div>
                                             </div>
@@ -80,9 +81,11 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-md-1">
-                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
-                                </div>                         
+
+                                <!--                                <div class="col-md-1">
+                                                                    <a href="adddoctor" type="button"class="btn btn-info">Add+</a>         
+                                                                </div>                         -->
+
                             </div>
 
                             <div class="row">
@@ -116,10 +119,15 @@
                                             <c:forEach items="${Appointment}" var="a">
                                                 <tr> 
                                                     <td class="p-3">${i}</td>
-                                                    <td class="p-3">${a.doctorName}</td>
+                                                    <c:if test="${not empty a.doctorName}">
+                                                        <td class="p-3">${a.doctorName}</td>
+                                                    </c:if>
+                                                    <c:if test="${ empty a.doctorName}">
+                                                        <td class="p-3">#</td>
+                                                    </c:if>
                                                     <td class="p-3">${a.patientName}</td>
                                                     <td class="p-3">${a.serviceName}</td>
-                                                    <td class="p-3"><fmt:formatDate value="${a.workingDate}" pattern="dd/ MM/ yyyy"/></td>
+                                                    <td class="p-3"><fmt:formatDate value="${a.dateBooking}" pattern="dd/ MM/ yyyy"/></td>
                                                     <td class="p-3"><fmt:formatDate value="${a.slotStart}" pattern="HH:mm"/> - <fmt:formatDate value="${a.slotEnd}" pattern="HH:mm"/> </td>
                                                     <td class="p-3">
 
@@ -135,6 +143,9 @@
                                                             </c:when>
                                                             <c:when test="${a.status == 3}">
                                                                 <span style="color: orange;">Yêu cầu hủy lịch</span>
+                                                            </c:when>
+                                                            <c:when test="${a.status == 4}">
+                                                                <span style="color: orange;">Bs yêu cầu đổi lịch</span>
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <span style="color: gray;">Không xác định</span>
@@ -274,7 +285,7 @@
         <script src="assets/js/feather.min.js"></script>
         <script src="assets/js/app.js"></script>
 
-      
+
 
     </body>
 

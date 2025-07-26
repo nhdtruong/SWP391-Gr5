@@ -45,7 +45,7 @@
                                             <img src="${d.img}" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
                                         </div>
                                     </c:if>
-                                        <c:if test="${d.img=='default'}" >
+                                    <c:if test="${d.img=='default'}" >
                                         <!-- Avatar -->
                                         <div class="team-person text-center mt-3">
                                             <img src="assets/images/avata.png" style="width: 80px; height: 80px; border-radius: 50%;" class="img-fluid" alt="">
@@ -61,41 +61,44 @@
 
                                     <!-- Button footer -->
                                     <div class="pt-2 pb-3 text-center">
-                                        <button class="btn btn-soft-primary me-1" onclick="window.location.href = 'book?type=appointment&id=${d.doctor_id}'">Đặt lịch</button>
+                                        <button class="btn btn-soft-primary me-1" 
+                                                onclick="window.location.href = 'booking?stepName=service&doctorId=${d.doctor_id}&doctorName=${d.doctor_name}&departmentName=${d.department_name}&departmentId=${d.deparment_id}&chuyenkhoaTypeDoctor=chuyenkhoaTypeDoctor'">
+                                            Đặt lịch
+                                        </button>
                                         <button class="btn btn-soft-primary" onclick="window.location.href = 'doctor?action=detail&id=${d.doctor_id}'">Chi tiết</button>  
                                     </div>
                                 </div>
                             </div>
 
                         </c:forEach>
-                            <div style="
-                                 text-align: center;
-                                 margin-top: 20px;
-                                 font-size: 18px;
-                                 font-weight: 500;
-                                 color: #333;
-                                 font-family: 'Segoe UI', sans-serif;
-                                 ">
-                                <a style="
-                                   cursor: pointer;
-                                   padding: 5px 10px;
-                                   border-radius: 5px;
-                                   background-color: #f0f0f0;
-                                   margin-right: 8px;
-                                   transition: background-color 0.2s ease;
-                                   " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex-1}">&lt;</a>
+                        <div style="
+                             text-align: center;
+                             margin-top: 20px;
+                             font-size: 18px;
+                             font-weight: 500;
+                             color: #333;
+                             font-family: 'Segoe UI', sans-serif;
+                             ">
+                            <a style="
+                               cursor: pointer;
+                               padding: 5px 10px;
+                               border-radius: 5px;
+                               background-color: #f0f0f0;
+                               margin-right: 8px;
+                               transition: background-color 0.2s ease;
+                               " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex-1}">&lt;</a>
 
-                                <span style="font-weight: bold; color: #007bff;">${pagIndex}</span>/<span style="color: #555;">${numberPage}</span>
+                            <span style="font-weight: bold; color: #007bff;">${pagIndex}</span>/<span style="color: #555;">${numberPage}</span>
 
-                                <a style="
-                                   cursor: pointer;
-                                   padding: 5px 10px;
-                                   border-radius: 5px;
-                                   background-color: #f0f0f0;
-                                   margin-left: 8px;
-                                   transition: background-color 0.2s ease;
-                                   " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex+1}" >&gt;</a>
-                            </div>
+                            <a style="
+                               cursor: pointer;
+                               padding: 5px 10px;
+                               border-radius: 5px;
+                               background-color: #f0f0f0;
+                               margin-left: 8px;
+                               transition: background-color 0.2s ease;
+                               " href="doctor?gender=${gender}&speciality=${speciality}&SortType=${sort}&pagIndex=${pagIndex+1}" >&gt;</a>
+                        </div>
                     </div>
 
                     <div class="col-lg-3 col-md-3 mt-3 pt-2">

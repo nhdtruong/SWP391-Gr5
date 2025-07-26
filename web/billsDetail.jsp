@@ -90,18 +90,24 @@
                                     <p class="text-muted small">(Đã bao gồm phí khám + phí tiện ích)</p>
 
                                     <div class="text-start bg-light p-3 rounded-3">
-                                        <div class="d-flex mb-3 ">
+                                        <c:if test="${not empty bills.departmentName}">
+                                            <div class="d-flex mb-3 ">
                                             <span style="min-width: 150px; margin-left:20px;">Chuyên khoa:</span>
                                             <strong>${bills.departmentName}</strong>
                                         </div>
+                                        </c:if>
+                                        
                                         <div class="d-flex  mb-3">
                                             <span style="min-width: 150px; margin-left:20px;">Mã phiếu:</span>
                                             <strong>${bills.appointment_code}</strong>
                                         </div>
-                                        <div class="d-flex  mb-3">
-                                            <span style="min-width: 150px; margin-left:20px;">Bác sĩ:</span>
-                                            <strong>${bills.doctorName}</strong>
-                                        </div>
+                                            <c:if test="${not empty bills.doctorName}">
+                                                <div class="d-flex  mb-3">
+                                                    <span style="min-width: 150px; margin-left:20px;">Bác sĩ:</span>
+                                                    <strong>${bills.doctorName}</strong>
+                                                </div>
+                                            </c:if>
+                                        
                                         <div class="d-flex  mb-3">
                                             <span style="min-width: 150px; margin-left:20px;">Dịch vụ:</span>
                                             <strong>${bills.serviceName}</strong>
@@ -112,7 +118,7 @@
                                         </div>
                                         <div class="d-flex  mb-3">
                                             <span style="min-width: 150px; margin-left:20px;">Thời gian khám:</span>
-                                            <strong><fmt:formatDate value="${bills.slotStart}" pattern="HH:mm" /> - <fmt:formatDate value="${bills.workingDate}" pattern="dd/ MM/ yyyy" /></strong>
+                                            <strong><fmt:formatDate value="${bills.slotStart}" pattern="HH:mm" /> - <fmt:formatDate value="${bills.dateBooking}" pattern="dd/ MM/ yyyy" /></strong>
                                         </div>
                                         <div class="d-flex  mb-3">
                                             <span style="min-width: 150px; margin-left:20px;">Phí khám:</span>

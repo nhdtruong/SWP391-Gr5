@@ -1,4 +1,4 @@
-package controller.admin;
+package controller.coordinator;
 
 import dal.CategoryServiceDAO;
 import dal.DepartmentDAO;
