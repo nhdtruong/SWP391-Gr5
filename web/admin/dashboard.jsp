@@ -21,6 +21,10 @@
 <%
     List<StaticDepartment> list2 = (List<StaticDepartment>) request.getAttribute("staticDepartmentss");
 %>
+
+<%@ page import="java.util.*, DTOStatic.AppointmentStat" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -158,6 +162,19 @@
                                         </div>
                                     </div>
                                     <div id="chartdiv4" style="width: 100%; height: 500px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 mt-4">
+                                <div class="card shadow border-0 p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h6 class="align-items-center mb-0">Thống kê lịch hẹn</h6>
+                                        <div class="mb-0 position-relative">
+                                        </div>
+                                    </div>
+                                    <div id="chartdiv6" style="width: 100%; height: 500px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -387,7 +404,7 @@
                 chart.appear(1000, 100);
             });
         </script>
-        
+
         <script>
             // Tạo mảng data từ JSP
             var chartData5 = [
@@ -465,6 +482,79 @@
             });
         </script>
 
+        <script>
+            var chartData_truong = [];
+            <%
+List<AppointmentStat> appointmentStatsList = (List<AppointmentStat>) request.getAttribute("appointmentStats");
+if (appointmentStatsList != null && !appointmentStatsList.isEmpty()) {
+    for (AppointmentStat s : appointmentStatsList) {
+        if (s != null) {
+            String month = s.getMonth()+"/"+ s.getYear();
+            %>
+            chartData_truong.push({"month": "<%=month%>", "total": <%=s.getTotal()%>});
+            <%
+        }
+    }
+}
+            %>
+            console.log("chartData_truong:", chartData_truong);
+        </script>
+
+        //        <script>
+                        am5.ready(function () {
+            
+                            // Create root element
+                            var root = am5.Root.new("chartdiv6");
+            
+                            // Set theme
+                            root.setThemes([
+                                am5themes_Animated.new(root)
+                            ]);
+            
+                            // Create chart
+                            var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                                panX: true,
+                                panY: true,
+                                wheelX: "panX",
+                                wheelY: "zoomX",
+                                pinchZoomX: true
+                            }));
+            
+                            // Tạo trục X (CategoryAxis)
+                            var xRenderer = am5xy.AxisRendererX.new(root, {minGridDistance: 30});
+                            var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                                categoryField: "month",
+                                renderer: xRenderer,
+                                tooltip: am5.Tooltip.new(root, {})
+                            }));
+            
+                            // Tạo trục Y (ValueAxis)
+                            var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                                renderer: am5xy.AxisRendererY.new(root, {})
+                            }));
+            
+                            // Tạo series cột
+                            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                                name: "Lịch hẹn",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "total",
+                                categoryXField: "month",
+                                tooltip: am5.Tooltip.new(root, {
+                                    labelText: "{categoryX}: {valueY}"
+                                })
+                            }));
+            
+                            // Gán data (dữ liệu từ JSP)
+                            series.data.setAll(chartData_truong);
+                            xAxis.data.setAll(chartData_truong);
+            
+                            // Thêm animation
+                            series.appear(1000);
+                            chart.appear(1000, 100);
+            
+                        }); // end am5.ready()
+            //        </script>
 
     </body>
 

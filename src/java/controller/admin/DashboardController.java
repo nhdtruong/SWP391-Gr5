@@ -4,6 +4,7 @@
  */
 package controller.admin;
 
+import DTOStatic.AppointmentStat;
 import DTOStatic.StaticDepartment;
 import dal.AppointmentDAO;
 import dal.DepartmentDAO;
@@ -19,6 +20,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -110,11 +112,24 @@ public class DashboardController extends HttpServlet {
             staticDepartmentss.add(sd);
         }
         
+        int year =2025;
+        int month = 1;
+        AppointmentDAO appointmentDAO1 = new AppointmentDAO();
+        List<AppointmentStat> appointmentStats = new ArrayList<AppointmentStat>();
+        for (int i = month; i < 13; i++) {
+            AppointmentStat stat = new AppointmentStat();
+            stat.month = i;
+            stat.year = year;
+            stat.total = appointmentDAO1.countAppointmentsByMonthYear(year, i);
+            appointmentStats.add(stat);
+            System.out.println(stat);
+        }
         
         
+        request.setAttribute("appointmentStats", appointmentStats);
         request.setAttribute("staticDepartmentss", staticDepartmentss);
         request.setAttribute("staticDepartments", staticDepartments);
-        request.setAttribute("appointmentStats", stats);
+        request.setAttribute("appointmentStatssssss", stats);
         request.setAttribute("total_user", total_user);
         request.setAttribute("total_Appointment", total_Appointment);
         request.setAttribute("sobenhnhan", sobenhnhan);

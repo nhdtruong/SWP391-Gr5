@@ -4,6 +4,7 @@
  */
 package dal;
 
+import DTOStatic.AppointmentStat;
 import context.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,7 +70,7 @@ public class AppointmentDAO extends DBContext {
 
         return -1;
     }
-    
+
     public int insertAppointment(
             String appointmentCode,
             int patientId,
@@ -216,7 +217,7 @@ public class AppointmentDAO extends DBContext {
         return false;
     }
 
-     public boolean reqChangeAppointmentByDoctor(int appointmentId, int doctorId, int slot_id_request_change, Date dateBooking, Time slotStart, Time slotEnd) {
+    public boolean reqChangeAppointmentByDoctor(int appointmentId, int doctorId, int slot_id_request_change, Date dateBooking, Time slotStart, Time slotEnd) {
         String sql = "UPDATE appointment SET doctor_id = ?, slot_id_request_change = ?, booking_date = ?, slot_start = ?, slot_end = ?,status = 4  WHERE appointment_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -235,8 +236,7 @@ public class AppointmentDAO extends DBContext {
 
         return false;
     }
-    
-    
+
     public List<AppointmentView> getAllAppointmentsSearchDoctor(String text) {
         List<AppointmentView> list = new ArrayList<>();
         String sql = "SELECT \n"
@@ -580,10 +580,8 @@ public class AppointmentDAO extends DBContext {
                 + "    a.is_refunded,\n"
                 + "    a.slot_start,\n"
                 + "    a.slot_end,\n"
-
                 + "    a.slot_id,\n"
                 + "    a.slot_id_request_change,\n"
-
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -657,7 +655,7 @@ public class AppointmentDAO extends DBContext {
     public List<AppointmentView> getAppointmentsByDoctorId(int doctorId) {
         List<AppointmentView> list = new ArrayList<>();
 
-         String sql = "SELECT \n"
+        String sql = "SELECT \n"
                 + "    a.appointment_id,\n"
                 + "    a.appointment_code,\n"
                 + "    a.patient_id,\n"
@@ -671,7 +669,7 @@ public class AppointmentDAO extends DBContext {
                 + "    a.slot_start,\n"
                 + "    a.slot_end,\n"
                 + "    a.slot_id,\n"
-                + "    a.slot_id_request_change,\n"        
+                + "    a.slot_id_request_change,\n"
                 + "    a.status,\n"
                 + "    a.note,\n"
                 + "    ISNULL(pm.amount, 0) AS amount,\n"
@@ -689,7 +687,7 @@ public class AppointmentDAO extends DBContext {
                 + "WHERE a.doctor_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-             ps.setInt(1, doctorId);
+            ps.setInt(1, doctorId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     AppointmentView a = new AppointmentView();
@@ -745,6 +743,46 @@ public class AppointmentDAO extends DBContext {
         }
     }
 
+    public int countAppointmentsByMonthYear(int year, int month) {
+        String sql = """
+            SELECT COUNT(*) AS total
+            FROM [clinic_db4].[dbo].[appointment]
+            WHERE YEAR([created_at]) = ? AND MONTH([created_at]) = ?
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, year);
+            ps.setInt(2, month);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0; // mặc định nếu không có kết quả
+    }
+
+    public boolean updateStatusToZero(int appointmentId) {
+        String sql = "UPDATE appointment SET status = 0 WHERE appointment_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, appointmentId);
+
+            int rows = ps.executeUpdate();
+            return rows > 0; // nếu có ít nhất 1 dòng được update
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public int checkPatientBookingConflictDetailed(int patientId, int departmentId, Date dateBooking, Time slotStart, Time slotEnd) {
 
         String sqlDept = "SELECT COUNT(*) FROM appointment a " //đã đặt cùng chuyên khoa trong ngày
@@ -768,7 +806,7 @@ public class AppointmentDAO extends DBContext {
                 + "AND a.status != 0 ";
 
         try {
-            
+
             try (PreparedStatement ps = connection.prepareStatement(sqlDept)) {
                 ps.setInt(1, patientId);
                 ps.setDate(2, dateBooking);
@@ -779,7 +817,6 @@ public class AppointmentDAO extends DBContext {
                 }
             }
 
-           
             try (PreparedStatement ps = connection.prepareStatement(sqlTime)) {
                 ps.setInt(1, patientId);
                 ps.setDate(2, dateBooking);
@@ -803,8 +840,7 @@ public class AppointmentDAO extends DBContext {
         AppointmentDAO a = new AppointmentDAO();
 
         // System.out.println(a.getBillstByCode("T250721LUUTKJ"));
-       // System.out.println(a.getAppointmentsByAppointmentId(1));
-
+        // System.out.println(a.getAppointmentsByAppointmentId(1));
         //   System.out.println(a.getAllAppointments());
         //  System.out.println(a.getAppointmentsByUsername("user10"));
         //System.out.println(a.getAllAppointments());
